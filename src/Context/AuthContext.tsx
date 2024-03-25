@@ -1,6 +1,11 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { getCurrentUser } from 'aws-amplify/auth';
+import { getCurrentUser, signIn } from 'aws-amplify/auth';
 import axios from 'axios';
+
+interface UserDetails {
+  username: string,
+  password: string
+}
 
 interface Account {
   userId: string | null;
@@ -24,6 +29,8 @@ interface AuthContextType {
   currentUser: Account;
   currentProfile: Profile;
   authLoading: boolean;
+  validLogin: boolean;
+  signInUser: ({username, password}: UserDetails) => void;
   grabCurrentUser: () => void;
   grabCurrentUserProfile: (userId: string) => void;
 }
@@ -43,6 +50,8 @@ const AuthContext = createContext<AuthContextType>({
     userid: null,
   },
   authLoading: false,
+  validLogin: true,
+  signInUser: () => {},
   grabCurrentUser: () => {},
   grabCurrentUserProfile: () => {},
 });
@@ -73,6 +82,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     userid: null,
   });
   const [authLoading, setAuthLoading] = useState(false);
+  const [validLogin, setValidLogin] = useState<boolean>(true);
+
+  const signInUser = (userInfo: UserDetails) => {
+    console.log(userInfo)
+    setAuthLoading(true);
+    signIn({username: userInfo.username, password: userInfo.password})
+      .then(() => {
+        grabCurrentUser();
+      })
+      .catch((error) => {
+        console.log(error);
+        setAuthLoading(false)
+      });
+  };
 
   const grabCurrentUser = () => {
     setAuthLoading(true);
@@ -111,6 +134,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         currentUser,
         currentProfile,
         authLoading,
+        validLogin,
+        signInUser,
         grabCurrentUser,
         grabCurrentUserProfile,
       }}

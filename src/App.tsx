@@ -5,6 +5,10 @@ import { useAuth } from './Context/AuthContext';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import LoginScreen from './Screens/Authentcation/LoginScreen';
 import HomeScreen from './Screens/Home/HomeScreen';
+import { Amplify } from 'aws-amplify';
+import amplifyconfig from './amplifyconfiguration.json';
+
+Amplify.configure(amplifyconfig)
 
 function App() {
 
