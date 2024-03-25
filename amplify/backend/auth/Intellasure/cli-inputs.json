@@ -1,0 +1,68 @@
+{
+  "version": "1",
+  "cognitoConfig": {
+    "identityPoolName": "testAuthIdentityPool",
+    "allowUnauthenticatedIdentities": false,
+    "resourceNameTruncated": "intell291199fa",
+    "userPoolName": "Intellasure",
+    "autoVerifiedAttributes": [
+      "email"
+    ],
+    "mfaConfiguration": "OFF",
+    "mfaTypes": [
+      "TOTP"
+    ],
+    "smsAuthenticationMessage": "Your login code is {####}",
+    "smsVerificationMessage": "Your verification code is {####}",
+    "emailVerificationSubject": "Confirm Your Intellasure Account Registration",
+    "emailVerificationMessage": "Welcome to Intellasure, and thank you for taking the first step towards streamlining your mental health and addiction facility's operations with us. We're excited to have you on board and look forward to supporting you in managing and analyzing your facility's data more efficiently. To complete your registration and activate your account, please enter the verification code below in the specified field on our website: \n\nVerification Code:{####} \n\nThis code is valid for 24 hours. If you did not initiate this request, please ignore this email or contact us immediately at support@intellasure.com for assistance. Once verified, you'll gain full access to Intellasure's features, including data consolidation, analytics, and insurance policy evaluation tools designed to make your intake process as smooth as possible. Should you have any questions or require further assistance, our support team is here to help. Thank you for choosing Intellasure. We're thrilled to be a part of your journey towards better data management and operational efficiency. Best Regards, The Intellasure Team",
+    "defaultPasswordPolicy": false,
+    "passwordPolicyMinLength": 8,
+    "passwordPolicyCharacters": [
+      "Requires Lowercase",
+      "Requires Numbers",
+      "Requires Uppercase"
+    ],
+    "requiredAttributes": [
+      "name",
+      "email"
+    ],
+    "aliasAttributes": [],
+    "userpoolClientGenerateSecret": false,
+    "userpoolClientRefreshTokenValidity": 30,
+    "userpoolClientWriteAttributes": [],
+    "userpoolClientReadAttributes": [],
+    "userpoolClientLambdaRole": "Intell291199fa_userpoolclient_lambda_role",
+    "userpoolClientSetAttributes": false,
+    "sharedId": "291199fa",
+    "resourceName": "Intellasure",
+    "authSelections": "identityPoolAndUserPool",
+    "serviceName": "Cognito",
+    "usernameAttributes": [
+      "email"
+    ],
+    "useDefault": "manual",
+    "userPoolGroups": false,
+    "userPoolGroupList": [],
+    "adminQueries": false,
+    "thirdPartyAuth": false,
+    "authProviders": [],
+    "usernameCaseSensitive": false,
+    "useEnabledMfas": true,
+    "authRoleArn": {
+      "Fn::GetAtt": [
+        "AuthRole",
+        "Arn"
+      ]
+    },
+    "unauthRoleArn": {
+      "Fn::GetAtt": [
+        "UnauthRole",
+        "Arn"
+      ]
+    },
+    "breakCircularDependency": true,
+    "dependsOn": [],
+    "hostedUI": false
+  }
+}

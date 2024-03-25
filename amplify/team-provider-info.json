@@ -1,0 +1,20 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-intellasure-staging-222016-authRole",
+      "UnauthRoleArn": "arn:aws:iam::549112134652:role/amplify-intellasure-staging-222016-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::549112134652:role/amplify-intellasure-staging-222016-authRole",
+      "Region": "us-west-1",
+      "DeploymentBucketName": "amplify-intellasure-staging-222016-deployment",
+      "UnauthRoleName": "amplify-intellasure-staging-222016-unauthRole",
+      "StackName": "amplify-intellasure-staging-222016",
+      "StackId": "arn:aws:cloudformation:us-west-1:549112134652:stack/amplify-intellasure-staging-222016/095ef330-e251-11ee-9a1c-06b4959d78a7",
+      "AmplifyAppId": "dp7m88yel3k4h"
+    },
+    "categories": {
+      "auth": {
+        "Intellasure": {}
+      }
+    }
+  }
+}
