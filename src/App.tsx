@@ -7,12 +7,16 @@ import LoginScreen from './Screens/Authentcation/LoginScreen';
 import HomeScreen from './Screens/Home/HomeScreen';
 import { Amplify } from 'aws-amplify';
 import amplifyconfig from './amplifyconfiguration.json';
+import SignupScreen from './Screens/Authentcation/SignupScreen';
+import AccessCodeScreen from './Screens/Authentcation/AccessCodeScreen';
+import ConfirmEmailScreen from './Screens/Authentcation/ConfirmEmailScreen';
+import LogoutScreen from './Screens/Authentcation/LogoutScreen';
 
 Amplify.configure(amplifyconfig)
 
 function App() {
 
-  const {authLoading, currentUser, grabCurrentUser} = useAuth()
+  const {validAccessCode, currentUser, grabCurrentUser} = useAuth()
 
   useEffect(() => {
     grabCurrentUser()
@@ -20,33 +24,33 @@ function App() {
 
   return (
     <div>
-      <BrowserRouter>
-        {/* {
-          authLoading
-            ? <p className='text-3xl font-bold'>Loading</p>
-            : currentUser.username === null
-                ? <p className='text-3xl font-bold'>Not Logged In</p>
-                : <p className='text-3xl font-bold'>Logged In</p>
-        } */}
-        <Routes>
-          <Route
-            path="/"
-            element={
-              currentUser.username ? <HomeScreen /> : <Navigate to="/auth/login" />
-            }
-          />
-          <Route
-            path="/external"
-            element={
-              currentUser.username ? <HomeScreen /> : <Navigate to="/auth/login" />
-            }
-          />
-          {/* Public routes */}
-          <Route path="/auth/login" element={<LoginScreen />} />
-          <Route path="/auth/logout" element={<LoginScreen />} />
-          <Route path="/external" element={<LoginScreen />} />
-        </Routes>
-      </BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            currentUser.username ? <HomeScreen /> : <Navigate to="/auth/login" />
+          }
+        />
+        <Route
+          path="/auth/logout"
+          element={
+            currentUser.username != null ? <LogoutScreen /> : <Navigate to="/auth/login" />
+          }
+        />
+        {/* Public routes */}
+        <Route path="/auth/confirmation" element={<ConfirmEmailScreen />} />
+        <Route path="/auth/login" element={<LoginScreen />} />
+        <Route path="/auth/accessCode" element={<AccessCodeScreen />} />
+        <Route
+          path="/auth/signup"
+          element={
+            validAccessCode ? <SignupScreen /> : <Navigate to="/auth/accessCode" />
+          }
+        />
+        <Route path="/auth/signup" element={<SignupScreen />} />
+        <Route path="/auth/logout" element={<LoginScreen />} />
+        <Route path="/external" element={<LoginScreen />} />
+      </Routes>
     </div>
   );
 }

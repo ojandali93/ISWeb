@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import InputContainerUser from '../../Components/General/InputContainerUser'
 import { useAuth } from '../../Context/AuthContext'
+import { Link, Navigate } from 'react-router-dom'
 
 const LoginScreen = () => {
 
@@ -52,8 +53,8 @@ const LoginScreen = () => {
                   <p>Login</p>
                 </div>
           }
-          <div onClick={() => {signInUser({username, password})}}>
-            <p>Signup</p>
+          <div>
+            <Link to="/auth/accessCode">Signup</Link>
           </div>
         </div>
       </div>
