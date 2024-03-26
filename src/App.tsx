@@ -11,6 +11,7 @@ import SignupScreen from './Screens/Authentcation/SignupScreen';
 import AccessCodeScreen from './Screens/Authentcation/AccessCodeScreen';
 import ConfirmEmailScreen from './Screens/Authentcation/ConfirmEmailScreen';
 import LogoutScreen from './Screens/Authentcation/LogoutScreen';
+import ForgotPasswordScreen from './Screens/Authentcation/ForgotPasswordScreen';
 
 Amplify.configure(amplifyconfig)
 
@@ -40,6 +41,7 @@ function App() {
         {/* Public routes */}
         <Route path="/auth/confirmation" element={<ConfirmEmailScreen />} />
         <Route path="/auth/login" element={<LoginScreen />} />
+        <Route path="/auth/forgotPassword" element={<ForgotPasswordScreen />} />
         <Route path="/auth/accessCode" element={<AccessCodeScreen />} />
         <Route
           path="/auth/signup"

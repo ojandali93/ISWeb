@@ -5,7 +5,7 @@ import { Link, Navigate } from 'react-router-dom'
 
 const LoginScreen = () => {
 
-  const {authLoading, signInUser} = useAuth()
+  const {authLoading, signInUser, validLogin} = useAuth()
 
   const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')
@@ -22,6 +22,11 @@ const LoginScreen = () => {
     <div>
       <div>
         <h1>Login</h1>
+        {
+          validLogin
+            ? null
+            : <p className='text-sm font-600 text-red-500'>Username/Password don't match our records</p>
+        }
         <InputContainerUser
           value={username}
           handleFunction={handleUsernameChange}
@@ -41,7 +46,7 @@ const LoginScreen = () => {
           split={'full'}
         />
         <div>
-          <p>Forgot Password?</p>
+          <Link to="/auth/forgotPassword">Forgot Password?</Link>
         </div>
         <div>
           {

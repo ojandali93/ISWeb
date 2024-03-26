@@ -199,7 +199,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         navigate('/')
       })
       .catch((error) => {
-        console.log(`Error getting user when login: ${error}`);
         setAuthLoading(false);
       });
   };
@@ -218,7 +217,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setAuthLoading(false);
       })
       .catch((error) => {
-        console.log(`Error getting user profile when login: ${error}`);
         setAuthLoading(false);
       });
   };
