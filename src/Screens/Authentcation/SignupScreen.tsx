@@ -5,6 +5,7 @@ import { useAuth } from '../../Context/AuthContext'
 
 const SignupScreen = () => {
   const { createNewUser } = useAuth();
+  const navigate = useNavigate()
 
   const [firstName, setFirstName] = useState<string>('')
   const [lastName, setLastName] = useState<string>('')
@@ -36,18 +37,21 @@ const SignupScreen = () => {
     createNewUser({ firstName, lastName, email, password });
   };
 
+  const goToLogin = () => {
+    navigate('/')
+  }
 
   return (
-    <div>
-      <div>
-        <h1>Signup</h1>
+    <div className='h-screen w-screen flex flex-row justify-center items-center'>
+      <div className='w-1/4 bg-white p-5 rounded-xl'>
+        <h1 className='pb-2 text-3xl font-bold text-black'>Signup</h1>
         <InputContainerUser
           value={firstName}
           handleFunction={handleFirstNameChange}
           placeHolder={'first name...'}
           type='text'
           capitalize={'none'}
-          icon={'user'}
+          icon={'First Name'}
           split={'full'}
         />
         <InputContainerUser
@@ -56,7 +60,7 @@ const SignupScreen = () => {
           placeHolder={'last name...'}
           type='text'
           capitalize={'none'}
-          icon={'user'}
+          icon={'Last Name'}
           split={'full'}
         />
         <InputContainerUser
@@ -65,32 +69,32 @@ const SignupScreen = () => {
           placeHolder={'email...'}
           type='text'
           capitalize={'none'}
-          icon={'user'}
+          icon={'Email'}
           split={'full'}
         />
         <InputContainerUser
           value={password}
           handleFunction={handlePasswordChange}
-          placeHolder={'****'}
+          placeHolder={'*******'}
           type='password'
           capitalize={'none'}
-          icon={'user'}
+          icon={'Password'}
           split={'full'}
         />
         <InputContainerUser
           value={verify}
           handleFunction={handleVerifyChange}
-          placeHolder={'****'}
+          placeHolder={'********'}
           type='password'
           capitalize={'none'}
-          icon={'user'}
+          icon={'Verify Password'}
           split={'full'}
         />
-        <div onClick={handleSignup}>
-            <p>Signup</p>
-          </div>
-        <div>
-          <Link to="/">Login</Link>
+        <div className='flex flex-row justify-center bg-primary py-2 rounded-lg mt-2' onClick={handleSignup}>
+          <p className='font-bold text-white'>Signup</p>
+        </div>
+        <div className='mt-2'>
+          <p className='text-xs text-center pt-2'>Have an account: <span className='text-primary font-bold' onClick={() => {goToLogin()}}>Login</span></p>
         </div>
       </div>
     </div>

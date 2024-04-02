@@ -19,26 +19,27 @@ const ConfirmEmailScreen = () => {
   }
 
   return (
-    <div>
-      <div>
-        <h1>Email Confirmation</h1>
+    <div className='h-screen w-screen flex flex-row justify-center items-center'>
+      <div className='w-1/4 bg-white p-5 rounded-xl'>
+        <h1 className='pb-2 text-3xl font-bold text-black'>Email Confirmation</h1>
+        <p>Check your email for a confirmatino code.</p>
         <InputContainerUser
           value={confirmationCode}
           handleFunction={handleConfirmationCodeChange}
           placeHolder={'confirmation code...'}
           type='text'
           capitalize={'none'}
-          icon={'user'}
+          icon={'Confirmation Code'}
           split={'full'}
         />
-        <div onClick={() => {checkConfirmationCide()}}>
-          <p>Confirm Code</p>
+        <div className='flex flex-row justify-center bg-primary py-2 rounded-lg mt-2' onClick={() => {checkConfirmationCide()}}>
+          <p className='font-bold text-white'>Confirm Code</p>
         </div>
-        <div onClick={() => {resetConfirmEmail()}}>
-          <p>Resend Code</p>
+        <div className='text-center mt-2' onClick={() => {resetConfirmEmail()}}>
+          <p className='text-xs text-center pt-2 text-primary'>Resend Code</p>
         </div>
-        <div>
-          <Link to="/">Back To Login</Link>
+        <div className='text-center mt-2'>
+          <Link className='text-xs text-center pt-2' to="/">Back To Login</Link>
         </div>
       </div>
     </div>

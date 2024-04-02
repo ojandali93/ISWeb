@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { getCurrentUser, signIn, signUp, signOut } from 'aws-amplify/auth';
 import axios from 'axios';
 import { Navigate, redirect, useNavigate } from 'react-router-dom';
-import { confirmSignUp, resendSignUpCode } from 'aws-amplify/auth'
+import { confirmSignUp, resendSignUpCode, resetPassword } from 'aws-amplify/auth'
 
 const accessOptions = {
   'PHG620I': {
@@ -92,6 +92,7 @@ interface AuthContextType {
   resetConfirmEmail: () => void;
   confirmEmailCode: (confirmationCode: string) => void;
   grabCurrentUserProfile: (userId: string) => void;
+  resetUserEmail: (email: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -124,6 +125,7 @@ const AuthContext = createContext<AuthContextType>({
   validateAccessCode: () => {},
   grabCurrentUser: () => {},
   grabCurrentUserProfile: () => {},
+  resetUserEmail: () => {}
 });
 
 interface AuthProviderProps {
@@ -181,6 +183,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     signIn({ username, password })
       .then((user) => {
         console.log('Sign-in successful:', user);
+        setValidLogin(true)
         grabCurrentUser();
       })
       .catch((error) => {
@@ -328,6 +331,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     });
   }
 
+  const resetUserEmail = (email: string) => {
+    resetPassword({username: email})
+      .then((response) => {
+        console.log('reset password email was sent.')
+        navigate('/auth/login')
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
   const signOutUser = () => {
     signOut()
       .then((response) => {
@@ -361,6 +375,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         confirmEmailCode,
         resetConfirmEmail,
         grabCurrentUserProfile,
+        resetUserEmail
       }}
     >
       {children}

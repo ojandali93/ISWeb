@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import InputContainerUser from '../../Components/General/InputContainerUser'
 import { useAuth } from '../../Context/AuthContext'
-import { Link, Navigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
+// import '../../App.css';
 
 const LoginScreen = () => {
+  const navigate = useNavigate()
 
   const {authLoading, signInUser, validLogin} = useAuth()
 
@@ -18,49 +20,56 @@ const LoginScreen = () => {
     setPassword(e.target.value)
   }
 
+  const loginAUser = () => {
+    signInUser({username, password})
+  }
+
+  const goToHome = () => {
+    navigate('/auth/accessCode')
+  }
+
   return (
-    <div>
-      <div>
-        <h1>Login</h1>
+    <div className='h-screen w-screen flex flex-row justify-center items-center'>
+      <div className='w-1/4 bg-white p-5 rounded-xl'>
+        <h1 className='pb-2 text-3xl font-bold text-black'>Login</h1>
         {
           validLogin
             ? null
-            : <p className='text-sm font-600 text-red-500'>Username/Password don't match our records</p>
+            : <p className='pb-2 text-sm text-red-500'>Username/Password don't match our records</p>
         }
-        <InputContainerUser
-          value={username}
-          handleFunction={handleUsernameChange}
-          placeHolder={'username'}
-          type='text'
-          capitalize={'none'}
-          icon={'user'}
-          split={'full'}
-        />
-        <InputContainerUser
-          value={password}
-          handleFunction={handlePasswordChange}
-          placeHolder={'password'}
-          type='password'
-          capitalize={'none'}
-          icon={'lock'}
-          split={'full'}
-        />
-        <div>
-          <Link to="/auth/forgotPassword">Forgot Password?</Link>
+        <form onSubmit={() => {loginAUser()}}>
+          <InputContainerUser
+            value={username}
+            handleFunction={handleUsernameChange}
+            placeHolder={'username'}
+            type='text'
+            capitalize={'none'}
+            icon={'Username'}
+            split={'full'}
+          />
+          <InputContainerUser
+            value={password}
+            handleFunction={handlePasswordChange}
+            placeHolder={'password'}
+            type='password'
+            capitalize={'none'}
+            icon={'Password'}
+            split={'full'}
+          />
+        </form>
+        <div className='text-end'>
+          <Link to="/auth/forgotPassword" className='text-sm text-primary'>Forgot Password?</Link>
         </div>
-        <div>
+        <div onClick={() => {signInUser({username, password})}} 
+            className='flex flex-row justify-center bg-primary py-2 rounded-lg mt-2'>
           {
             authLoading 
-              ? <div>
-                  <p>Loading...</p>
-                </div>
-              : <div onClick={() => {signInUser({username, password})}}>
-                  <p>Login</p>
-                </div>
+              ? <p className='font-bold text-white'>Loading...</p>
+              : <p className='font-bold text-white'>Login</p>
           }
-          <div>
-            <Link to="/auth/accessCode">Signup</Link>
-          </div>
+        </div>
+        <div className=' mt-2'>
+          <p className='text-xs text-center pt-2'>Create an account: <span onClick={() =>{goToHome()}} className='text-primary font-bold'>Click Here</span></p>
         </div>
       </div>
     </div>
