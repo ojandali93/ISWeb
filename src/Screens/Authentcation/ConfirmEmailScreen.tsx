@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import InputContainerUser from '../../Components/General/InputContainerUser'
 import { useAuth } from '../../Context/AuthContext'
+import BackgrounImage from '../../Assets/background.png'
+
 
 const ConfirmEmailScreen = () => {
   const navigate = useNavigate()
@@ -19,7 +21,13 @@ const ConfirmEmailScreen = () => {
   }
 
   return (
-    <div className='h-screen w-screen flex flex-row justify-center items-center'>
+    <div className='h-screen w-screen flex flex-row justify-center items-center'
+      style={{
+        backgroundImage: `url(${BackgrounImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
       <div className='w-1/4 bg-white p-5 rounded-xl'>
         <h1 className='pb-2 text-3xl font-bold text-black'>Email Confirmation</h1>
         <p>Check your email for a confirmatino code.</p>

@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import InputContainerUser from '../../Components/General/InputContainerUser'
 import { useAuth } from '../../Context/AuthContext'
+import BackgrounImage from '../../Assets/background.png'
+
 
 const ForgotPasswordScreen = () => {
 
@@ -18,7 +20,13 @@ const ForgotPasswordScreen = () => {
   }
 
   return (
-    <div className='h-screen w-screen flex flex-row justify-center items-center'>
+    <div className='h-screen w-screen flex flex-row justify-center items-center'
+      style={{
+        backgroundImage: `url(${BackgrounImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
       <div className='w-1/4 bg-white p-5 rounded-xl'>
         <h1 className='pb-2 text-3xl font-bold text-black'>Forgot Password</h1>
         <p>Confirm your email to reset your password</p>

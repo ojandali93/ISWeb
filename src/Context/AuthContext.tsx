@@ -88,6 +88,7 @@ interface AuthContextType {
     password
   }: UserPassthrough) => void;
   grabCurrentUser: () => void;
+  unvalidateAccessCode: () => void;
   signOutUser: () => void;
   resetConfirmEmail: () => void;
   confirmEmailCode: (confirmationCode: string) => void;
@@ -117,6 +118,7 @@ const AuthContext = createContext<AuthContextType>({
   invalidEmail: false,
   accessCode: {code: '', company: '', privileges: '', department: ''},
   confirmEmailCode: () => {},
+  unvalidateAccessCode: () => {},
   signInUser: () => {},
   createNewUser: () => {},
   removeAccessCode: () => {},
@@ -354,6 +356,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       })
   }
 
+  const unvalidateAccessCode = () => {
+    setValidAccessCode(false)
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -371,6 +377,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         removeAccessCode,
         validateAccessCode,
         signOutUser,
+        unvalidateAccessCode,
         grabCurrentUser,
         confirmEmailCode,
         resetConfirmEmail,
