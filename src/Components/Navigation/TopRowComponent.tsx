@@ -13,11 +13,11 @@ const TopRowComponent = () => {
         <img className='h-8 ml-2' src={Logo}/>
         <p className='text-black font-bold ml-2 text-3xl'>Intellasure</p>
       </div>
-      <div className='flex flex-row'>
+      <div className='flex flex-row mr-2'>
         {
           topNavigation.map((tab) => {
             return(
-              <NavigationTabComponent tab={tab.label} icon={tab.icon} route={tab.route}/>
+              <NavigationTabComponent tab={tab.label} icon={tab.icon} route={tab.route} position={'top'}/>
             )
           })
         }

@@ -21,6 +21,7 @@ import AccountsScreen from './Screens/Accounts/AccountsScreen';
 import TicketsScreen from './Screens/Tickets/TicketsScreen';
 import SupportScreen from './Screens/Support/SupportScreen';
 import SettingsScreen from './Screens/Settings/SettingsScreen';
+import AboutScreen from './Screens/About/AboutScreen';
 
 Amplify.configure(amplifyconfig)
 
@@ -93,6 +94,12 @@ function App() {
           path="/settings"
           element={
             currentUser.username ? <SettingsScreen /> : <Navigate to="/auth/login" />
+          }
+        />
+        <Route
+          path="/about"
+          element={
+            currentUser.username ? <AboutScreen /> : <Navigate to="/auth/login" />
           }
         />
         <Route

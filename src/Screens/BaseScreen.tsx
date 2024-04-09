@@ -12,7 +12,7 @@ const LayoutComponent: React.FC<LayoutComponentProps> = ({ children }) => {
       <TopRowComponent />
       <div className='flex-1 flex flex-row'>
         <SidebarComponent />
-        <div className='flex-1 bg-white ml-2 rounded-tl-md'>
+        <div className='flex-1 bg-white ml-1.5 rounded-tl-md'>
           {children}
         </div>
       </div>

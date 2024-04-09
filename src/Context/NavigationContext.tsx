@@ -27,17 +27,17 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
     },
     {
       label: 'External',
-      icon: 'dollar-sign',
+      icon: 'download',
       route: '/external'
     },
     {
       label: 'Claims',
-      icon: 'hash',
+      icon: 'file-text',
       route: '/claims'
     },
     {
       label: 'Follow Up',
-      icon: 'rotate-cw',
+      icon: 'repeat',
       route: '/follow-up'
     },
     {
@@ -60,7 +60,12 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
   const topNavigation = [
     {
       label: '',
-      icon: 'help-circle',
+      icon: 'info',
+      route: '/about'
+    },
+    {
+      label: '',
+      icon: 'life-buoy',
       route: '/help'
     },
     {

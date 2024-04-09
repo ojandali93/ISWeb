@@ -6,10 +6,11 @@ interface NavigationTabProps {
   tab: string;
   icon: string;
   route: string;
+  position: string;
 }
 
 const NavigationTabComponent: React.FC<NavigationTabProps> = (props) => {
-  const {tab, icon, route} = props
+  const {tab, icon, route, position} = props
   const IconComponent = getIconComponent(icon);
   const navigate = useNavigate()
   const location = useLocation();
@@ -19,11 +20,10 @@ const NavigationTabComponent: React.FC<NavigationTabProps> = (props) => {
   return (
     <div 
       onClick={() => {navigate(route)}} 
-      className={`w-full h-10 flex flex-row items-center hover:cursor-pointer ${
-        isActive ? 'bg-slate-300 text-white' : 'hover:bg-slate-200 text-white'
-      }`}
+      className={`w-full h-10 flex flex-row items-center hover:cursor-pointer 
+        ${position === 'top' ? 'hover:bg-sky-600 rounded-xl text-white' : isActive ? 'bg-slate-300 text-white' : 'hover:bg-slate-200 text-white' }`}
     >
-      {IconComponent && <IconComponent size={20} color='black' className='ml-2 mr-2' />}
+      {IconComponent && position === 'top' ? <IconComponent size={22} color='black' className='ml-2 mr-2 stroke-[3px]' /> : <IconComponent size={20} color='black' className='ml-2 mr-2' />}
       <h1 className='text-base font-semibold text-black'>{tab}</h1>
     </div>
   )
