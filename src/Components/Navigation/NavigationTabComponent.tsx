@@ -1,17 +1,28 @@
 import React from 'react'
 import {Home} from 'react-feather'
+import { useNavigate, useLocation } from 'react-router-dom';
 
 interface NavigationTabProps {
   tab: string;
   icon: string;
+  route: string;
 }
 
 const NavigationTabComponent: React.FC<NavigationTabProps> = (props) => {
-  const {tab, icon} = props
+  const {tab, icon, route} = props
   const IconComponent = getIconComponent(icon);
+  const navigate = useNavigate()
+  const location = useLocation();
+
+  const isActive = location.pathname === route;
 
   return (
-    <div className='w-full h-10 flex flex-row items-center'>
+    <div 
+      onClick={() => {navigate(route)}} 
+      className={`w-full h-10 flex flex-row items-center hover:cursor-pointer ${
+        isActive ? 'bg-slate-300 text-white' : 'hover:bg-slate-200 text-white'
+      }`}
+    >
       {IconComponent && <IconComponent size={20} color='black' className='ml-2 mr-2' />}
       <h1 className='text-base font-semibold text-black'>{tab}</h1>
     </div>

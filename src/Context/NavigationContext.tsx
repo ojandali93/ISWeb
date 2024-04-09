@@ -1,8 +1,9 @@
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode, useState } from 'react';
 
 interface NavigationTab {
   label: string;
   icon: string;
+  route: string;
 }
 
 interface NavigationContextValue {
@@ -15,53 +16,66 @@ const NavigationContext = createContext<NavigationContextValue | undefined>(unde
 export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const sideNavigation = [
     {
-      label: 'Intellachat AI',
-      icon: 'zap'
-    },
-    {
       label: 'Dashboard',
-      icon: 'home'
+      icon: 'home',
+      route: '/'
     },
     {
       label: 'Historic',
-      icon: 'list' // Corrected typo from 'Sheild' to 'Shield'
+      icon: 'list',
+      route: '/historic'
     },
     {
       label: 'External',
-      icon: 'dollar-sign'
+      icon: 'dollar-sign',
+      route: '/external'
     },
     {
       label: 'Claims',
-      icon: 'hash'
+      icon: 'hash',
+      route: '/claims'
     },
     {
       label: 'Follow Up',
-      icon: 'rotate-cw'
+      icon: 'rotate-cw',
+      route: '/follow-up'
     },
     {
       label: 'Accounts',
-      icon: 'users'
+      icon: 'users',
+      route: '/accounts'
     },
     {
       label: 'Tickets',
-      icon: 'layers'
+      icon: 'layers',
+      route: '/tickets'
+    },
+    {
+      label: 'Intellachat AI',
+      icon: 'zap',
+      route: '/intellachat'
     },
   ];
 
   const topNavigation = [
     {
       label: '',
-      icon: 'help-circle'
+      icon: 'help-circle',
+      route: '/help'
     },
     {
       label: '',
-      icon: 'sliders'
+      icon: 'sliders',
+      route: '/settings'
     },
     {
       label: '',
-      icon: 'log-out'
+      icon: 'log-out',
+      route: '/auth/logout'
     },
   ];
+
+  const [selectedNavTab, setSelectedNavTab] = useState('')
 
   const value: NavigationContextValue = { sideNavigation, topNavigation };
 

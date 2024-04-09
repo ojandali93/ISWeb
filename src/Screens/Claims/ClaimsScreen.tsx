@@ -1,24 +1,19 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { useAuth } from '../../Context/AuthContext'
-import SidebarComponent from '../../Components/Navigation/SidebarComponent'
 import TopRowComponent from '../../Components/Navigation/TopRowComponent'
+import SidebarComponent from '../../Components/Navigation/SidebarComponent'
 
-const HomeScreen = () => {
-
-  const {signOutUser} = useAuth()
-
+const ClaimsScreen = () => {
   return (
     <div className='h-screen w-screen flex flex-col'>
       <TopRowComponent />
       <div className='flex-1 flex flex-row'>
         <SidebarComponent />
         <div className='flex-1 bg-white ml-2 rounded-tl-md'>
-          <p>Dashboard</p>
+          <p>Claims</p>
         </div>
       </div>
     </div>
   )
 }
 
-export default HomeScreen
+export default ClaimsScreen

@@ -7,11 +7,11 @@ const SidebarComponent = () => {
   const { sideNavigation } = useNavigation()
 
   return (
-    <div className='h-full w-52 bg-slate-300'>
+    <div className='h-full w-40 bg-white pt-2 rounded-tr-md'>
       {
         sideNavigation.map((tab) => {
           return(
-            <NavigationTabComponent tab={tab.label} icon={tab.icon}/>
+            <NavigationTabComponent tab={tab.label} icon={tab.icon} route={tab.route}/>
           )
         })
       }
