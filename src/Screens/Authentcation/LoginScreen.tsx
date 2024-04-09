@@ -48,10 +48,10 @@ const LoginScreen = () => {
           <InputContainerUser
             value={username}
             handleFunction={handleUsernameChange}
-            placeHolder={'username'}
+            placeHolder={'email'}
             type='text'
             capitalize={'none'}
-            icon={'Username'}
+            icon={'Email'}
             split={'full'}
           />
           <InputContainerUser
