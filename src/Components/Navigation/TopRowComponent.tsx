@@ -1,14 +1,18 @@
 import React from 'react'
 import { useNavigation } from '../../Context/NavigationContext'
 import NavigationTabComponent from './NavigationTabComponent'
+import Logo from '../../Assets/intellasure-logoqas.png'
 
 const TopRowComponent = () => {
 
   const {topNavigation} = useNavigation()
 
   return (
-    <div className='w-screen h-12 flex flex-row justify-between items-center'>
-      <p className='text-white font-bold'>intellasure</p>
+    <div className='w-screen h-14 flex flex-row justify-between items-center'>
+      <div className='flex flex-row items-center'>
+        <img className='h-8 ml-2' src={Logo}/>
+        <p className='text-black font-bold ml-2 text-3xl'>Intellasure</p>
+      </div>
       <div className='flex flex-row'>
         {
           topNavigation.map((tab) => {
