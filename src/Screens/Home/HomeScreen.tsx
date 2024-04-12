@@ -6,6 +6,8 @@ import SelectComponent from '../../Components/Inputs/SelectComponent';
 import ButtonComponent from '../../Components/Inputs/ButtonComponent';
 import SearchComponent from '../../Components/Inputs/SearchComponent';
 import CalendarSelectComponent from '../../Components/Inputs/CalendarSelectComponent';
+import MenuTabsComponent from '../../Components/Navigation/MenuTabsComponent';
+import SidebarSubMenuComponent from '../../Components/Navigation/SidebarSubMenuComponent';
 
 const options = [
   {
@@ -22,6 +24,34 @@ const options = [
   },
 ]
 
+const navigation = [
+  {
+    label: 'All'
+  },
+  {
+    label: 'Pending'
+  },
+  {
+    label: 'Successful'
+  },
+  {
+    label: 'Failed'
+  },
+]
+
+const sideNavigation = [
+  {
+    tab: 'Collab MD.',
+    icon: 'folder',
+    route: '/'
+  },
+  {
+    tab: 'Avea',
+    icon: 'folder',
+    route: '/'
+  },
+]
+
 const HomeScreen = () => {
 
   const [currentPage, setCurrentPage] = useState(1)
@@ -34,6 +64,10 @@ const HomeScreen = () => {
   const [activeSearch, setActiveSearch] = useState<boolean>(false)
   
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+
+  const [selectedName, setSelectedNav] = useState<string>('All')
+
+  const [selectedSubTab, setSelectedSubTab] = useState<string>('Collab MD.')
 
   const handlePageChange = (page: number) => {
     console.log(page)
@@ -67,6 +101,11 @@ const HomeScreen = () => {
     setSelectedDate(date);
   };
 
+  const handleMenuChange = (text: string) => {
+    console.log(text)
+    setSelectedSubTab(text)
+  }
+
   return (
     <LayoutComponent>
       <PaginationComponent handlePageChange={handlePageChange} currentPage={currentPage} pageCount={pageCount}/>
@@ -83,6 +122,8 @@ const HomeScreen = () => {
                         activeSearch={activeSearch}
                         handleActiveSearch={handleActiveSearch}/>
       <CalendarSelectComponent selectedDate={selectedDate} handleDateChange={handleDateChange}/>
+      <MenuTabsComponent options={navigation} selectedName={selectedName} handleMenuChange={handleMenuChange}/>
+      <SidebarSubMenuComponent options={sideNavigation} selectedSubTab={selectedSubTab} handleMenuChange={handleMenuChange}/>
     </LayoutComponent>
   )
 }
