@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import InputContainerUser from '../../Components/General/InputContainerUser'
+import InputContainerUser from '../../Components/Inputs/InputContainerUser'
 import { useAuth } from '../../Context/AuthContext'
 import BackgrounImage from '../../Assets/background.png'
 
