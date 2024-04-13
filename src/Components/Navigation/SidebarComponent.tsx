@@ -7,7 +7,7 @@ const SidebarComponent = () => {
   const { sideNavigation } = useNavigation()
 
   return (
-    <div className='h-full w-52 pt-0 rounded-tr-sm bg-sky-100'>
+    <div className='h-full w-52 pt-0 rounded-tr-sm bg-slate-700'>
       {
         sideNavigation.map((tab) => {
           return(

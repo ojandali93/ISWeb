@@ -8,6 +8,7 @@ import SearchComponent from '../../Components/Inputs/SearchComponent';
 import CalendarSelectComponent from '../../Components/Inputs/CalendarSelectComponent';
 import MenuTabsComponent from '../../Components/Navigation/MenuTabsComponent';
 import SidebarSubMenuComponent from '../../Components/Navigation/SidebarSubMenuComponent';
+import SelectInTableComponent from '../../Components/Inputs/SelectInTableComponent';
 
 const options = [
   {
@@ -101,6 +102,10 @@ const HomeScreen = () => {
     setSelectedDate(date);
   };
 
+  const handleTabChange = (text: string) => {
+    setSelectedNav(text)
+  }
+
   const handleMenuChange = (text: string) => {
     console.log(text)
     setSelectedSubTab(text)
@@ -115,6 +120,12 @@ const HomeScreen = () => {
                         handleOpenSelect={handleOpenSelect}
                         selectedValue={selectedValue}
                         isOpen={isOpen}/>
+      <SelectInTableComponent placeholder={'Select'} 
+                        options={options} 
+                        handleOptionClick={handleOptionClick} 
+                        handleOpenSelect={handleOpenSelect}
+                        selectedValue={selectedValue}
+                        isOpen={isOpen}/>
       <ButtonComponent label={'Submit'} handler={handleConfirmClick}/>
       <SearchComponent placeholder='Search...'
                         searchTerm={searchTerm} 
@@ -122,7 +133,7 @@ const HomeScreen = () => {
                         activeSearch={activeSearch}
                         handleActiveSearch={handleActiveSearch}/>
       <CalendarSelectComponent selectedDate={selectedDate} handleDateChange={handleDateChange}/>
-      <MenuTabsComponent options={navigation} selectedName={selectedName} handleMenuChange={handleMenuChange}/>
+      <MenuTabsComponent options={navigation} selectedName={selectedName} handleMenuChange={handleTabChange}/>
       <SidebarSubMenuComponent options={sideNavigation} selectedSubTab={selectedSubTab} handleMenuChange={handleMenuChange}/>
     </LayoutComponent>
   )

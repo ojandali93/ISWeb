@@ -34,7 +34,7 @@ function App() {
   }, [])
 
   return (
-    <div className='w-screen h-screen flex-column bg-sky-300'>
+    <div className='w-screen h-screen flex-column bg-slate-800'>
       <Routes>
         <Route
           path="/"

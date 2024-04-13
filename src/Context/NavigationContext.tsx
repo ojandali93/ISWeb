@@ -30,6 +30,11 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
       icon: 'download',
       route: '/external'
     },
+    // {
+    //   label: 'Billing',
+    //   icon: 'file-text',
+    //   route: '/external'
+    // },
     {
       label: 'Claims',
       icon: 'file-text',
@@ -48,6 +53,16 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
     {
       label: 'Tickets',
       icon: 'layers',
+      route: '/tickets'
+    },
+    {
+      label: 'Admin',
+      icon: 'lock',
+      route: '/tickets'
+    },
+    {
+      label: 'Dev',
+      icon: 'git-branch',
       route: '/tickets'
     },
     {

@@ -21,10 +21,10 @@ const NavigationTabComponent: React.FC<NavigationTabProps> = (props) => {
     <div 
       onClick={() => {navigate(route)}} 
       className={`w-full h-10 flex flex-row items-center hover:cursor-pointer 
-        ${position === 'top' ? 'hover:bg-sky-400 rounded-xl text-white' : isActive ? 'bg-sky-500 text-white' : 'hover:bg-sky-400 text-white' }`}
+        ${position === 'top' ? 'hover:bg-sky-400 rounded-xl text-white' : isActive ? 'bg-slate-900 text-white' : 'hover:bg-slate-600 text-white' }`}
     >
-      {IconComponent && position === 'top' ? <IconComponent size={22} color='black' className='ml-2 mr-2 stroke-[3px]' /> : <IconComponent size={20} color={isActive ? 'white' : 'black'} className='ml-2 mr-2' />}
-      <h1 className={`text-base font-semibold ${isActive ? 'text-white' : 'text-black'}`}>{tab}</h1>
+      {IconComponent && position === 'top' ? <IconComponent size={22} color='white' className='ml-2 mr-2 stroke-[3px]' /> : <IconComponent size={20} color={isActive ? 'white' : 'white'} className='ml-2 mr-2' />}
+      <h1 className={`text-base font-semibold ${isActive ? 'text-white' : 'text-white'}`}>{tab}</h1>
     </div>
   )
 }
