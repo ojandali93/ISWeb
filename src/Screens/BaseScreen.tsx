@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 import TopRowComponent from '../Components/Navigation/TopRowComponent';
 import SidebarComponent from '../Components/Navigation/SidebarComponent';
 
@@ -7,12 +7,23 @@ interface LayoutComponentProps {
 }
 
 const LayoutComponent: React.FC<LayoutComponentProps> = ({ children }) => {
+  const [maxWidth, setMaxWidth] = React.useState(window.innerWidth);  
+  useEffect(() => {
+    const updateDimensions = () => {
+      setMaxWidth(window.innerWidth);
+    };
+    window.addEventListener('resize', updateDimensions);
+    return () => {
+      window.removeEventListener('resize', updateDimensions);
+    };
+  }, [maxWidth]);
+
   return (
     <div className='h-screen w-screen flex flex-col'>
       <TopRowComponent />
-      <div className='flex-1 flex flex-row'>
+      <div className='flex flex-1 flex-row' style={{ width: maxWidth}} >
         <SidebarComponent />
-        <div className='flex-1 bg-white rounded-tl-sm'>
+        <div id='content' style={{ width: maxWidth}} className='rounded-tl-md overflow-hidden'>
           {children}
         </div>
       </div>
