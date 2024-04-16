@@ -112,30 +112,7 @@ const HomeScreen = () => {
   }
 
   return (
-    <LayoutComponent>
-      <PaginationComponent handlePageChange={handlePageChange} currentPage={currentPage} pageCount={pageCount}/>
-      <SelectComponent placeholder={'Select'} 
-                        options={options} 
-                        handleOptionClick={handleOptionClick} 
-                        handleOpenSelect={handleOpenSelect}
-                        selectedValue={selectedValue}
-                        isOpen={isOpen}/>
-      <SelectInTableComponent placeholder={'Select'} 
-                        options={options} 
-                        handleOptionClick={handleOptionClick} 
-                        handleOpenSelect={handleOpenSelect}
-                        selectedValue={selectedValue}
-                        isOpen={isOpen}/>
-      <ButtonComponent label={'Submit'} handler={handleConfirmClick}/>
-      <SearchComponent placeholder='Search...'
-                        searchTerm={searchTerm} 
-                        handler={handleSearchUpdate}
-                        activeSearch={activeSearch}
-                        handleActiveSearch={handleActiveSearch}/>
-      <CalendarSelectComponent selectedDate={selectedDate} handleDateChange={handleDateChange}/>
-      <MenuTabsComponent options={navigation} selectedName={selectedName} handleMenuChange={handleTabChange}/>
-      <SidebarSubMenuComponent options={sideNavigation} selectedSubTab={selectedSubTab} handleMenuChange={handleMenuChange}/>
-    </LayoutComponent>
+    <LayoutComponent sticky={null} children={null} />
   )
 }
 

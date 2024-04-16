@@ -5,9 +5,7 @@ import LayoutComponent from '../BaseScreen'
 
 const ClaimsScreen = () => {
   return (
-    <LayoutComponent>
-      <p>Claims</p>
-    </LayoutComponent>
+    <LayoutComponent sticky={null} children={<p>Claims</p>} />
   )
 }
 

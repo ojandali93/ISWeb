@@ -3,9 +3,7 @@ import LayoutComponent from '../BaseScreen'
 
 const IntellachatScreen = () => {
   return (
-    <LayoutComponent>
-      <p>IntellaChat</p>
-    </LayoutComponent>
+    <LayoutComponent sticky={null} children={<p>Intellachat AI</p>} />
   )
 }
 

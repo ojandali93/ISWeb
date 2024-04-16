@@ -1,4 +1,4 @@
-export const ExternalColumns = [
+export const intakeOColumns = [
   {
     label:'Date',
     type:'text',
@@ -9,6 +9,7 @@ export const ExternalColumns = [
     type:'text',
     recordName: 'prefix'
   },
+
   {
     label:'Insurance',
     type:'text',
@@ -18,6 +19,11 @@ export const ExternalColumns = [
     label:'Active',
     type:'text',
     recordName: 'active'
+  },
+  {
+    label:'Coordinator',
+    type:'text',
+    recordName: 'coordinator'
   },
   {
     label:'INN Admit %',

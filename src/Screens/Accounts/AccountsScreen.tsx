@@ -3,9 +3,7 @@ import LayoutComponent from '../BaseScreen'
 
 const AccountsScreen = () => {
   return (
-    <LayoutComponent>
-      <p>Accounts</p>
-    </LayoutComponent>
+    <LayoutComponent sticky={null} children={<p>Accounts</p>} />
   )
 }
 

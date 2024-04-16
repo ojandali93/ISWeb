@@ -3,9 +3,7 @@ import LayoutComponent from '../BaseScreen'
 
 const SupportScreen = () => {
   return (
-    <LayoutComponent>
-      <p>Support</p>
-    </LayoutComponent>
+    <LayoutComponent sticky={null} children={<p>Support</p>} />
   )
 }
 

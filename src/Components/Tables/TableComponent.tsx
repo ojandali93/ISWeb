@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import SelectOptionComponent from './SelectOptionComponent';
+import SelectPeopleComponent from './SelectPeopleComponent';
+
+interface PeopleOptions {
+  name: string;
+  userId: string;
+}
 
 interface ColumnData {
   label: string;
   type: string;
   recordName: string;
   options?: string[];
+  people?: PeopleOptions[];
 }
 
 interface RecordData {
@@ -17,15 +25,15 @@ interface TableProps {
 }
 
 const TableComponent: React.FC<TableProps> = (props) => {
-  const {columns, records} = props
+  const { columns, records } = props;
 
   return (
-    <div className="p-6 h-full w-full overflow-auto bg-slate-500">
-      <table className="rounded bg-slate-500 overflow-scroll">
-        <thead className="">
-          <tr className="bg-slate-600">
+    <div className='max-w-full max-h-full'>
+      <table className='w-full border-collapse'>
+        <thead className='bg-slate-800 sticky top-0 z-10 h-20'>
+          <tr className="bg-slate-800">
             {columns.map((column, index) => (
-              <th key={index} className="py-4 min-w-48">
+              <th key={index} className="py-4 min-w-52">
                 <p className='text-lg text-white'>{column.label}</p>
               </th>
             ))}
@@ -33,11 +41,35 @@ const TableComponent: React.FC<TableProps> = (props) => {
         </thead>
         <tbody>
           {records.map((record, rowIndex) => (
-            <tr key={rowIndex} className='text-center h-16 max-h-40 text-white'>
-              {columns.map((column, columnIndex) => (
-                // If recordName is empty string, render nothing, otherwise get the value from record
-                <td key={columnIndex}>{column.recordName ? record[column.recordName] : ''}</td>
-              ))}
+            <tr key={rowIndex} className={`text-center h-16 text-white ${rowIndex % 2 === 0 ? 'bg-alt-on' : 'bg-alt-off'}`}>
+              {columns.map((column, columnIndex) => {
+                const cellValue = column.recordName ? record[column.recordName] : '';
+                return (
+                  <td key={columnIndex}>
+                    {column.type === 'select' && column.options ? (
+                      <SelectOptionComponent
+                        options={column.options}
+                        value={cellValue}
+                        onChange={(newValue) => {
+                          console.log(newValue);
+                        }}
+                      />
+                    ) : column.type === 'boolean' ? (
+                      record[column.recordName] === true ? 'Yes' : record[column.recordName] === null ? 'Unknown' : 'No'
+                    ) : column.type === 'people' ? (
+                      <SelectPeopleComponent
+                        options={column.people}
+                        value={cellValue}
+                        onChange={(newValue) => {
+                          console.log(newValue);
+                        }}
+                      />
+                    ) : (
+                      record[column.recordName] ? record[column.recordName] : ''
+                    )}
+                  </td>
+                );
+              })}
             </tr>
           ))}
         </tbody>

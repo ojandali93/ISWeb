@@ -3,9 +3,7 @@ import LayoutComponent from '../BaseScreen'
 
 const FollowUpScreen = () => {
   return (
-    <LayoutComponent>
-      <p>Folllow Up</p>
-    </LayoutComponent>
+    <LayoutComponent sticky={null} children={<p>Follow UP</p>} />
   )
 }
 

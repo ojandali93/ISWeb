@@ -9,8 +9,8 @@ export const intakeOColumns = [
     type:'select',
     options: [
       'Pending',
-      'Yes',
-      'No'
+      'Arrived',
+      'MIA'
     ],
     recordName: 'checked_in'
   },
@@ -29,8 +29,8 @@ export const intakeOColumns = [
     type:'select',
     options: [
       'Pending',
-      'Arrived',
-      'MIA'
+      'Approved',
+      'Denied'
     ],
     recordName: 'booked'
   },
@@ -61,13 +61,14 @@ export const intakeOColumns = [
   },
   {
     label:'Active',
-    type:'text',
+    type:'boolean',
     recordName: 'active'
   },
   {
     label:'Coordinator',
-    type:'text',
-    recordName: 'coordinator'
+    type:'people',
+    recordName: 'coordinator',
+    people: []
   },
   {
     label:'INN Admit %',

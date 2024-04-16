@@ -6,11 +6,11 @@ const SidebarComponent = () => {
 
   const { sideNavigation } = useNavigation()
 
-  const [maxHeight, setMaxHeight] = React.useState(window.innerHeight - 56);
+  const [maxHeight, setMaxHeight] = React.useState(window.innerHeight - 52);
 
   useEffect(() => {
     const updateDimensions = () => {
-      setMaxHeight(window.innerHeight - 56);
+      setMaxHeight(window.innerHeight - 52);
     };
     window.addEventListener('resize', updateDimensions);
     return () => {
@@ -19,7 +19,7 @@ const SidebarComponent = () => {
   }, []);
 
   return (
-    <div className='h-screen w-52 rounded-tr-sm bg-slate-700' style={{height: maxHeight}}>
+    <div className='h-full min-w-52 max-w-52 bg-slate-800' style={{height: maxHeight}}>
       {
         sideNavigation.map((tab) => {
           return(

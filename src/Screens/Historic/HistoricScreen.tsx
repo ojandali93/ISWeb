@@ -3,12 +3,20 @@ import LayoutComponent from '../BaseScreen'
 import TableComponent from '../../Components/Tables/TableComponent'
 import axios from 'axios'
 import { intakeOColumns } from '../../Options/IntakeOptions'
+import FilterBarComponent from '../../Components/Tables/FilterBarComponent'
+
+interface coordinatorInfo {
+  name: string;
+  userid: string;
+}
 
 const HistoricScreen = () => {
 
   const [records, setRecords] = useState([])
+  const [columns, setColumns] = useState(intakeOColumns);
 
   useEffect(() => {
+    grabAllProfiles()
     getIntakeRecords()
   }, [])
 
@@ -28,7 +36,6 @@ const HistoricScreen = () => {
     };
     axios.request(config)
     .then((response) => {
-      console.log(JSON.stringify(response.data.data[0]))
       setRecords(response.data.data)
        
     })
@@ -37,13 +44,44 @@ const HistoricScreen = () => {
     });
   }
 
-  const screenWidth = window.innerWidth;
-  const maxWidth = screenWidth - 208;
+  const grabAllProfiles = () => {
+    let config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: 'https://intellasurebackend-docker.onrender.com/users/all',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    };
+    
+    axios.request(config)
+      .then((response) => {
+        let allCoordinators: any = [];
+        response.data.forEach((selection: any) => {
+          if(selection.department === 'intake'){
+            allCoordinators.push({name: selection.name, userId: selection.userid}); // Assuming you want to display the names
+          }
+        });
+        updateCoordinatorOptions(allCoordinators);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  
+  const updateCoordinatorOptions = (coordinatorOptions: coordinatorInfo[]) => {
+    setColumns((prevColumns: any) => {
+      return prevColumns.map((col: any) => {
+        if (col.recordName === 'coordinator') {
+          return { ...col, people: coordinatorOptions };
+        }
+        return col;
+      });
+    });
+  };
 
   return (
-    <LayoutComponent>
-      <TableComponent columns={intakeOColumns} records={records}/>
-    </LayoutComponent>
+      <LayoutComponent sticky={<FilterBarComponent />} children={<TableComponent columns={columns} records={records}/>}/>
   )
 }
 
