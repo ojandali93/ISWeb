@@ -3,7 +3,7 @@ import LayoutComponent from '../BaseScreen'
 import TableComponent from '../../Components/Tables/TableComponent'
 import axios from 'axios'
 import { intakeOColumns } from '../../Options/IntakeOptions'
-import FilterBarComponent from '../../Components/Tables/FilterBarComponent'
+import FilterBarComponent from '../../Components/SortAndFilter/FilterBarComponent'
 
 interface coordinatorInfo {
   name: string;

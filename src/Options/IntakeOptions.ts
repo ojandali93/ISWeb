@@ -41,7 +41,7 @@ export const intakeOColumns = [
   },
   {
     label:'DOB',
-    type:'text',
+    type:'date',
     recordName: 'date_of_birth'
   },
   {
@@ -82,12 +82,12 @@ export const intakeOColumns = [
   },
   {
     label:'INN Ded',
-    type:'text',
+    type:'dollar',
     recordName: 'inn_deductible'
   },
   {
     label:'INN OOP',
-    type:'text',
+    type:'dollar',
     recordName: 'in_network_oop'
   },
   {
@@ -102,13 +102,13 @@ export const intakeOColumns = [
   },
   {
     label:'OON Ded',
-    type:'text',
+    type:'dollar',
     recordName: 'onn_deductible'
   },
 
   {
     label:'OON OOP',
-    type:'text',
+    type:'dollar',
     recordName: 'out_network_oop'
   },
   {
@@ -118,7 +118,7 @@ export const intakeOColumns = [
   },
   {
     label:'Notes',
-    type:'expand',
+    type:'form',
     recordName: ''
   },
 ]

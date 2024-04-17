@@ -18,48 +18,48 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({ handlePageCha
             handlePageChange(currentPage - 1)
           }
         }}
-        className='h-10 w-10 hover:cursor-pointer border-2 border-gray-300 hover:bg-sky-100 rounded-md flex justify-center items-center m-2'
+          className='h-8 w-8 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500 my-2 mr-1'
       >
-        <ChevronLeft size={20} className='text-sky-500' strokeWidth={3}/>
+        <ChevronLeft size={20} className='text-white' strokeWidth={3}/>
       </div>
       <div className='flex flex-row'>
-        <div className='h-10 w-10 hover:cursor-pointer border-2 border-gray-300 rounded-md flex justify-center items-center bg-gray-200  my-2'>
-          <p className='font-bold'>{currentPage}</p>
+        <div className='h-8 w-8 hover:cursor-pointe rounded-md flex justify-center items-center bg-stone-300  my-2 mr-1'>
+          <p className='font-bold text-black'>{currentPage}</p>
         </div> 
         <div
           onClick={() => {
             handlePageChange(currentPage + 1)
           }}
-          className='h-10 w-10 hover:cursor-pointer border-2 border-gray-300 hover:bg-sky-100 rounded-md flex justify-center items-center  my-2'
+          className='h-8 w-8 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500 my-2 mr-1'
         >
-          <p className='font-bold'>{currentPage + 1}</p>
+          <p className='font-bold text-white'>{currentPage + 1}</p>
         </div>
         <div 
           onClick={() => {
             handlePageChange(currentPage + 2)
           }}
-          className='h-10 w-10 hover:cursor-pointer border-2 border-gray-300 hover:bg-sky-100 rounded-md flex justify-center items-center  my-2'
+          className='h-8 w-8 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500  my-2 mr-1'
         >
-          <p className='font-bold'>{currentPage + 2}</p>
+          <p className='font-bold text-white'>{currentPage + 2}</p>
         </div>
         <div 
           onClick={() => {
             handlePageChange(currentPage + 3)
           }}
-          className='h-10 w-10 hover:cursor-pointer border-2 border-gray-300 hover:bg-sky-100 rounded-md flex justify-center items-center  my-2'
+          className='h-8 w-8 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500  my-2 mr-1'
         >
-          <p className='font-bold'>{currentPage + 3}</p>
+          <p className='font-bold text-white'>{currentPage + 3}</p>
         </div>
-        <div className='h-10 w-10 rounded-md flex justify-center items-end m-2'>
-          <p className='font-bold'>...</p>
+        <div className='h-8 w-8 rounded-md flex justify-center items-end m-2'>
+          <p className='font-bold text-stone-500'>...</p>
         </div>
         <div 
           onClick={() => {
             handlePageChange(pageCount)
           }}
-          className='h-10 w-10 hover:cursor-pointer border-2 border-gray-300 hover:bg-sky-100 rounded-md flex justify-center items-center my-2'
+          className='h-8 w-8 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500  my-2 mr-1'
         >
-          <p className='font-bold'>{pageCount}</p>
+          <p className='font-bold text-white'>{pageCount}</p>
         </div>
       </div>
       <div 
@@ -68,9 +68,9 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({ handlePageCha
             handlePageChange(currentPage + 1)
           }
         }}
-        className='h-10 w-10 hover:cursor-pointer border-2 border-gray-300 hover:bg-sky-100 rounded-md flex justify-center items-center m-2'
-      >
-        <ChevronRight size={20} className='text-sky-500' strokeWidth={3}/>
+        className='h-8 w-8 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500  my-2 mr-1'
+        >
+        <ChevronRight size={20} className='text-white' strokeWidth={3}/>
       </div>
     </div>
   );

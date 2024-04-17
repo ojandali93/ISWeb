@@ -9,7 +9,7 @@ const ButtonComponent: React.FC<SelectedProps> = ({label, handler}) => {
   return (
     <div>
       <div onClick={handler} style={{ display: 'inline-block' }}>
-        <p className='m-2 p-2 bg-sky-500 rounded-md font-standard text-white text-lg'>{label}</p>
+        <p className='px-2 py-1 bg-sky-600 rounded-md font-bold text-white'>{label}</p>
       </div>
     </div>
   )

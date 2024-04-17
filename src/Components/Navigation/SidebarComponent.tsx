@@ -19,7 +19,7 @@ const SidebarComponent = () => {
   }, []);
 
   return (
-    <div className='h-full min-w-52 max-w-52 bg-slate-800' style={{height: maxHeight}}>
+    <div className='h-full min-w-52 max-w-52 bg-sky-800' style={{height: maxHeight}}>
       {
         sideNavigation.map((tab) => {
           return(

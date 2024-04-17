@@ -43,13 +43,13 @@ const LayoutComponent: React.FC<LayoutComponentProps> = ({ children, sticky }) =
   return (
     <div className='h-screen w-screen flex flex-col overflow-hidden' ref={containerRef}>
       <TopRowComponent />
-      <div className='flex-1 flex flex-row bg-slate-600'>
+      <div className='flex-1 flex flex-row bg-stone-900'>
         <SidebarComponent />
-        <div id='content' className='flex-1 m-4'>
+        <div id='content' className='flex-1 m-4 bg-stone-900'>
           <div className='sticky top-0'>
             {sticky}
           </div>
-          <div id='main-content' style={{ maxHeight, maxWidth }} className='overflow-auto bg-slate-600'>
+          <div id='main-content' style={{ maxHeight, maxWidth }} className='overflow-auto'>
             {children}
           </div>
         </div>

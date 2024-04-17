@@ -12,7 +12,7 @@ const SelectOptionComponent: React.FC<SelectOptionComponentProps> = ({ options, 
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="bg-slate-600 text-white rounded"
+      className="bg-sky-800 p-1 min-w-28 text-white text-md rounded"
     >
       {options.map((option, index) => (
         <option key={index} value={option}>

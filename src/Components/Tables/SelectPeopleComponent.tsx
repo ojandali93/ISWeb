@@ -20,7 +20,7 @@ const SelectPeopleComponent: React.FC<SelectPeopleComponentProps> = ({ options, 
     <select
       value={selectedUser ? selectedUser.userId : ''}
       onChange={(e) => onChange(e.currentTarget.value)} // Use currentTarget for the correct typing.
-      className="bg-slate-600 text-white rounded"
+      className="bg-sky-800 p-1 text-white rounded"
     >
       {options?.map((option, index) => (
         // Here, the value of the option is the userId, but we display the name.
