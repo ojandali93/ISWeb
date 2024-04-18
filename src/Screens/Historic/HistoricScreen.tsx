@@ -81,7 +81,10 @@ const HistoricScreen = () => {
   };
 
   return (
-      <LayoutComponent sticky={<FilterBarComponent />} children={<TableComponent columns={columns} records={records}/>}/>
+      <LayoutComponent 
+        header={<FilterBarComponent />} 
+        content={<TableComponent columns={columns} records={records}/>}
+      />
   )
 }
 

@@ -3,7 +3,10 @@ import LayoutComponent from '../BaseScreen'
 
 const AccountsScreen = () => {
   return (
-    <LayoutComponent sticky={null} children={<p>Accounts</p>} />
+    <LayoutComponent
+      header={null} // Render your custom header component here
+      content={<div>accounts</div>} // Render your custom content component here
+    />
   )
 }
 

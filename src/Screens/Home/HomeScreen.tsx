@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../Context/AuthContext'
 import LayoutComponent from '../BaseScreen'
 import PaginationComponent from '../../Components/Pagination/PaginationComponent';
@@ -9,6 +9,8 @@ import CalendarSelectComponent from '../../Components/Inputs/CalendarSelectCompo
 import MenuTabsComponent from '../../Components/Navigation/MenuTabsComponent';
 import SidebarSubMenuComponent from '../../Components/Navigation/SidebarSubMenuComponent';
 import SelectInTableComponent from '../../Components/Inputs/SelectInTableComponent';
+import { useData } from '../../Context/DataContext';
+import IntakeHome from './IntakeHome';
 
 const options = [
   {
@@ -55,64 +57,44 @@ const sideNavigation = [
 
 const HomeScreen = () => {
 
-  const [currentPage, setCurrentPage] = useState(1)
-  const [pageCount, setPageCount] =useState(30)
+  const {currentProfile} = useAuth()
 
-  const [selectedValue, setSelectedValue] = useState<string | null>(null);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  
-  const [searchTerm, setSearchTerm] = useState<string>('')
-  const [activeSearch, setActiveSearch] = useState<boolean>(false)
-  
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  useEffect(() => {
+    console.log(currentProfile.department)
+  }, [currentProfile])
 
-  const [selectedName, setSelectedNav] = useState<string>('All')
-
-  const [selectedSubTab, setSelectedSubTab] = useState<string>('Collab MD.')
-
-  const handlePageChange = (page: number) => {
-    console.log(page)
-    setCurrentPage(page);
-  };
-
-  const handleOptionClick = (value: string) => {
-    setSelectedValue(value);
-    setIsOpen(false);
-  };
-
-  const handleOpenSelect = () => {
-    setIsOpen(!isOpen)
-  }
-
-  const handleConfirmClick = () => {
-    
-  }
-
-  const handleSearchUpdate = (text: string) => {
-    console.log(text)
-    setSearchTerm(text)
-  }
-
-  const handleActiveSearch = () => {
-    setActiveSearch(!activeSearch)
-  }
-
-
-  const handleDateChange = (date: Date) => {
-    setSelectedDate(date);
-  };
-
-  const handleTabChange = (text: string) => {
-    setSelectedNav(text)
-  }
-
-  const handleMenuChange = (text: string) => {
-    console.log(text)
-    setSelectedSubTab(text)
+  const showIntakeHome = () => {
+    return(
+      <div className='h-42 w-42 bg-zinc-200'>
+        <IntakeHome />
+      </div>
+    )
   }
 
   return (
-    <LayoutComponent sticky={null} children={null} />
+    <LayoutComponent
+      header={
+        currentProfile.department === 'dev' ? (
+          <div className='h-12 w-full bg-red-200'>
+            <p>hello</p>
+          </div>
+        ) : (
+          null
+        )
+      }
+      content={
+        currentProfile.department === 'dev' ? (
+          <div className='h-full w-full'>
+            <IntakeHome />
+          </div>
+        ) : (
+          <div className=''>
+            Content for Other
+            {/* Add some text or other elements here */}
+          </div>
+        )
+      }
+    />
   )
 }
 

@@ -3,20 +3,25 @@ import TopRowComponent from '../Components/Navigation/TopRowComponent';
 import SidebarComponent from '../Components/Navigation/SidebarComponent';
 
 interface LayoutComponentProps {
-  children: ReactNode | null;
-  sticky: ReactNode | null;
+  header: ReactNode | null;
+  content: ReactNode | null; 
 }
 
-const LayoutComponent: React.FC<LayoutComponentProps> = ({ children, sticky }) => {
+const LayoutComponent: React.FC<LayoutComponentProps> = ({ header, content }) => {
+
   const containerRef = useRef<HTMLDivElement>(null);
   const [maxHeight, setMaxHeight] = useState(0);
   const [maxWidth, setMaxWidth] = useState(0);
 
   useEffect(() => {
+    console.log(`dimensions: ${maxHeight} X ${maxWidth}`)
+  }, [maxHeight, maxWidth])
+
+  useEffect(() => {
     const updateSize = () => {
       if (containerRef.current) {
-        setMaxHeight(containerRef.current.clientHeight - 150);  // Assuming 160px is reserved for other components
-        setMaxWidth(containerRef.current.clientWidth - 240);  // Assuming 240px is reserved for sidebars, etc.
+        setMaxHeight(containerRef.current.clientHeight - 58);  // Assuming 160px is reserved for other components
+        setMaxWidth(containerRef.current.clientWidth - 210);  // Assuming 240px is reserved for sidebars, etc.
       }
     };
 
@@ -45,12 +50,12 @@ const LayoutComponent: React.FC<LayoutComponentProps> = ({ children, sticky }) =
       <TopRowComponent />
       <div className='flex-1 flex flex-row bg-stone-900'>
         <SidebarComponent />
-        <div id='content' className='flex-1 m-4 bg-stone-900'>
+        <div id='content' style={{ display: 'flex', flexDirection: 'column', maxHeight, maxWidth }} className='h-full w-full bg-zinc-900 p-4'>
           <div className='sticky top-0'>
-            {sticky}
+            {header}
           </div>
-          <div id='main-content' style={{ maxHeight, maxWidth }} className='overflow-auto'>
-            {children}
+          <div id='main-content' style={{flex: 1}} className='flex-1 bg-red-200' >
+            {content}
           </div>
         </div>
       </div>

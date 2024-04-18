@@ -22,16 +22,25 @@ import TicketsScreen from './Screens/Tickets/TicketsScreen';
 import SupportScreen from './Screens/Support/SupportScreen';
 import SettingsScreen from './Screens/Settings/SettingsScreen';
 import AboutScreen from './Screens/About/AboutScreen';
+import LoadingScreen from './Screens/LoadingScreen';
+import { useData } from './Context/DataContext';
 
 Amplify.configure(amplifyconfig)
 
 function App() {
 
-  const {validAccessCode, currentUser, grabCurrentUser} = useAuth()
+  const {validAccessCode, currentUser, authLoading, grabCurrentUser} = useAuth()
+  const {collectAllData} = useData()
 
   useEffect(() => {
     grabCurrentUser()
   }, [])
+
+  useEffect(() => {
+    if(currentUser.username){
+      collectAllData()
+    }
+  }, [currentUser])
 
   return (
     <div className='w-screen h-screen flex-column bg-slate-800'>
@@ -39,73 +48,73 @@ function App() {
         <Route
           path="/"
           element={
-            currentUser.username ? <HomeScreen /> : <Navigate to="/auth/login" />
+            authLoading ? <LoadingScreen /> : currentUser.username ? <HomeScreen /> : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/intellachat"
           element={
-            currentUser.username ? <IntellachatScreen /> : <Navigate to="/auth/login" />
+            authLoading ? <LoadingScreen /> : currentUser.username ? <IntellachatScreen /> : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/historic"
           element={
-            currentUser.username ? <HistoricScreen /> : <Navigate to="/auth/login" />
+            authLoading ? <LoadingScreen /> : currentUser.username ? <HistoricScreen /> : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/external"
           element={
-            currentUser.username ? <ExternalScreen /> : <Navigate to="/auth/login" />
+            authLoading ? <LoadingScreen /> : currentUser.username ? <ExternalScreen /> : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/claims"
           element={
-            currentUser.username ? <ClaimsScreen /> : <Navigate to="/auth/login" />
+            authLoading ? <LoadingScreen /> : currentUser.username ? <ClaimsScreen /> : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/follow-up"
           element={
-            currentUser.username ? <FollowUpScreen /> : <Navigate to="/auth/login" />
+            authLoading ? <LoadingScreen /> : currentUser.username ? <FollowUpScreen /> : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/accounts"
           element={
-            currentUser.username ? <AccountsScreen /> : <Navigate to="/auth/login" />
+            authLoading ? <LoadingScreen /> : currentUser.username ? <AccountsScreen /> : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/tickets"
           element={
-            currentUser.username ? <TicketsScreen /> : <Navigate to="/auth/login" />
+            authLoading ? <LoadingScreen /> : currentUser.username ? <TicketsScreen /> : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/help"
           element={
-            currentUser.username ? <SupportScreen /> : <Navigate to="/auth/login" />
+            authLoading ? <LoadingScreen /> : currentUser.username ? <SupportScreen /> : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/settings"
           element={
-            currentUser.username ? <SettingsScreen /> : <Navigate to="/auth/login" />
+            authLoading ? <LoadingScreen /> : currentUser.username ? <SettingsScreen /> : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/about"
           element={
-            currentUser.username ? <AboutScreen /> : <Navigate to="/auth/login" />
+            authLoading ? <LoadingScreen /> : currentUser.username ? <AboutScreen /> : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/auth/logout"
           element={
-            currentUser.username != null ? <LogoutScreen /> : <Navigate to="/auth/login" />
+            authLoading ? <LoadingScreen /> : currentUser.username != null ? <LogoutScreen /> : <Navigate to="/auth/login" />
           }
         />
         {/* Public routes */}

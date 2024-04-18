@@ -5,7 +5,10 @@ import LayoutComponent from '../BaseScreen'
 
 const ClaimsScreen = () => {
   return (
-    <LayoutComponent sticky={null} children={<p>Claims</p>} />
+    <LayoutComponent
+      header={null} // Render your custom header component here
+      content={<div>claims</div>} // Render your custom content component here
+    />
   )
 }
 

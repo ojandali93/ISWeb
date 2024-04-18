@@ -3,7 +3,10 @@ import LayoutComponent from '../BaseScreen'
 const ExternalScreen = () => {
 
   return (
-    <LayoutComponent sticky={null} children={<p>External</p>} />
+    <LayoutComponent
+      header={null} // Render your custom header component here
+      content={<div>extername</div>} // Render your custom content component here
+    />
   )
 }
 

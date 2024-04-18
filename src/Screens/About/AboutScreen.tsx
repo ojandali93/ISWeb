@@ -3,7 +3,10 @@ import LayoutComponent from '../BaseScreen'
 
 const AboutScreen = () => {
   return (
-    <LayoutComponent sticky={null} children={<p>About</p>} />
+    <LayoutComponent
+      header={null} // Render your custom header component here
+      content={<div>about</div>} // Render your custom content component here
+    />
   )
 }
 

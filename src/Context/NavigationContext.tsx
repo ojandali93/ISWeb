@@ -30,11 +30,7 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
       icon: 'download',
       route: '/external'
     },
-    // {
-    //   label: 'Billing',
-    //   icon: 'file-text',
-    //   route: '/external'
-    // },
+
     {
       label: 'Claims',
       icon: 'file-text',
@@ -94,8 +90,6 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
       route: '/auth/logout'
     },
   ];
-
-  const [selectedNavTab, setSelectedNavTab] = useState('')
 
   const value: NavigationContextValue = { sideNavigation, topNavigation };
 

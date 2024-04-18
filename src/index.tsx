@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './Context/AuthContext';
 import { BrowserRouter } from 'react-router-dom';
 import { NavigationProvider } from './Context/NavigationContext';
+import { DataProvider } from './Context/DataContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -15,7 +16,9 @@ root.render(
     <BrowserRouter>
       <AuthProvider>
         <NavigationProvider>
-          <App/>
+          <DataProvider>
+            <App/>
+          </DataProvider>
         </NavigationProvider>
       </AuthProvider>
     </BrowserRouter>

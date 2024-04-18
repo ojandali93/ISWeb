@@ -200,7 +200,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     getCurrentUser()
       .then((response) => {
         setCurrentUser(response);
-        setAuthLoading(false);
+        grabCurrentUserProfile(response.userId)
         navigate('/')
       })
       .catch((error) => {
