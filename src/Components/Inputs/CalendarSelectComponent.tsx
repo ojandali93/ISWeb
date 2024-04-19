@@ -14,7 +14,7 @@ const CalendarSelectComponent: React.FC<SelectComponentProps> = ({selectedDate, 
         id="datepicker"
         selected={selectedDate}
         onChange={handleDateChange}
-        className="px-4 py-2 m-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+        className="p-1 border border-black bg-sky-800 text-sm rounded-md focus:outline-none focus:border-blue-500"
       />
     </div>
   );

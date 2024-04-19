@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import SingleClickTabComponent from '../Navigation/SingleClickTabComponent'
 import PaginationComponent from '../Pagination/PaginationComponent'
 import ButtonComponent from '../Inputs/ButtonComponent'
+import SelectOptionComponent from '../Tables/SelectOptionComponent'
 
 const tabs = [
   {
@@ -34,7 +35,9 @@ const FilterBarComponent = () => {
     <div className="h-14 px-2 w-full flex flex-col justify-center bg-stone-700 rounded-md mb-4">
       <div className='w-full flex flex-row items-center justify-between'>
         <ButtonComponent label='Add Record' handler={handleAddRecord}/>
-        <PaginationComponent currentPage={currentPage} pageCount={pageCount} handlePageChange={handlePageChange}/>
+        <div>
+          <PaginationComponent currentPage={currentPage} pageCount={pageCount} handlePageChange={handlePageChange}/>
+        </div>
       </div>
     </div>
   )

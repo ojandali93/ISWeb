@@ -1,38 +1,62 @@
 export const intakeOColumns = [
   {
     label:'Date',
-    type:'text',
+    type:'date',
     recordName: 'date'
   },
   {
-    label:'Checked In',
+    label:'Status',
     type:'select',
     options: [
       'Pending',
-      'Arrived',
-      'MIA'
+      'Approved',
+      'Approved RTC',
+      'Approved LB no RTC',
+      'Denied'
     ],
     recordName: 'checked_in'
-  },
-  {
-    label:'VOB',
-    type:'select',
-    options: [
-      'Pending',
-      'Good VOB',
-      'Bad VOB',
-    ],
-    recordName: 'summary_out'
   },
   {
     label:'Booked',
     type:'select',
     options: [
       'Pending',
+      'Arrived',
+      'MIA',
+      'DB'
+    ],
+    dependent: 'checked_in',
+    dependentResults: [
       'Approved',
-      'Denied'
+      'Approved RTC',
+      'Approved LB no RTC',
     ],
     recordName: 'booked'
+  },
+  {
+    label:'Reason',
+    type:'select',
+    options: [
+      'Pending',
+      'Lost Contect',
+      'Unwilling To Travel',
+      'Booked Out',
+      'Other'
+    ],
+    dependent: 'booked',
+    dependentResults: [
+      'MIA',
+    ],
+    recordName: 'reason'
+  },
+  {
+    label:'Arriving Date',
+    type:'select_date',
+    dependent: 'booked',
+    dependentResults: [
+      'DB',
+    ],
+    recordName: 'arrival_date'
   },
   {
     label:'Client',
@@ -45,6 +69,11 @@ export const intakeOColumns = [
     recordName: 'date_of_birth'
   },
   {
+    label:'Insurance',
+    type:'text',
+    recordName: 'insurance'
+  },
+  {
     label:'Prefix',
     type:'text',
     recordName: 'prefix'
@@ -54,11 +83,16 @@ export const intakeOColumns = [
     type:'text',
     recordName: 'policy_id'
   },
-  {
-    label:'Insurance',
-    type:'text',
-    recordName: 'insurance'
-  },
+  // {
+  //   label:'VOB',
+  //   type:'select',
+  //   options: [
+  //     'Pending',
+  //     'Good VOB',
+  //     'Bad VOB',
+  //   ],
+  //   recordName: 'summary_out'
+  // },
   {
     label:'Active',
     type:'boolean',

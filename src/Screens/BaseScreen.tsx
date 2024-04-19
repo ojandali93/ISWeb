@@ -50,11 +50,11 @@ const LayoutComponent: React.FC<LayoutComponentProps> = ({ header, content }) =>
       <TopRowComponent />
       <div className='flex-1 flex flex-row bg-stone-900'>
         <SidebarComponent />
-        <div id='content' style={{ display: 'flex', flexDirection: 'column', maxHeight, maxWidth }} className='h-full w-full bg-zinc-900 p-4'>
+        <div id='content' style={{ display: 'flex', flexDirection: 'column', maxHeight, maxWidth }} className='h-full w-full p-4'>
           <div className='sticky top-0'>
             {header}
           </div>
-          <div id='main-content' style={{flex: 1}} className='flex-1 bg-red-200' >
+          <div id='main-content' style={{flex: 1}} className='bg-red-200 overflow-scroll' >
             {content}
           </div>
         </div>

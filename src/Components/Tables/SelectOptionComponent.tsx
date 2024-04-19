@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface SelectOptionComponentProps {
-  options: string[];
+  options: string[] | number[];
   value: string;
   compareColumn?: string;
   onChange: (newValue: string) => void; // The type here assumes a function that takes a string and returns void

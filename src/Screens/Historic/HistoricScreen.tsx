@@ -36,6 +36,7 @@ const HistoricScreen = () => {
     };
     axios.request(config)
     .then((response) => {
+      console.log(response.data.data[0])
       setRecords(response.data.data)
        
     })
@@ -83,7 +84,7 @@ const HistoricScreen = () => {
   return (
       <LayoutComponent 
         header={<FilterBarComponent />} 
-        content={<TableComponent columns={columns} records={records}/>}
+        content={<div></div>}
       />
   )
 }

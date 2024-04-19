@@ -9,6 +9,12 @@ interface NavigationTab {
 interface NavigationContextValue {
   sideNavigation: NavigationTab[];
   topNavigation: NavigationTab[];
+  currentSidebarTab: string;
+  currentSidebarSubTab: string;
+  currentContentTab: string;
+  handleUpdateCurrentSidebarTab: (text: string) => void;
+  handleUpdateCurrentSidebarSubTab: (text: string) => void;
+  handleUpdateCurrentContentTab: (text: string) => void;
 }
 
 const NavigationContext = createContext<NavigationContextValue | undefined>(undefined);
@@ -91,7 +97,33 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
     },
   ];
 
-  const value: NavigationContextValue = { sideNavigation, topNavigation };
+  const [currentSidebarTab, setCurrentSidebarTab] = useState<string>('home')
+  const [currentSidebarSubTab, setCurrentSidebarSubTab] = useState<string>('home')
+  const [currentContentTab, setCurrentContentTab] = useState<string>('home')
+
+  const handleUpdateCurrentSidebarTab = (text: string) => {
+    setCurrentSidebarTab(text)
+  }
+
+  const handleUpdateCurrentSidebarSubTab = (text: string) => {
+    setCurrentSidebarSubTab(text)
+  }
+
+  const handleUpdateCurrentContentTab = (text: string) => {
+    setCurrentContentTab(text)
+  }
+
+
+  const value: NavigationContextValue = { 
+                                          sideNavigation, 
+                                          topNavigation,
+                                          currentSidebarTab,
+                                          currentSidebarSubTab,
+                                          currentContentTab,
+                                          handleUpdateCurrentSidebarTab,
+                                          handleUpdateCurrentSidebarSubTab,
+                                          handleUpdateCurrentContentTab
+                                         };
 
   return <NavigationContext.Provider value={value}>{children}</NavigationContext.Provider>;
 };

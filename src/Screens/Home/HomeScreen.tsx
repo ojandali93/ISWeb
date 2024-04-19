@@ -1,16 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../Context/AuthContext'
 import LayoutComponent from '../BaseScreen'
-import PaginationComponent from '../../Components/Pagination/PaginationComponent';
-import SelectComponent from '../../Components/Inputs/SelectComponent';
-import ButtonComponent from '../../Components/Inputs/ButtonComponent';
-import SearchComponent from '../../Components/Inputs/SearchComponent';
-import CalendarSelectComponent from '../../Components/Inputs/CalendarSelectComponent';
-import MenuTabsComponent from '../../Components/Navigation/MenuTabsComponent';
-import SidebarSubMenuComponent from '../../Components/Navigation/SidebarSubMenuComponent';
-import SelectInTableComponent from '../../Components/Inputs/SelectInTableComponent';
-import { useData } from '../../Context/DataContext';
 import IntakeHome from './IntakeHome';
+import FilterBarComponent from '../../Components/SortAndFilter/FilterBarComponent';
 
 const options = [
   {
@@ -63,20 +55,12 @@ const HomeScreen = () => {
     console.log(currentProfile.department)
   }, [currentProfile])
 
-  const showIntakeHome = () => {
-    return(
-      <div className='h-42 w-42 bg-zinc-200'>
-        <IntakeHome />
-      </div>
-    )
-  }
-
   return (
     <LayoutComponent
       header={
         currentProfile.department === 'dev' ? (
-          <div className='h-12 w-full bg-red-200'>
-            <p>hello</p>
+          <div className='h-14 w-full mb-2'>
+            <FilterBarComponent />
           </div>
         ) : (
           null
@@ -84,7 +68,7 @@ const HomeScreen = () => {
       }
       content={
         currentProfile.department === 'dev' ? (
-          <div className='h-full w-full'>
+          <div className='h-full w-full max-h-full max-w-full'>
             <IntakeHome />
           </div>
         ) : (
