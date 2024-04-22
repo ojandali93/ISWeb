@@ -2,6 +2,7 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faList, faUser } from '@fortawesome/free-solid-svg-icons';
 
+
 const InputContainerUser = (props: any) => {
   const {value, handleFunction, placeHolder, type, icon, capitalize} = props
 

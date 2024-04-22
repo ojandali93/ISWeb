@@ -34,6 +34,11 @@ interface IntakeProps {
   summary_out: string;
 }
 
+interface InsuranceOptionsProps {
+  insurance: string;
+  payer_id: number;
+}
+
 interface DataContextType {
   allUsers: ProfileProps[] | null;
   intakeUsers: ProfileProps[] | null;
@@ -41,6 +46,7 @@ interface DataContextType {
   billingUsers: ProfileProps[] | null;
   devUsers: ProfileProps[] | null;
   intakeRecords: IntakeProps[] | null;
+  insuranceOptions: InsuranceOptionsProps[] | null;
   collectAllData: () => void;
   grabAllProfiles: () => void;
 }
@@ -52,6 +58,7 @@ const DataContext = createContext<DataContextType>({
   billingUsers: null,
   devUsers: null,
   intakeRecords: null,
+  insuranceOptions: null,
   collectAllData: () => {},
   grabAllProfiles: () => {}
 });
@@ -73,9 +80,12 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   const [intakeRecords, setIntakeRecords] = useState<IntakeProps[] | null>(null)
 
+  const [insuranceOptions, setInsuranceOptions] = useState<InsuranceOptionsProps[] | null>(null)
+
   const collectAllData = () => {
     grabAllProfiles()
     getIntakeRecords()
+    grabInsuranceOptions()
   }
 
   const grabAllProfiles = () => {
@@ -144,6 +154,40 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     return records;
   }
 
+  const grabInsuranceOptions = () => {
+    const url = 'https://intellasurebackend-docker.onrender.com/verifytx_payers'
+    axios.get(url)
+      .then((response) => {
+        let records = response.data 
+        console.log('sample insurance options: ', response.data[0])
+        records.sort((a: any, b: any) => {
+          const insuranceA = a.insurance.toUpperCase(); // Convert to uppercase for case-insensitive sorting
+          const insuranceB = b.insurance.toUpperCase();
+        
+          if (insuranceA < insuranceB) {
+            return -1;
+          }
+          if (insuranceA > insuranceB) {
+            return 1;
+          }
+          return 0;
+        });
+        const udpatedRecords = reformatInsurance(records)
+        setInsuranceOptions(udpatedRecords)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  const reformatInsurance = (records: InsuranceOptionsProps[]) => {
+    let newRecords: any[] = []
+    records.map((record: any) => {
+      newRecords.push({label: record.insurance, value: record.payer_id})
+    })
+    return(newRecords)
+  }
+
   const contextValue: DataContextType = {
     allUsers,
     intakeUsers,
@@ -151,6 +195,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     billingUsers,
     devUsers,
     intakeRecords,
+    insuranceOptions, 
     collectAllData,
     grabAllProfiles
   };

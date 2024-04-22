@@ -68,7 +68,7 @@ const TableComponent: React.FC<TableProps> = (props) => {
   return (
     <div className='max-w-full max-h-full'>
       <table className='w-full border-collapse'>
-        <thead className='bg-sky-800 sticky top-0 z-10 h-14'>
+        <thead className='bg-sky-800 sticky top-0 h-14'>
           <tr className="">
             {columns.map((column, index) => (
               <th key={index} className="min-w-52">
@@ -119,10 +119,8 @@ const TableComponent: React.FC<TableProps> = (props) => {
                         )
                       ) : ( null )
                     ) : column.type === 'dollar' ? (
-                      // console.log(record[column.recordName])
                       record[column.recordName] ? formatDollarAmount(record[column.recordName]) : ''
                     ) : column.type === 'form' ? (
-                      // <FormComponent />
                       <button className={`py-1 px-3 rounded-lg bg-sky-700 hover:bg-sky-900`}>View</button>
                     ) : column.type === 'people' ? (
                       <SelectPeopleComponent
@@ -134,7 +132,6 @@ const TableComponent: React.FC<TableProps> = (props) => {
                       />
                     ) : (
                       record[column.recordName] ? record[column.recordName] : ''
-                      // <p>asdf</p>
                     )}
                   </td>
                 );

@@ -3,6 +3,7 @@ import { useAuth } from '../../Context/AuthContext'
 import LayoutComponent from '../BaseScreen'
 import IntakeHome from './IntakeHome';
 import FilterBarComponent from '../../Components/SortAndFilter/FilterBarComponent';
+import IntakeFilterComponent from '../../Components/SortAndFilter/IntakeFilterComponent';
 
 const options = [
   {
@@ -60,7 +61,7 @@ const HomeScreen = () => {
       header={
         currentProfile.department === 'dev' ? (
           <div className='h-14 w-full mb-2'>
-            <FilterBarComponent />
+            <IntakeFilterComponent />
           </div>
         ) : (
           null
