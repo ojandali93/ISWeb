@@ -9,13 +9,12 @@ interface SelectComponentProps {
 
 const CalendarSelectComponent: React.FC<SelectComponentProps> = ({selectedDate, handleDateChange}) => {
   return (
-    <div className='w-full flex my-2 px-3 py-2 flex-col justify-center rounded-lg'>
-      <p className='pb-1 mb-2 font-bold text-primary text-md mr-4 text-white'>Date Of Birth:</p>
+    <div>
       <DatePicker
         id="datepicker"
         selected={selectedDate}
         onChange={handleDateChange}
-        className="p-1 w-full text-white bg-sky-800 text-lg rounded-md focus:outline-none focus:border-blue-500"
+        className="p-1 border border-black bg-sky-700 text-sm rounded-md focus:outline-none focus:border-blue-500"
       />
     </div>
   );

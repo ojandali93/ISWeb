@@ -53,6 +53,7 @@ interface DataContextType {
   grabAllProfiles: () => void;
   addIntakeRecord: (data: any) => void;
   handleAddRecord: () => void;
+  getIntakeRecords: () => void;
 }
 
 const DataContext = createContext<DataContextType>({
@@ -68,7 +69,8 @@ const DataContext = createContext<DataContextType>({
   collectAllData: () => {},
   grabAllProfiles: () => {},
   addIntakeRecord: () => {},
-  handleAddRecord: () => {}
+  handleAddRecord: () => {},
+  getIntakeRecords: () => {}
 });
 
 export function useData() {
@@ -147,7 +149,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     };
     axios.request(config)
     .then((response) => {
-      console.log(response.data.data[0])
+      console.log(response.data.data)
       setIntakeRecords(sortRecordsByDateDesc(response.data.data))
     })
     .catch((error) => {
@@ -213,7 +215,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     axios.get(url)
       .then((response) => {
         let records = response.data 
-        console.log('sample insurance options: ', response.data[0])
         records.sort((a: any, b: any) => {
           const insuranceA = a.insurance.toUpperCase(); // Convert to uppercase for case-insensitive sorting
           const insuranceB = b.insurance.toUpperCase();
@@ -259,7 +260,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     collectAllData,
     grabAllProfiles,
     addIntakeRecord,
-    handleAddRecord
+    handleAddRecord,
+    getIntakeRecords
   };
 
   return (

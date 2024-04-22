@@ -22,10 +22,6 @@ const InsuranceSelectComponent: React.FC<SelectProps> = ({ placeholder,
                                                   handleOpenSelect,
                                                   isOpen }) => {
 
-  useEffect(() => {
-    console.log(options.length)
-  }, [])
-
   return (
     <div className='w-full flex my-2 px-3 py-2 flex-col justify-center rounded-lg'>
       <p className='pb-1 mb-2 font-bold text-primary text-md mr-4 text-white'>Select Insurance:</p>

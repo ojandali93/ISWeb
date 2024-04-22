@@ -3,6 +3,7 @@ import SelectOptionComponent from './SelectOptionComponent';
 import SelectPeopleComponent from './SelectPeopleComponent';
 import FormComponent from './FormComponent';
 import CalendarSelectComponent from '../Inputs/CalendarSelectComponent';
+import CellComponent from './CellComponent';
 
 interface PeopleOptions {
   name: string;
@@ -46,6 +47,8 @@ const TableComponent: React.FC<TableProps> = (props) => {
 
   const [selectedDate, setSelectedDate] = useState(new Date())
 
+
+
   const handleDateSelectedChange = (date: Date) => {
     setSelectedDate(date)
   }
@@ -64,6 +67,9 @@ const TableComponent: React.FC<TableProps> = (props) => {
     return num.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
   }
 
+  const updateIntakeRecord = () => {
+
+  }
 
   return (
     <div className='max-w-full max-h-full'>
@@ -80,62 +86,7 @@ const TableComponent: React.FC<TableProps> = (props) => {
         <tbody>
           {records != null ? ( records.map((record, rowIndex) => (
             <tr key={rowIndex} className={`text-center min-h-14 h-16 text-white ${rowIndex % 2 === 0 ? 'bg-stone-900' : 'bg-stone-800'}`}>
-              {columns.map((column, columnIndex) => {
-                const cellValue = column.recordName ? record[column.recordName] : '';
-                return (
-                  <td key={columnIndex}>
-                    {column.type === 'select' && column.options ? (
-                      column.type === 'select' && column.dependent && column.dependentResults ? (
-                        column.dependentResults.includes(record[column.dependent]) ? (
-                          <SelectOptionComponent
-                            options={column.options}
-                            value={cellValue}
-                            onChange={(newValue) => {
-                              console.log(newValue);
-                            }}
-                          />
-                        ) : (
-                          null
-                        )
-                      ) : (
-                        <SelectOptionComponent
-                          options={column.options}
-                          value={cellValue}
-                          onChange={(newValue) => {
-                            console.log(newValue);
-                          }}
-                        />
-                      )
-                    ) : column.type === 'boolean' ? (
-                      record[column.recordName] === true ? 'Yes' : record[column.recordName] === null ? 'Unknown' : 'No'
-                    ) : column.type === 'date' ? (
-                      <>{convertDateToMMDDYYYY(record[column.recordName])}</>
-                    ) : column.type === 'select_date' ? (
-                      column.type === 'select_date' && column.dependent && column.dependentResults ? (
-                        column.dependentResults.includes(record[column.dependent]) ? (
-                          <CalendarSelectComponent selectedDate={selectedDate} handleDateChange={handleDateSelectedChange}/>
-                        ) : (
-                          null
-                        )
-                      ) : ( null )
-                    ) : column.type === 'dollar' ? (
-                      record[column.recordName] ? formatDollarAmount(record[column.recordName]) : ''
-                    ) : column.type === 'form' ? (
-                      <button className={`py-1 px-3 rounded-lg bg-sky-700 hover:bg-sky-900`}>View</button>
-                    ) : column.type === 'people' ? (
-                      <SelectPeopleComponent
-                        options={users}
-                        value={cellValue}
-                        onChange={(newValue) => {
-                          console.log(newValue);
-                        }}
-                      />
-                    ) : (
-                      record[column.recordName] ? record[column.recordName] : ''
-                    )}
-                  </td>
-                );
-              })}
+              <CellComponent columns={columns} record={record}/>
             </tr>
           ))) : (null)}
         </tbody>

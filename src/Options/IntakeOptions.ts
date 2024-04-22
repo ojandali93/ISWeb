@@ -10,8 +10,11 @@ export const intakeOColumns = [
     options: [
       'Pending',
       'Approved',
+      'Approved BD',
+      'Approved DB',
       'Approved RTC',
       'Approved LB no RTC',
+      'Private Pay',
       'Denied'
     ],
     recordName: 'checked_in'
@@ -28,6 +31,7 @@ export const intakeOColumns = [
     dependent: 'checked_in',
     dependentResults: [
       'Approved',
+      'Approved DB',
       'Approved RTC',
       'Approved LB no RTC',
     ],
@@ -52,11 +56,11 @@ export const intakeOColumns = [
   {
     label:'Arriving Date',
     type:'select_date',
-    dependent: 'booked',
+    dependent: 'checked_in',
     dependentResults: [
-      'DB',
+      'Approved DB',
     ],
-    recordName: 'arrival_date'
+    recordName: 'expected_arrival_date'
   },
   {
     label:'Client',
@@ -83,16 +87,6 @@ export const intakeOColumns = [
     type:'text',
     recordName: 'policy_id'
   },
-  // {
-  //   label:'VOB',
-  //   type:'select',
-  //   options: [
-  //     'Pending',
-  //     'Good VOB',
-  //     'Bad VOB',
-  //   ],
-  //   recordName: 'summary_out'
-  // },
   {
     label:'Active',
     type:'boolean',

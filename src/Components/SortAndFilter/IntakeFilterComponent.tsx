@@ -12,7 +12,6 @@ const IntakeFilterComponent = () => {
   const [pageCount, setPageCount] =useState(30)
 
   const handlePageChange = (page: number) => {
-    console.log(page)
     setCurrentPage(page);
   };
 

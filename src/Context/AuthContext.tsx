@@ -178,13 +178,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signInUser = (userInfo: UserDetails) => {
     const { username, password } = userInfo;
-    console.log('Attempting to sign in with username:', username);
   
     setAuthLoading(true);
   
     signIn({ username, password })
       .then((user) => {
-        console.log('Sign-in successful:', user);
         setValidLogin(true)
         grabCurrentUser();
       })
@@ -219,7 +217,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       .request(config)
       .then((response) => {
         setCurrentProfile(response.data.data);
-        console.log('current profile: ', response.data.data.userid)
         setAuthLoading(false);
       })
       .catch((error) => {
@@ -228,9 +225,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const validateAccessCode = (accessCode: string) => {
-    console.log('checking code')
     if(accessOptions[accessCode as keyof typeof accessOptions]){
-      console.log('valid code')
       setAccessCode(accessOptions[accessCode as keyof typeof accessOptions])
       setValidAccessCode(true)
     } 
@@ -262,7 +257,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     signUp(signupData)
       .then((currentUser) => {
-        console.log(currentUser.userId)
         setCurrentUser({userId: currentUser.userId, username: currentUser.userId})
         createProfile(currentUser.userId, userPassthrough)
       })
@@ -275,7 +269,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }
 
   const createProfile = (userId: string | undefined, userPassthrough: UserPassthrough) => {
-    console.log('creating new profiel now')
     let data = {
       "first_name": userPassthrough.firstName,
       "last_name": userPassthrough.lastName,
@@ -301,7 +294,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     axios.request(config)
       .then((response) => {
 
-        console.log('new profile created')
         navigate('/auth/confirmation')
       })
       .catch((error) => {
@@ -327,7 +319,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       username: email
     })
     .then(response => {
-      console.log('none')
     })
     .catch(error => {
         console.log('Error confirming sign up', error);
@@ -337,7 +328,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const resetUserEmail = (email: string) => {
     resetPassword({username: email})
       .then((response) => {
-        console.log('reset password email was sent.')
         navigate('/auth/login')
       })
       .catch((error) => {

@@ -14,10 +14,6 @@ const LayoutComponent: React.FC<LayoutComponentProps> = ({ header, content }) =>
   const [maxWidth, setMaxWidth] = useState(0);
 
   useEffect(() => {
-    console.log(`dimensions: ${maxHeight} X ${maxWidth}`)
-  }, [maxHeight, maxWidth])
-
-  useEffect(() => {
     const updateSize = () => {
       if (containerRef.current) {
         setMaxHeight(containerRef.current.clientHeight - 58);  // Assuming 160px is reserved for other components

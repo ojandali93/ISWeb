@@ -21,7 +21,6 @@ const SingleClickTabComponent: React.FC<SingleClickTabs> = ({ tabs, selected, ha
             <div 
               onClick={() => {
                 if(singleTab.value != selected){
-                  console.log(singleTab.value)
                   handleFunction(singleTab.value)
                 }
               }}

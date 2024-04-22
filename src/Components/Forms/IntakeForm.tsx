@@ -6,6 +6,7 @@ import DatePicker from "react-datepicker";
 import CalendarSelectComponent from '../Inputs/CalendarSelectComponent';
 import ButtonComponent from '../Inputs/ButtonComponent';
 import { useAuth } from '../../Context/AuthContext';
+import DobSelectComponent from '../Inputs/DobSelectComponent';
 
 const IntakeForm = () => {
 
@@ -86,7 +87,7 @@ const IntakeForm = () => {
         icon={'Policy Number'}
         capitalization={true}
       />
-      <CalendarSelectComponent selectedDate={dateOfBirth} handleDateChange={handleUpdateDOB}/>
+      <DobSelectComponent selectedDate={dateOfBirth} handleDateChange={handleUpdateDOB}/>
       <InsuranceSelectComponent 
         placeholder='Insurance'
         options={insuranceOptions}
