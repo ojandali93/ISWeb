@@ -47,8 +47,12 @@ interface DataContextType {
   devUsers: ProfileProps[] | null;
   intakeRecords: IntakeProps[] | null;
   insuranceOptions: InsuranceOptionsProps[] | null;
+  loadingNewIntake: boolean;
+  addRecord: boolean;
   collectAllData: () => void;
   grabAllProfiles: () => void;
+  addIntakeRecord: (data: any) => void;
+  handleAddRecord: () => void;
 }
 
 const DataContext = createContext<DataContextType>({
@@ -59,8 +63,12 @@ const DataContext = createContext<DataContextType>({
   devUsers: null,
   intakeRecords: null,
   insuranceOptions: null,
+  loadingNewIntake: false,
+  addRecord: false, 
   collectAllData: () => {},
-  grabAllProfiles: () => {}
+  grabAllProfiles: () => {},
+  addIntakeRecord: () => {},
+  handleAddRecord: () => {}
 });
 
 export function useData() {
@@ -81,6 +89,9 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [intakeRecords, setIntakeRecords] = useState<IntakeProps[] | null>(null)
 
   const [insuranceOptions, setInsuranceOptions] = useState<InsuranceOptionsProps[] | null>(null)
+
+  const [loadingNewIntake, setLoadingNewIntake] = useState<boolean>(false)
+  const [addRecord, setAddRecord] = useState<boolean>(false)
 
   const collectAllData = () => {
     grabAllProfiles()
@@ -154,6 +165,49 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     return records;
   }
 
+  const generateTenDigitNumber = () => {
+    const min = 1000000000;
+    const max = 9999999999;
+    const number = Math.floor(Math.random() * (max - min + 1)) + min;
+    return number.toString()
+  }
+
+  const addIntakeRecord = (data: any) => {
+      setLoadingNewIntake(true)
+      let intakeId = generateTenDigitNumber()
+      let intakeData = { data: {
+        "intake_id": intakeId,
+        "name": data.name,
+        "prefix": data.policy.slice(0, 3),
+        "policy_id": data.policy,
+        "insurance": data.insurance,
+        "payer_id": data.payer_id,
+        "date_of_birth": data.dob,
+        "source": data.source,
+        "coordinator": data.userId,
+        "summary_out": 'PENDING',
+        "booked": "Pending",
+        "check_in": "Pending",
+        "out_network_details": '',
+        "in_network_details": '',
+        "notes": data.notes,
+        "date": new Date()
+      }}
+  
+      const url = 'https://intellasurebackend-docker.onrender.com/intake/'
+      
+      axios.post(url, intakeData)
+      .then((response) => {
+        setLoadingNewIntake(false)
+        handleAddRecord()
+        getIntakeRecords()
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoadingNewIntake(false)
+      });
+  }
+
   const grabInsuranceOptions = () => {
     const url = 'https://intellasurebackend-docker.onrender.com/verifytx_payers'
     axios.get(url)
@@ -188,6 +242,10 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     return(newRecords)
   }
 
+  const handleAddRecord = () => {
+    setAddRecord(!addRecord)
+  }
+
   const contextValue: DataContextType = {
     allUsers,
     intakeUsers,
@@ -196,8 +254,12 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     devUsers,
     intakeRecords,
     insuranceOptions, 
+    loadingNewIntake,
+    addRecord, 
     collectAllData,
-    grabAllProfiles
+    grabAllProfiles,
+    addIntakeRecord,
+    handleAddRecord
   };
 
   return (

@@ -1,24 +1,28 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useData } from '../../Context/DataContext'
 import FormInputComponent from '../Inputs/FormInputComponent'
 import InsuranceSelectComponent from '../Inputs/InsuranceSelectComponent'
 import DatePicker from "react-datepicker";
 import CalendarSelectComponent from '../Inputs/CalendarSelectComponent';
 import ButtonComponent from '../Inputs/ButtonComponent';
+import { useAuth } from '../../Context/AuthContext';
 
 const IntakeForm = () => {
 
-  const {insuranceOptions} = useData()
+  const {currentProfile} = useAuth()
+  const {insuranceOptions, addIntakeRecord, loadingNewIntake} = useData()
 
   const [clientName, setClientName] = useState<string>('')
   const [dateOfBirth, setDateOfBirth] = useState<Date>(new Date())
   const [policy, setPolicy] = useState<string>('')
   const [insurance, setInsurance] = useState<string>('')
+  const [payerId, setPayerId] = useState<string>('')
   const [source, setSource] = useState<string>('')
-  const [coordinator, setCoordinator] = useState<string>('')
   const [note, setNote] = useState<string>('')
 
-  const [insuranceOpen, setInsuranceOpen] = useState<boolean>(true)
+  const [insuranceOpen, setInsuranceOpen] = useState<boolean>(false)
+
+  useEffect(() => {console.log(currentProfile.userid)}, [currentProfile])
 
   const handleOpenInsurance = () => {
     setInsuranceOpen(!insuranceOpen)
@@ -36,8 +40,9 @@ const IntakeForm = () => {
     setPolicy(text)
   }
 
-  const handleUpdateInsurance = (text: string) => {
-    setInsurance(text)
+  const handleUpdateInsurance = (insurance: string, payerId: string) => {
+    setInsurance(insurance)
+    setPayerId(payerId)
     setInsuranceOpen(!insuranceOpen)
   }
 
@@ -45,15 +50,23 @@ const IntakeForm = () => {
     setSource(text)
   }
 
-  const handleUpdateCoordinator = (text: string) => {
-    setCoordinator(text)
-  }
-
   const handleUpdateNotes = (text: string) => {
     setNote(text)
   }
 
-
+  const addNewIntakeRecord = () => {
+    const data = {
+      name: clientName,
+      policy: policy,
+      insurance: insurance,
+      payerId: payerId,
+      dob: dateOfBirth,
+      source: source,
+      userId: currentProfile.userid,
+      notes: note
+    }
+    addIntakeRecord(data)
+  }
 
   return (
     <form>
@@ -99,7 +112,7 @@ const IntakeForm = () => {
         capitalization={true}
       />
       <div className='w-full flex flex-row justify-center items-center my-2 mt-4'>
-        <ButtonComponent label='Submit Record' handler={() => {console.log('submitting claim')}}/>
+        <ButtonComponent label={loadingNewIntake ? 'Submitting...' : 'Submit Record'} handler={() => {addNewIntakeRecord()}}/>
       </div>
     </form>
   )

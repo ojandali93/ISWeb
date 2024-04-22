@@ -10,7 +10,7 @@ interface SelectProps {
   placeholder: string;
   options: any;
   selectedValue: string | null;
-  handleOptionClick: (text: string) => void;
+  handleOptionClick: (insurance: string, payerId: string) => void;
   isOpen: boolean;
   handleOpenSelect: () => void;
 }
@@ -42,12 +42,12 @@ const InsuranceSelectComponent: React.FC<SelectProps> = ({ placeholder,
         }
       </div>
       {isOpen && (
-        <div className="max-h-64 max-w-full overflow-y-scroll max-w-2/12 bg-sky-700 text-white rounded-md px-4">
+        <div className="max-h-48 max-w-full overflow-y-scroll max-w-2/12 bg-sky-700 text-white rounded-md px-4">
           {options && options.map((option: Option) => (
             <div
               key={option.value}
               className="option py-1 border-b-2 border-b-gray-200"
-              onClick={() => handleOptionClick(option.label)}
+              onClick={() => handleOptionClick(option.label, option.value)}
             >
               {option.label}
             </div>

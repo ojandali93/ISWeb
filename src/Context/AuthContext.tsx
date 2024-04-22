@@ -219,6 +219,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       .request(config)
       .then((response) => {
         setCurrentProfile(response.data.data);
+        console.log('current profile: ', response.data.data.userid)
         setAuthLoading(false);
       })
       .catch((error) => {
