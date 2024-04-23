@@ -12,7 +12,8 @@ const SelectOptionComponent: React.FC<SelectOptionComponentProps> = ({ options, 
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="bg-sky-800 p-1 min-w-28 text-white text-md rounded"
+      className={`p-1 min-w-28 text-white text-md rounded 
+        ${value === 'Yellow Stripe' ? 'bg-yellow-500' : 'bg-sky-800'}`}
     >
       {options.map((option, index) => (
         <option key={index} value={option}>

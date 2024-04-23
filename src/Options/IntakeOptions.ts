@@ -10,10 +10,8 @@ export const intakeOColumns = [
     options: [
       'Pending',
       'Approved',
-      'Approved BD',
-      'Approved DB',
       'Approved RTC',
-      'Approved LB no RTC',
+      'Approved LB No RTC',
       'Private Pay',
       'Denied'
     ],
@@ -26,14 +24,15 @@ export const intakeOColumns = [
       'Pending',
       'Arrived',
       'MIA',
-      'DB'
+      'BD',
+      'Yellow Stripe'
     ],
     dependent: 'checked_in',
     dependentResults: [
       'Approved',
       'Approved DB',
       'Approved RTC',
-      'Approved LB no RTC',
+      'Approved LB No RTC',
     ],
     recordName: 'booked'
   },
@@ -56,9 +55,9 @@ export const intakeOColumns = [
   {
     label:'Arriving Date',
     type:'select_date',
-    dependent: 'checked_in',
+    dependent: 'booked',
     dependentResults: [
-      'Approved DB',
+      'BD',
     ],
     recordName: 'expected_arrival_date'
   },

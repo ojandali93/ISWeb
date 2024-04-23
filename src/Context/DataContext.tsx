@@ -54,6 +54,7 @@ interface DataContextType {
   addIntakeRecord: (data: any) => void;
   handleAddRecord: () => void;
   getIntakeRecords: () => void;
+  searchIntakeRecords: (search: string) => void;
 }
 
 const DataContext = createContext<DataContextType>({
@@ -70,7 +71,8 @@ const DataContext = createContext<DataContextType>({
   grabAllProfiles: () => {},
   addIntakeRecord: () => {},
   handleAddRecord: () => {},
-  getIntakeRecords: () => {}
+  getIntakeRecords: () => {},
+  searchIntakeRecords: () => {}
 });
 
 export function useData() {
@@ -155,6 +157,16 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     .catch((error) => {
       console.log(error);
     });
+  }
+
+  const searchIntakeRecords = (search: string) => {
+    let searchResults:any = []
+    intakeRecords?.map((record) => {
+      if(record.name.includes(search)){
+        searchResults.push(record)
+      }
+    })
+    setIntakeRecords(searchResults)
   }
 
   function sortRecordsByDateDesc(records: IntakeProps[]) {
@@ -261,7 +273,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     grabAllProfiles,
     addIntakeRecord,
     handleAddRecord,
-    getIntakeRecords
+    getIntakeRecords,
+    searchIntakeRecords
   };
 
   return (

@@ -50,7 +50,7 @@ const LayoutComponent: React.FC<LayoutComponentProps> = ({ header, content }) =>
           <div className='sticky top-0 z-20'>
             {header}
           </div>
-          <div id='main-content' style={{flex: 1}} className='z-10 bg-red-200 overflow-scroll' >
+          <div id='main-content' style={{flex: 1}} className='z-10 bg-stone-800 overflow-scroll' >
             {content}
           </div>
         </div>

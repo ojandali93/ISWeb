@@ -11,13 +11,13 @@ interface ComponentProps {
 
 const SearchComponent: React.FC<ComponentProps>  = ({searchTerm, handler, activeSearch, handleActiveSearch, placeholder}) => {
   return (
-    <div className='border-2 border-gray-300 rounded-md flex flex-row items-center p-2 py-2 m-2'>
-      <Search size={24} color='black'/>
+    <div className='rounded-md flex flex-row items-center m-2 w-full'>
+      <Search size={24} color='white'/>
       <form className='flex-1 mx-1'>
         <input 
           value={searchTerm}
           onChange={(e) => {handler(e.target.value)}}
-          className='text-lg px-2 pt-1 w-full' 
+          className='text-md px-2 pt-1 w-full rounded-md' 
           placeholder={placeholder}/>
       </form>
       {

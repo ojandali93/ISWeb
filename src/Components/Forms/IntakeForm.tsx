@@ -23,8 +23,6 @@ const IntakeForm = () => {
 
   const [insuranceOpen, setInsuranceOpen] = useState<boolean>(false)
 
-  useEffect(() => {console.log(currentProfile.userid)}, [currentProfile])
-
   const handleOpenInsurance = () => {
     setInsuranceOpen(!insuranceOpen)
   }
