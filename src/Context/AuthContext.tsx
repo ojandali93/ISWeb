@@ -28,7 +28,14 @@ const accessOptions = {
     'company': 'PHG',
     'privileges': 'admin',
     'department': 'admin'
+  },
+  'PHG620D': {
+    'code': 'PHG620D',
+    'company': 'PHG',
+    'privileges': 'dev',
+    'department': 'dev'
   }
+
 }
 
 interface accessCode {

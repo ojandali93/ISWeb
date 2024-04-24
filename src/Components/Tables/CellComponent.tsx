@@ -4,6 +4,7 @@ import CalendarSelectComponent from '../Inputs/CalendarSelectComponent';
 import SelectPeopleComponent from './SelectPeopleComponent';
 import { useData } from '../../Context/DataContext';
 import axios from 'axios';
+import { Edit } from 'react-feather';
 
 interface PeopleOptions {
   name: string;
@@ -71,6 +72,14 @@ const CellComponent: React.FC<CellProps> = ({columns, record}) => {
     return `${yyyy}-${mm}-${dd}`;
   }
 
+  function limitStringLength(str: string) {
+    if (str.length <= 20) {
+      return str; // If the string is already 20 characters or less, return it unchanged
+    } else {
+      return str.substring(0, 20); // If the string is longer than 20 characters, return the first 20 characters
+    }
+  }
+
   const submitUpdate = (data: any) => {
     let config = {
       method: 'patch',
@@ -134,10 +143,22 @@ const CellComponent: React.FC<CellProps> = ({columns, record}) => {
                   }}
                 />
               )
+            ) : column.type === 'select-edit' ? (
+              <>
+                <div className='min-w-80 flex flex-row justify-center'>
+                  {record[column.recordName]}
+                  <Edit height={20} width={20} className='text-sky-500 ml-2'/>
+                </div>
+              </>
             ) : column.type === 'boolean' ? (
               record[column.recordName] === true ? 'Yes' : record[column.recordName] === null ? 'Unknown' : 'No'
             ) : column.type === 'date' ? (
               <>{convertDateToMMDDYYYY(record[column.recordName])}</>
+            ) : column.type === 'date-edit' ? (
+              <><div className='flex flex-row'>
+                {convertDateToMMDDYYYY(record[column.recordName])}
+                <Edit height={20} width={20} className='text-sky-500 ml-2'/>
+              </div></>
             ) : column.type === 'select_date' ? (
               column.type === 'select_date' && column.dependent && column.dependentResults ? (
                 column.dependentResults.includes(record[column.dependent]) ? (
@@ -163,6 +184,11 @@ const CellComponent: React.FC<CellProps> = ({columns, record}) => {
                   console.log('updated select option: ', newValue);
                 }}
               />
+            ) : column.type === 'text-edit' ? (
+              <><div className='flex flex-row'>
+                {record[column.recordName]}
+                <Edit height={20} width={20} className='text-sky-500 ml-2'/>
+              </div></>
             ) : (
               record[column.recordName] ? record[column.recordName] : ''
             )}

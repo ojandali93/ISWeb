@@ -70,12 +70,12 @@ export const intakeOColumns = [
   },
   {
     label:'DOB',
-    type:'date',
+    type:'date-edit',
     recordName: 'date_of_birth'
   },
   {
     label:'Insurance',
-    type:'text',
+    type:'select-edit',
     recordName: 'insurance'
   },
   {
@@ -85,7 +85,7 @@ export const intakeOColumns = [
   },
   {
     label:'Policy',
-    type:'text',
+    type:'text-edit',
     recordName: 'policy_id'
   },
   {
