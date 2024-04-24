@@ -1,90 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import LayoutComponent from '../BaseScreen'
+import HistoricFilterComponent from '../../Components/SortAndFilter/HistoricFilterComponent'
 import TableComponent from '../../Components/Tables/TableComponent'
-import axios from 'axios'
-import { intakeOColumns } from '../../Options/IntakeOptions'
-import FilterBarComponent from '../../Components/SortAndFilter/FilterBarComponent'
-
-interface coordinatorInfo {
-  name: string;
-  userid: string;
-}
-
+import { useData } from '../../Context/DataContext'
+import { historicOptions } from '../../Options/Historic3Options'
 const HistoricScreen = () => {
 
-  const [records, setRecords] = useState([])
-  const [columns, setColumns] = useState(intakeOColumns);
-
-  useEffect(() => {
-    grabAllProfiles()
-    getIntakeRecords()
-  }, [])
-
-  const getIntakeRecords = () => {
-    let data = JSON.stringify({
-      "status": "success",
-      "method": "GET"
-    });
-    let config = {
-      method: 'get',
-      maxBodyLength: Infinity,
-      url: 'https://intellasurebackend-docker.onrender.com/intake/',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      data : data
-    };
-    axios.request(config)
-    .then((response) => {
-      console.log(response.data.data[0])
-      setRecords(response.data.data)
-       
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  }
-
-  const grabAllProfiles = () => {
-    let config = {
-      method: 'get',
-      maxBodyLength: Infinity,
-      url: 'https://intellasurebackend-docker.onrender.com/users/all',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    };
-    
-    axios.request(config)
-      .then((response) => {
-        let allCoordinators: any = [];
-        response.data.forEach((selection: any) => {
-          if(selection.department === 'intake'){
-            allCoordinators.push({name: selection.name, userId: selection.userid}); // Assuming you want to display the names
-          }
-        });
-        updateCoordinatorOptions(allCoordinators);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  
-  const updateCoordinatorOptions = (coordinatorOptions: coordinatorInfo[]) => {
-    setColumns((prevColumns: any) => {
-      return prevColumns.map((col: any) => {
-        if (col.recordName === 'coordinator') {
-          return { ...col, people: coordinatorOptions };
-        }
-        return col;
-      });
-    });
-  };
+  const {allUsers, billingDetails} = useData()
 
   return (
       <LayoutComponent 
-        header={<FilterBarComponent />} 
-        content={<div></div>}
+        header={
+          <div className='h-14 w-full mb-2'>
+            <HistoricFilterComponent />
+          </div>
+        } 
+        content={
+          <div className='h-full w-full max-h-full max-w-ful'>
+            <TableComponent users={allUsers} columns={historicOptions} records={billingDetails}/>
+          </div>
+        }
       />
   )
 }

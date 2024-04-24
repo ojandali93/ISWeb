@@ -5,49 +5,6 @@ import IntakeHome from './IntakeHome';
 import FilterBarComponent from '../../Components/SortAndFilter/FilterBarComponent';
 import IntakeFilterComponent from '../../Components/SortAndFilter/IntakeFilterComponent';
 
-const options = [
-  {
-    value: 'Omar',
-    label: 'Omar'
-  },
-  {
-    value: 'RJ',
-    label: 'RJ'
-  },
-  {
-    value: 'Nasim',
-    label: 'Nasim'
-  },
-]
-
-const navigation = [
-  {
-    label: 'All'
-  },
-  {
-    label: 'Pending'
-  },
-  {
-    label: 'Successful'
-  },
-  {
-    label: 'Failed'
-  },
-]
-
-const sideNavigation = [
-  {
-    tab: 'Collab MD.',
-    icon: 'folder',
-    route: '/'
-  },
-  {
-    tab: 'Avea',
-    icon: 'folder',
-    route: '/'
-  },
-]
-
 const HomeScreen = () => {
 
   const {currentProfile} = useAuth()

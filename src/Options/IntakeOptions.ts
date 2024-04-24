@@ -10,6 +10,7 @@ export const intakeOColumns = [
     options: [
       'Pending',
       'Approved',
+      'Approved BD',
       'Approved RTC',
       'Approved LB No RTC',
       'Private Pay',
@@ -24,13 +25,13 @@ export const intakeOColumns = [
       'Pending',
       'Arrived',
       'MIA',
-      'BD',
+      'Booked',
       'Yellow Stripe'
     ],
     dependent: 'checked_in',
     dependentResults: [
       'Approved',
-      'Approved DB',
+      'Approved BD',
       'Approved RTC',
       'Approved LB No RTC',
     ],
@@ -41,14 +42,15 @@ export const intakeOColumns = [
     type:'select',
     options: [
       'Pending',
-      'Lost Contect',
+      'Lost Contact',
       'Unwilling To Travel',
       'Booked Out',
-      'Other'
+      'Other - See Notes'
     ],
     dependent: 'booked',
     dependentResults: [
       'MIA',
+      'Yellow Stripe'
     ],
     recordName: 'reason'
   },

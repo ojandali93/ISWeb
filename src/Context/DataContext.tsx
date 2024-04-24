@@ -34,6 +34,34 @@ interface IntakeProps {
   summary_out: string;
 }
 
+interface HistoricProps {
+  average_charged: number;
+  average_paid: number;
+  balance: number;
+  insurance: string;
+  network: string;
+  payout_ratio: number;
+  prefix: string
+}
+
+interface ClaimsProps {
+  balance_total: number,
+  charged_total: number,
+  claim_id: string,
+  claim_status: string,
+  coordinator: string,
+  end_date: string,
+  facility: string,
+  favorites: number,
+  fu_note: string | null,
+  name: string,
+  network: string,
+  paid_total: number,
+  payout_ratio: boolean,
+  start_date: string,
+  status: string
+}
+
 interface InsuranceOptionsProps {
   insurance: string;
   payer_id: number;
@@ -49,6 +77,8 @@ interface DataContextType {
   insuranceOptions: InsuranceOptionsProps[] | null;
   loadingNewIntake: boolean;
   addRecord: boolean;
+  billingDetails: HistoricProps[] | null;
+  claimsRecords: ClaimsProps[] | null;
   collectAllData: () => void;
   grabAllProfiles: () => void;
   addIntakeRecord: (data: any) => void;
@@ -67,6 +97,8 @@ const DataContext = createContext<DataContextType>({
   insuranceOptions: null,
   loadingNewIntake: false,
   addRecord: false, 
+  billingDetails: null,
+  claimsRecords: null,
   collectAllData: () => {},
   grabAllProfiles: () => {},
   addIntakeRecord: () => {},
@@ -97,10 +129,17 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [loadingNewIntake, setLoadingNewIntake] = useState<boolean>(false)
   const [addRecord, setAddRecord] = useState<boolean>(false)
 
+  const [billingDetails, setBillingDetails] = useState<HistoricProps[] | null>(null)
+
+  const [claimsRecords, setClaimsRcords] = useState<ClaimsProps[] | null>(null)
+
   const collectAllData = () => {
     grabAllProfiles()
     getIntakeRecords()
     grabInsuranceOptions()
+    grabRecords()
+    grabRecords()
+    grabClaims()
   }
 
   const grabAllProfiles = () => {
@@ -134,6 +173,30 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
         console.log(error);
       });
   };
+
+  const grabRecords = () => {
+    const url = 'https://intellasurebackend-docker.onrender.com/level3'
+    axios.get(url)
+    .then((response) => {
+      console.log('billing details records length: ', response.data[0])
+      setBillingDetails(response.data)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
+  const grabClaims = () => {
+    const url = 'https://intellasurebackend-docker.onrender.com/claims/claim_main_page'
+    axios.get(url)
+    .then((response) => {
+      console.log('billing details records length: ', response.data[0])
+      setClaimsRcords(response.data)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
   
   const getIntakeRecords = () => {
     let data = JSON.stringify({
@@ -269,6 +332,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     insuranceOptions, 
     loadingNewIntake,
     addRecord, 
+    billingDetails, 
+    claimsRecords,
     collectAllData,
     grabAllProfiles,
     addIntakeRecord,

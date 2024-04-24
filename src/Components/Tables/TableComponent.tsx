@@ -36,40 +36,24 @@ interface RecordData {
   [key: string]: any;
 }
 
+interface HistoricProps {
+  average_charged: number;
+  average_paid: number;
+  balance: number;
+  insurance: string;
+  network: string;
+  payout_ratio: number;
+  prefix: string
+}
+
 interface TableProps {
   columns: ColumnData[];
-  records: RecordData[];
+  records: any;
   users: UserData[] | null;
 }
 
 const TableComponent: React.FC<TableProps> = (props) => {
   const { columns, records, users } = props;
-
-  const [selectedDate, setSelectedDate] = useState(new Date())
-
-
-
-  const handleDateSelectedChange = (date: Date) => {
-    setSelectedDate(date)
-  }
-
-  function convertDateToMMDDYYYY(dateString: string) {
-    const date = new Date(dateString);
-    const mm = String(date.getUTCMonth() + 1).padStart(2, '0'); // UTC months from 1-12
-    const dd = String(date.getUTCDate()).padStart(2, '0'); // UTC day of the month
-    const yyyy = date.getUTCFullYear(); // UTC full year
-  
-    return `${mm}/${dd}/${yyyy}`;
-  }
-
-  const formatDollarAmount = (str: string) => {
-    const num = parseFloat(str);
-    return num.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-  }
-
-  const updateIntakeRecord = () => {
-
-  }
 
   return (
     <div className='max-w-full max-h-full'>
@@ -84,7 +68,7 @@ const TableComponent: React.FC<TableProps> = (props) => {
           </tr>
         </thead>
         <tbody>
-          {records != null ? ( records.map((record, rowIndex) => (
+          {records != null ? ( records.map((record: any, rowIndex: number) => (
             <tr key={rowIndex} className={`text-center min-h-14 h-16 text-white ${rowIndex % 2 === 0 ? 'bg-stone-900' : 'bg-stone-800'}`}>
               <CellComponent columns={columns} record={record}/>
             </tr>
