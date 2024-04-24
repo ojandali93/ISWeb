@@ -36,23 +36,19 @@ const CellComponent: React.FC<CellProps> = ({columns, record}) => {
   const [selectedDate, setSelectedDate] = useState(record.expected_arrival_date ? record.expected_arrival_date : new Date())
 
   useEffect(() => {
-    // Check if the expected_arrival_date is not null
     if (record.expected_arrival_date) {
-      // Parse the date string from the item prop
       const parsedDate = new Date(record.expected_arrival_date);
-      // Set the parsed date as the selected date
       setSelectedDate(parsedDate);
     } else {
-      // If the expected_arrival_date is null, set the current date as the selected date
       setSelectedDate(new Date());
     }
   }, [record.expected_arrival_date]);
 
   function convertDateToMMDDYYYY(dateString: string) {
     const date = new Date(dateString);
-    const mm = String(date.getUTCMonth() + 1).padStart(2, '0'); // UTC months from 1-12
-    const dd = String(date.getUTCDate()).padStart(2, '0'); // UTC day of the month
-    const yyyy = date.getUTCFullYear(); // UTC full year
+    const mm = String(date.getUTCMonth() + 1).padStart(2, '0'); 
+    const dd = String(date.getUTCDate()).padStart(2, '0'); 
+    const yyyy = date.getUTCFullYear(); 
   
     return `${mm}/${dd}/${yyyy}`;
   }
@@ -68,71 +64,11 @@ const CellComponent: React.FC<CellProps> = ({columns, record}) => {
 
   function convertDateToCustomFormat(dateStr: string) {
     const date = new Date(dateStr);
-    const mm = String(date.getUTCMonth() + 1).padStart(2, '0'); // UTC months from 1-12
-    const dd = String(date.getUTCDate()).padStart(2, '0'); // UTC day of the month
-    const yyyy = date.getUTCFullYear(); // UTC full year
+    const mm = String(date.getUTCMonth() + 1).padStart(2, '0'); 
+    const dd = String(date.getUTCDate()).padStart(2, '0'); 
+    const yyyy = date.getUTCFullYear(); 
 
     return `${yyyy}-${mm}-${dd}`;
-  }
-  
-  const handleStatusChange = (value: any, record: any) => {
-    const data = { data: {
-      "checked_in": value,
-      "booked": record.booked,
-      "coordinator": record.coordinator,
-      "summary_out": record.summary_out,
-      "reason": record.reason,
-      "expected_arrival_date": convertDateToCustomFormat(record.expected_arrival_date)
-    }}
-    submitUpdate(data)
-  }
-
-  const handleBookedChange = (value: any, record: any) => {
-    const data = { data: {
-      "checked_in": record.checked_in,
-      "booked": value,
-      "coordinator": record.coordinator,
-      "summary_out": record.summary_out,
-      "reason": record.reason,
-      "expected_arrival_date": convertDateToCustomFormat(record.expected_arrival_date)
-    }}
-    submitUpdate(data)
-  }
-
-  const handleReasonChange = (value: any, record: any) => {
-    const data = { data: {
-      "checked_in": record.checked_in,
-      "booked": record.booked,
-      "coordinator": record.coordinator,
-      "summary_out": record.summary_out,
-      "reason": value,
-      "expected_arrival_date": convertDateToCustomFormat(record.expected_arrival_date)
-    }}
-    submitUpdate(data)
-  }
-
-  const handleArrivalDateChange = (value: any, record: any) => {
-    const data = { data: {
-      "checked_in": record.checked_in,
-      "booked": record.booked,
-      "coordinator": record.coordinator,
-      "summary_out": record.summary_out,
-      "reason": record.reason,
-      "expected_arrival_date": convertDateToCustomFormat(value)
-    }}
-    submitUpdate(data)
-  }
-
-  const handleCoordinatorChange = (value: any, record: any) => {
-    const data = { data: {
-      "checked_in": record.checked_in,
-      "booked": record.booked,
-      "coordinator": value,
-      "summary_out": record.summary_out,
-      "reason": record.reason,
-      "expected_arrival_date": convertDateToCustomFormat(record.expected_arrival_date)
-    }}
-    submitUpdate(data)
   }
 
   const submitUpdate = (data: any) => {
@@ -154,28 +90,18 @@ const CellComponent: React.FC<CellProps> = ({columns, record}) => {
       });
   }
 
-  const handleSelectChange = (columnName: string, record: any, value: string | Date | null) => {
+  const handleSelectChange = (columnName: string, record: any, value: any) => {
     console.log('column name: ', columnName)
-    if(columnName === 'Status'){
-      console.log('updated checked in: ', value)
-      handleStatusChange(value, record)
-    }
-    if(columnName === 'Booked'){
-      console.log('updated booked: ', value)
-      handleBookedChange(value, record)
-    }
-    if(columnName === 'Reason'){
-      console.log('updated reason: ', value)
-      handleReasonChange(value, record)
-    }
-    if(columnName === 'Arriving Date'){
-      console.log('updated reason: ', value)
-      handleArrivalDateChange(value, record)
-    }
-    if(columnName === 'Coordinator'){
-      console.log('updated coordinator: ', value)
-      handleCoordinatorChange(value, record)
-    }
+    const data = { data: {
+      "checked_in": columnName === 'Status' ? value : record.checked_in,
+      "booked": columnName === 'Booked' ? value : record.booked,
+      "coordinator": columnName === 'Coordinator' ? value : record.coordinator,
+      "summary_out": record.summary_out,
+      "reason": columnName === 'Reason' ? value : record.reason,
+      "expected_arrival_date": columnName === 'Arriving Date' ? convertDateToCustomFormat(record.expected_arrival_date) : record.expected_arrival_date
+    }}
+    console.log('updated record: ', data)
+    // submitUpdate(data)
   }
 
   return (
