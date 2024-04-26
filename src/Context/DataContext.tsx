@@ -214,7 +214,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     };
     axios.request(config)
     .then((response) => {
-      console.log(response.data.data)
+      console.log('intake record: ', response.data.data[0])
       setIntakeRecords(sortRecordsByDateDesc(response.data.data))
     })
     .catch((error) => {
@@ -268,7 +268,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
         "out_network_details": '',
         "in_network_details": '',
         "notes": data.notes,
-        "date": new Date()
+        "created_date": getCurrentDateFormatted()
       }}
   
       const url = 'https://intellasurebackend-docker.onrender.com/intake/'
@@ -283,6 +283,14 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
         console.log(error);
         setLoadingNewIntake(false)
       });
+  }
+
+  function getCurrentDateFormatted() {
+    const now = new Date();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-based in JS, add 1
+    const day = now.getDate().toString().padStart(2, '0');
+    const year = now.getFullYear().toString();
+    return `${year}-${month}-${day}`;
   }
 
   const grabInsuranceOptions = () => {

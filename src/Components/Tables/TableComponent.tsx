@@ -1,8 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
-import SelectOptionComponent from './SelectOptionComponent';
-import SelectPeopleComponent from './SelectPeopleComponent';
-import FormComponent from './FormComponent';
-import CalendarSelectComponent from '../Inputs/CalendarSelectComponent';
+import React, { useEffect } from 'react';
 import CellComponent from './CellComponent';
 
 interface PeopleOptions {
@@ -18,6 +14,7 @@ interface ColumnData {
   dependent?: string;
   dependentResults?: string[];
   people?: PeopleOptions[];
+  width?: number;
 }
 
 interface UserData {
@@ -61,7 +58,7 @@ const TableComponent: React.FC<TableProps> = (props) => {
         <thead className='bg-sky-800 sticky top-0 h-14'>
           <tr className="">
             {columns.map((column, index) => (
-              <th key={index} className="min-w-52">
+              <th key={index} className={`min-w-${column.width?.toString()}`}>
                 <p className='text-lg text-white'>{column.label}</p>
               </th>
             ))}
