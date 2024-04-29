@@ -15,7 +15,7 @@ const IntakeHome = () => {
 
   return (
     <div className='h-full w-full max-h-full max-w-ful'>
-      <TableComponent users={intakeUsers} columns={intakeOColumns} records={intakeRecords}/>
+      <TableComponent table='intake' users={intakeUsers} columns={intakeOColumns} records={intakeRecords}/>
     </div>
   )
 }

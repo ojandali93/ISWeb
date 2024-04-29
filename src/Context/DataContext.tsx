@@ -190,7 +190,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     const url = 'https://intellasurebackend-docker.onrender.com/claims/claim_main_page'
     axios.get(url)
     .then((response) => {
-      console.log('billing details records length: ', response.data[0])
+      console.log('claims records length: ', response.data[0])
       setClaimsRcords(response.data)
     })
     .catch((error) => {

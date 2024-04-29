@@ -10,6 +10,7 @@ import DateChangeComponent from '../Inputs/DateChangeComponent';
 import InsuranceSelectComponent from './InsuranceSelectComponent';
 import EditPolicyComponent from './EditPolicyComponent';
 import DateSelectionComponent from '../Inputs/DateSelectionComponent';
+import { useClaims } from '../../Context/ClaimsContext';
 
 interface PeopleOptions {
   name: string;
@@ -33,12 +34,17 @@ interface RecordData {
 
 interface CellProps {
   columns: ColumnData[],
-  record: RecordData
+  record: RecordData,
+  table: string,
+  selectedClaims?: string[] | null
 }
 
-const CellComponent: React.FC<CellProps> = ({columns, record}) => {
+const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedClaims}) => {
 
   const {intakeUsers, getIntakeRecords, insuranceOptions} = useData()
+  const {updateSelectedClaims} = useClaims()
+
+  // console.log(updateSelectedClaims)
 
   const [selectedDate, setSelectedDate] = useState(record.expected_arrival_date ? record.expected_arrival_date : new Date())
   const [dobDate, setDobDate] = useState(record.date_of_birth)
@@ -318,7 +324,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record}) => {
                 </div>
               </>
             ) : column.type === 'boolean' ? (
-              <div  className={`flex flex-row`}>
+              <div  className={`flex flex-row justify-center`}>
                 <p>{record[column.recordName] === true ? 'Yes' : record[column.recordName] === null ? 'Unknown' : 'No'}</p>
               </div>
             ) : column.type === 'date' ? (
@@ -372,9 +378,9 @@ const CellComponent: React.FC<CellProps> = ({columns, record}) => {
               <div>
                 <button onClick={() => {handleDeleteRecord(record.intake_id)}} className={`py-1 px-3 rounded-lg bg-sky-700 hover:bg-sky-900`}>Remove</button>
               </div>
-            ) : column.type === 'popup' ? (
+            ) : column.type === 'percent' ? (
               <div>
-                <button onChange={() => {toggleShowPopup()}} className={`py-1 px-3 rounded-lg bg-sky-700 hover:bg-sky-900`}>View</button>
+                <p>{record[column.recordName] === 0 ? '0%' : `${(record[column.recordName] * 100).toFixed(1)}%`}</p>
               </div>
             ) : column.type === 'note' ? (
               <div className='max-w-96 py-2'>
@@ -393,6 +399,19 @@ const CellComponent: React.FC<CellProps> = ({columns, record}) => {
                   }}
                 />
               </div>
+            ) : column.type === 'checkbox' ? (
+              <>
+                <input
+                  type="checkbox"
+                  checked={table === 'Claims' ? selectedClaims?.includes(record['claim_id']) : false}
+                  onChange={() => {
+                    if(table === 'Claims'){
+                      console.log('new function call: ', record['claim_id'])
+                      updateSelectedClaims(record['claim_id'])
+                    }
+                  }}
+                />
+              </>
             ) : column.type === 'text-edit' ? (
               <><div className={`flex flex-row justify-center`}>
                 {record[column.recordName]}

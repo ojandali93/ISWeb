@@ -7,6 +7,7 @@ import { AuthProvider } from './Context/AuthContext';
 import { BrowserRouter } from 'react-router-dom';
 import { NavigationProvider } from './Context/NavigationContext';
 import { DataProvider } from './Context/DataContext';
+import { ClaimsProvider } from './Context/ClaimsContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -17,7 +18,9 @@ root.render(
       <AuthProvider>
         <NavigationProvider>
           <DataProvider>
-            <App/>
+            <ClaimsProvider>
+              <App/>
+            </ClaimsProvider>
           </DataProvider>
         </NavigationProvider>
       </AuthProvider>

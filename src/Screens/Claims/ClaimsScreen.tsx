@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import TopRowComponent from '../../Components/Navigation/TopRowComponent'
 import SidebarComponent from '../../Components/Navigation/SidebarComponent'
 import LayoutComponent from '../BaseScreen'
@@ -6,10 +6,12 @@ import ClaimsFilterComponent from '../../Components/SortAndFilter/ClaimsFilterCo
 import TableComponent from '../../Components/Tables/TableComponent'
 import { useData } from '../../Context/DataContext'
 import { ClaimOptions } from '../../Options/ClaimOptions'
+import { useClaims } from '../../Context/ClaimsContext'
 
 const ClaimsScreen = () => {
 
   const {claimsRecords, allUsers} = useData()
+  const {selectedClaims, updateSelectedClaims} = useClaims()
 
   return (
     <LayoutComponent 
@@ -20,7 +22,7 @@ const ClaimsScreen = () => {
         } 
         content={
           <div className='h-full w-full max-h-full max-w-ful'>
-            <TableComponent users={allUsers} columns={ClaimOptions} records={claimsRecords}/>
+            <TableComponent table={'Claims'} users={allUsers} columns={ClaimOptions} records={claimsRecords}/>
           </div>
         }
       />
