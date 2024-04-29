@@ -2,71 +2,85 @@ export const ClaimOptions = [
   {
     label:'Claim Id',
     type:'text',
-    recordName: 'claim_id'
-  },
-  {
-    label:'Name',
-    type:'text',
-    recordName: 'name'
-  },
-  {
-    label:'Policy',
-    type:'text',
-    recordName: 'claim_status'
-  },
-  {
-    label:'Facility',
-    type:'text',
-    recordName: 'facility'
-  },
-  {
-    label:'Network',
-    type:'text',
-    recordName: 'network'
-  },
-  {
-    label:'CPT Code',
-    type:'text',
-    recordName: 'coordinator'
+    recordName: 'claim_id',
+    width: '52'
   },
   {
     label:'Status',
     type:'text',
-    recordName: 'status'
+    recordName: 'claim_status',
+    width: '48'
+  },
+  {
+    label:'Name',
+    type:'text',
+    recordName: 'name',
+    width: '64'
+  },
+  {
+    label:'Insruance',
+    type:'text',
+    recordName: 'insurance',
+    width: '64'
+  },
+  {
+    label:'Facility',
+    type:'text',
+    recordName: 'facility',
+    width: '56'
+  },
+  {
+    label:'Network',
+    type:'text',
+    recordName: 'network',
+    width: '56'
+  },
+  {
+    label:'Status',
+    type:'text',
+    recordName: 'status',
+    width: '80'
   },
   {
     label:'Notes',
-    type:'text',
-    recordName: 'fu_note'
+    type:'note',
+    recordName: 'fu_note',
+    width: '80'
   },
   {
     label:'Charged Total',
     type:'dollar',
-    recordName: 'charged_total'
+    recordName: 'charged_total',
+    width: '56'
   },
   {
     label:'Paid Total',
     type:'dollar',
-    recordName: 'paid_total'
+    recordName: 'paid_total',
+    width: '56'
   },
   {
     label:'Payout %',
     type:'percent',
-    recordName: 'favorites'
+    recordName: 'favorites',
+    width: '56'
   },
   {
     label:'Balance Total',
     type:'dollar',
-    recordName: 'balance_total'
+    recordName: 'balance_total',
+    width: '56'
   },
   {
     label:'Start Date',
     type:'date',
-    recordName: 'start_date'
+    recordName: 'start_date',
+    width: '56'
   },
   {
     label:'End Date',
     type:'date',
-    recordName: 'end_date'
+    recordName: 'end_date',
+    width: '56'
   },
 ]

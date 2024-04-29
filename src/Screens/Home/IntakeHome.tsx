@@ -8,19 +8,14 @@ const IntakeHome = () => {
   const {intakeRecords, intakeUsers} = useData()
 
   const [records, setRecords] = useState<any>([])
-  const [columns, setColumns] = useState(intakeOColumns);
 
   useEffect(() => {
     setRecords(intakeRecords)
   }, [intakeRecords])
 
-  useEffect(() => {
-    setColumns(intakeOColumns)
-  }, [intakeOColumns])
-
   return (
     <div className='h-full w-full max-h-full max-w-ful'>
-      <TableComponent users={intakeUsers} columns={columns} records={records}/>
+      <TableComponent users={intakeUsers} columns={intakeOColumns} records={intakeRecords}/>
     </div>
   )
 }

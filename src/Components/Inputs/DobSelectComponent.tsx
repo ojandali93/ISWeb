@@ -7,7 +7,7 @@ interface SelectComponentProps {
   handleDateChange: (date: Date) => void;
 }
 
-const DobSelectComponent: React.FC<SelectComponentProps> = ({selectedDate, handleDateChange}) => {
+const CalendarSelectComponent: React.FC<SelectComponentProps> = ({selectedDate, handleDateChange}) => {
   return (
     <div className='w-full flex my-2 px-3 py-2 flex-col justify-center rounded-lg'>
       <p className='pb-1 mb-2 font-bold text-primary text-md mr-4 text-white'>Date Of Birth:</p>
@@ -21,4 +21,4 @@ const DobSelectComponent: React.FC<SelectComponentProps> = ({selectedDate, handl
   );
 }
 
-export default DobSelectComponent
+export default CalendarSelectComponent

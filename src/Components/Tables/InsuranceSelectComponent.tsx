@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useData } from '../../Context/DataContext';
 
 interface SelectOptionComponentProps {
-  options: string[] | number[];
   value: string;
-  compareColumn?: string;
+  insuranceOptions: any | null;
   onChange: (newValue: string) => void; // The type here assumes a function that takes a string and returns void
 }
 
-const SelectOptionComponent: React.FC<SelectOptionComponentProps> = ({ options, compareColumn, value, onChange }) => {
+const InsuranceSelectComponent: React.FC<SelectOptionComponentProps> = ({value, onChange, insuranceOptions }) => {
+
   return (
     <select
       value={value}
@@ -15,13 +16,13 @@ const SelectOptionComponent: React.FC<SelectOptionComponentProps> = ({ options, 
       className={`p-1 min-w-28 text-white text-md rounded 
         ${value === 'Yellow Stripe' ? 'bg-yellow-500' : value === 'Pending' ? 'bg-sky-800 border-2 border-red-500' : 'bg-sky-800'}`}
     >
-      {options.map((option, index) => (
-        <option key={index} value={option}>
-          {option}
+      {insuranceOptions.map((option: any, index: any) => (
+        <option key={index} value={option.label}>
+          {option.label}
         </option>
       ))}
     </select>
   );
 };
 
-export default SelectOptionComponent;
+export default InsuranceSelectComponent;
