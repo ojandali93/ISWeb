@@ -11,12 +11,6 @@ export const ClaimOptions = [
     recordName: 'claim_id',
     width: '52'
   },
-  // {
-  //   label:'Status',
-  //   type:'text',
-  //   recordName: 'claim_status',
-  //   width: '52'
-  // },
   {
     label:'Name',
     type:'text',
@@ -27,7 +21,7 @@ export const ClaimOptions = [
     label:'Insruance',
     type:'text',
     recordName: 'insurance',
-    width: '52'
+    width: '96'
   },
   {
     label:'Facility',
@@ -45,7 +39,7 @@ export const ClaimOptions = [
     label:'Status',
     type:'text',
     recordName: 'status',
-    width: '52'
+    width: '96'
   },
   {
     label:'Notes',

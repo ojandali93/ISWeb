@@ -24,6 +24,8 @@ import SettingsScreen from './Screens/Settings/SettingsScreen';
 import AboutScreen from './Screens/About/AboutScreen';
 import LoadingScreen from './Screens/LoadingScreen';
 import { useData } from './Context/DataContext';
+import ClaimsCollabScreen from './Screens/Claims/ClaimsCollabScreen';
+import ClaimsAveaScreen from './Screens/Claims/ClaimsAveaScreen';
 
 Amplify.configure(amplifyconfig)
 
@@ -73,6 +75,18 @@ function App() {
           path="/claims"
           element={
             authLoading ? <LoadingScreen /> : currentUser.username ? <ClaimsScreen /> : <Navigate to="/auth/login" />
+          }
+        />
+        <Route
+          path="/claims/collab"
+          element={
+            authLoading ? <LoadingScreen /> : currentUser.username ? <ClaimsCollabScreen /> : <Navigate to="/auth/login" />
+          }
+        />
+        <Route
+          path="/claims/avea"
+          element={
+            authLoading ? <LoadingScreen /> : currentUser.username ? <ClaimsAveaScreen /> : <Navigate to="/auth/login" />
           }
         />
         <Route

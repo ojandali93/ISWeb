@@ -133,6 +133,12 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   const [claimsRecords, setClaimsRcords] = useState<ClaimsProps[] | null>(null)
 
+  const [startDate, setStartDate] = useState(new Date(Date.UTC(2018, 1, 1)));
+  const [endDate, setEndDate] = useState(new Date())
+
+  const [minPercent, setMinPercent] = useState(0);
+  const [maxPercent, setMaxPercent] = useState(100)
+
   const collectAllData = () => {
     grabAllProfiles()
     getIntakeRecords()
@@ -186,11 +192,34 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     });
   }
 
+  function formatDate(date: Date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}`;
+  }
+
   const grabClaims = () => {
-    const url = 'https://intellasurebackend-docker.onrender.com/claims/claim_main_page'
-    axios.get(url)
+    let data = {
+      'start-date': formatDate(startDate),
+      'end-date': formatDate(endDate),
+      'min-payout': 0,
+      'max-payout': 0,
+      'page': 1,
+    }
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://intellasurebackend-docker.onrender.com/claims/claim_main_page',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+    axios.request(config)
     .then((response) => {
-      console.log('claims records length: ', response.data[0])
+      console.log('claims records length: ', response.data.length)
       setClaimsRcords(response.data)
     })
     .catch((error) => {

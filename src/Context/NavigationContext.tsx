@@ -1,10 +1,18 @@
 import React, { createContext, useContext, ReactNode, useState } from 'react';
 
+interface NavigationSubTab {
+  label: string;
+  icon: string;
+  route: string;
+  page: string;
+}
+
 interface NavigationTab {
   label: string;
   icon: string;
   route: string;
   page: string;
+  subTabs: NavigationSubTab[] | null;
 }
 
 interface NavigationContextValue {
@@ -28,62 +36,98 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
       label: 'Dashboard',
       icon: 'home',
       route: '/',
-      page: 'table'
+      page: 'table',
+      subTabs: null
     },
     {
       label: 'Historic',
       icon: 'list',
       route: '/historic',
-      page: 'table'
+      page: 'table',
+      subTabs: null
     },
     {
       label: 'External',
       icon: 'download',
       route: '/external',
-      page: 'table'
+      page: 'table',
+      subTabs: null
     },
 
     {
       label: 'Claims',
       icon: 'file-text',
-      route: '/claims',
-      page: 'table'
+      route: '/claims/collab',
+      page: 'table',
+      subTabs: [
+        {
+          label: 'Collab Md',
+          icon: 'download',
+          route: '/claims/collab',
+          page: 'table',
+        },
+        {
+          label: 'Avea',
+          icon: 'download',
+          route: '/claims/avea',
+          page: 'table',
+        },
+      ]
     },
     {
       label: 'Follow Up',
       icon: 'repeat',
       route: '/follow-up',
-      page: 'table'
+      page: 'table',
+      subTabs: [
+        {
+          label: 'Collab Md',
+          icon: 'download',
+          route: '/claims/collab',
+          page: 'table',
+        },
+        {
+          label: 'Avea',
+          icon: 'download',
+          route: '/claims/avea',
+          page: 'table',
+        },
+      ]
     },
     {
       label: 'Accounts',
       icon: 'users',
       route: '/accounts',
-      page: 'table'
+      page: 'table',
+      subTabs: null
     },
     {
       label: 'Tickets',
       icon: 'layers',
       route: '/tickets',
-      page: 'table'
+      page: 'table',
+      subTabs: null
     },
     {
       label: 'Admin',
       icon: 'lock',
       route: '/admin',
-      page: 'static'
+      page: 'static',
+      subTabs: null
     },
     {
       label: 'Dev',
       icon: 'git-branch',
       route: '/dev',
-      page: 'static'
+      page: 'static',
+      subTabs: null
     },
     {
       label: 'Intellachat AI',
       icon: 'zap',
       route: '/intellachat',
-      page: 'static'
+      page: 'static',
+      subTabs: null
     },
   ];
 
@@ -92,26 +136,29 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
       label: '',
       icon: 'help-circle',
       route: '/help',
-      page: 'static'
+      page: 'static',
+      subTabs: null
     },
     {
       label: '',
       icon: 'settings',
       route: '/settings',
-      page: 'static'
+      page: 'static',
+      subTabs: null
       
     },
     {
       label: '',
       icon: 'log-out',
       route: '/auth/logout',
-      page: 'status'
+      page: 'status',
+      subTabs: null
     },
   ];
 
-  const [currentSidebarTab, setCurrentSidebarTab] = useState<string>('home')
+  const [currentSidebarTab, setCurrentSidebarTab] = useState<string>('Home')
   const [currentSidebarType, setCurrentSidebarType] = useState<string>('table')
-  const [currentSidebarSubTab, setCurrentSidebarSubTab] = useState<string>('home')
+  const [currentSidebarSubTab, setCurrentSidebarSubTab] = useState<string>('Collab Md')
   const [currentContentTab, setCurrentContentTab] = useState<string>('home')
 
   const handleUpdateCurrentSidebarTab = (text: string) => {

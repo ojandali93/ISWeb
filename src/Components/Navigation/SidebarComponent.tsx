@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
 import NavigationTabComponent from './NavigationTabComponent'
 import { useNavigation } from '../../Context/NavigationContext'
+import SidebarSubMenuComponent from './SidebarSubMenuComponent'
 
 const SidebarComponent = () => {
 
-  const { sideNavigation } = useNavigation()
+  const { sideNavigation, currentSidebarTab } = useNavigation()
 
   const [maxHeight, setMaxHeight] = React.useState(window.innerHeight - 52);
 
@@ -23,7 +24,20 @@ const SidebarComponent = () => {
       {
         sideNavigation.map((tab) => {
           return(
-            <NavigationTabComponent type={tab.page} tab={tab.label} icon={tab.icon} route={tab.route} position={'side'}/>
+            <>
+              <NavigationTabComponent type={tab.page} tab={tab.label} icon={tab.icon} route={tab.route} position={'side'}/>
+              {
+                tab.subTabs === null 
+                  ? null
+                  : <div>
+                      {
+                        currentSidebarTab === tab.label
+                          ? <SidebarSubMenuComponent tab={tab}/>
+                          : null
+                      }
+                    </div>
+              }
+            </>
           )
         })
       }
