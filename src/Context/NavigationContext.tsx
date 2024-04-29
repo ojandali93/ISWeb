@@ -60,12 +60,12 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
     {
       label: 'Admin',
       icon: 'lock',
-      route: '/tickets'
+      route: '/admin'
     },
     {
       label: 'Dev',
       icon: 'git-branch',
-      route: '/tickets'
+      route: '/dev'
     },
     {
       label: 'Intellachat AI',

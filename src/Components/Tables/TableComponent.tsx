@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import CellComponent from './CellComponent';
+import { useClaims } from '../../Context/ClaimsContext';
 
 interface PeopleOptions {
   name: string;
@@ -47,10 +48,17 @@ interface TableProps {
   columns: ColumnData[];
   records: any;
   users: UserData[] | null;
+  table: string
 }
 
 const TableComponent: React.FC<TableProps> = (props) => {
-  const { columns, records, users } = props;
+  const { columns, records, users, table} = props;
+
+  const { selectedClaims } = useClaims()
+
+  useEffect(() => {
+    console.log(selectedClaims)
+  }, [selectedClaims])
 
   return (
     <div className='max-w-full max-h-full'>
@@ -70,7 +78,7 @@ const TableComponent: React.FC<TableProps> = (props) => {
         <tbody>
           {records != null ? ( records.map((record: any, rowIndex: number) => (
             <tr key={rowIndex} className={`text-center min-h-14 h-16 text-white ${rowIndex % 2 === 0 ? 'bg-stone-900' : 'bg-stone-800'}`}>
-              <CellComponent columns={columns} record={record}/>
+              <CellComponent table={table} columns={columns} record={record} selectedClaims={table === 'Claims' ? selectedClaims : null}/>
             </tr>
           ))) : (null)}
         </tbody>

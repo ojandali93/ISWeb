@@ -18,7 +18,7 @@ export const intakeOColumns = [
       'Denied'
     ],
     recordName: 'checked_in',
-    width: '72'
+    width: '56'
   },
   {
     label:'Booked',
@@ -38,7 +38,7 @@ export const intakeOColumns = [
       'Approved LB No RTC',
     ],
     recordName: 'booked',
-    width: '72'
+    width: '52'
   },
   {
     label:'Reason',
@@ -56,7 +56,7 @@ export const intakeOColumns = [
       'Yellow Stripe'
     ],
     recordName: 'reason',
-    width: '72'
+    width: '52'
   },
   {
     label:'Arriving Date',
@@ -66,7 +66,7 @@ export const intakeOColumns = [
       'Booked',
     ],
     recordName: 'expected_arrival_date',
-    width: '72'
+    width: '52'
   },
   {
     label:'Facility',
@@ -90,31 +90,31 @@ export const intakeOColumns = [
     label:'DOB',
     type:'date-edit',
     recordName: 'date_of_birth',
-    width: '64'
+    width: '52'
   },
   {
     label:'Insurance',
     type:'insurance-edit',
     recordName: 'insurance',
-    width: '80'
+    width: '96'
   },
   {
     label:'Prefix',
     type:'text',
     recordName: 'prefix',
-    width: '24'
+    width: '52'
   },
   {
     label:'Policy',
     type:'policy-edit',
     recordName: 'policy_id',
-    width: '80'
+    width: '92'
   },
   {
     label:'Active',
     type:'boolean',
     recordName: 'active',
-    width: '24'
+    width: '52'
   },
   {
     label:'Coordinator',

@@ -17,7 +17,7 @@ const HistoricScreen = () => {
         } 
         content={
           <div className='h-full w-full max-h-full max-w-ful'>
-            <TableComponent users={allUsers} columns={historicOptions} records={billingDetails}/>
+            <TableComponent table='Historic' users={allUsers} columns={historicOptions} records={billingDetails}/>
           </div>
         }
       />
