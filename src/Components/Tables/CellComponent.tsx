@@ -24,7 +24,7 @@ interface ColumnData {
   dependent?: string;
   dependentResults?: string[];
   people?: PeopleOptions[];
-  width?: number;
+  width?: string;
 }
 
 interface RecordData {
@@ -37,10 +37,6 @@ interface CellProps {
 }
 
 const CellComponent: React.FC<CellProps> = ({columns, record}) => {
-
-  useEffect(() => {
-    console.log('cell_record: ', record)
-  }, [])
 
   const {intakeUsers, getIntakeRecords, insuranceOptions} = useData()
 
@@ -55,6 +51,12 @@ const CellComponent: React.FC<CellProps> = ({columns, record}) => {
   const [columnName, setColumnName] = useState<string>()
   const [singleRecord, setSingleRecord] = useState<any>()
   const [value, setValue] = useState<any>()
+
+  const [showNotes, setShowNotes] = useState<boolean>(false)
+
+  const toggleShowPopup = () => {
+    setShowNotes(!showNotes)
+  }
 
   const updateEditDate = (columnName: string, record: any, value: any) => {
     setValue(value)
@@ -185,6 +187,13 @@ const CellComponent: React.FC<CellProps> = ({columns, record}) => {
     return num.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
   }
 
+  function truncateString(input: string, maxLength: number = 35): string {
+    if (input.length > maxLength) {
+      return input.substring(0, maxLength) + '...';
+    }
+    return input;
+  }
+
   const submitUpdate = (data: any) => {
     let config = {
       method: 'patch',
@@ -214,6 +223,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record}) => {
       "coordinator": columnName === 'Coordinator' ? value : record.coordinator,
       "summary_out": record.summary_out,
       "reason": columnName === 'Reason' ? value : record.reason,
+      'facility': columnName === 'Facility' ? value : record.facility,
       "expected_arrival_date": columnName === 'Arriving Date' 
                                 ? value
                                 : record.expected_arrival_date === null 
@@ -231,11 +241,27 @@ const CellComponent: React.FC<CellProps> = ({columns, record}) => {
     <>
       {columns.map((column, columnIndex) => {
         const cellValue = column.recordName ? record[column.recordName] : '';
+        const width = `min-w-${column.width}`
         return (
           <td key={columnIndex}>
             {column.type === 'select' && column.options ? (
               column.type === 'select' && column.dependent && column.dependentResults ? (
                 column.dependentResults.includes(record[column.dependent]) ? (
+                  <div>
+                    <SelectOptionComponent
+                      options={column.options}
+                      value={cellValue}
+                      onChange={(newValue) => {
+                        handleSelectChange(column.label, record, newValue)
+                        console.log('updated select option: ', newValue);
+                      }}
+                    />
+                  </div>
+                ) : (
+                  null
+                )
+              ) : (
+                <div>
                   <SelectOptionComponent
                     options={column.options}
                     value={cellValue}
@@ -244,29 +270,18 @@ const CellComponent: React.FC<CellProps> = ({columns, record}) => {
                       console.log('updated select option: ', newValue);
                     }}
                   />
-                ) : (
-                  null
-                )
-              ) : (
-                <SelectOptionComponent
-                  options={column.options}
-                  value={cellValue}
-                  onChange={(newValue) => {
-                    handleSelectChange(column.label, record, newValue)
-                    console.log('updated select option: ', newValue);
-                  }}
-                />
+                </div>
               )
             ) : column.type === 'select-edit' ? (
               <>
-                <div className='min-w-80 flex flex-row justify-center'>
+                <div className={`flex flex-row justify-center`}>
                   {record[column.recordName]}
                   <Edit height={20} width={20} className='text-sky-500 ml-2'/>
                 </div>
               </>
             ) : column.type === 'insurance-edit' ? (
               <>
-                <div className='min-w-80 flex flex-row justify-center'>
+                <div className='flex flex-row justify-center'>
                   {
                     editInsurance
                       ? <>
@@ -275,7 +290,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record}) => {
                           </div>
                         </>
                       : <>
-                          <div className='flex flex-row'>
+                          <div className={` flex flex-row`}>
                             {record[column.recordName]}
                             <Edit onClick={() => {toggleEditInsurance(column.label, record, record[column.recordName])}} height={20} width={20} className='text-sky-500 ml-2'/>
                           </div>
@@ -285,16 +300,16 @@ const CellComponent: React.FC<CellProps> = ({columns, record}) => {
               </>
             ) : column.type === 'policy-edit' ? (
               <>
-                <div className='min-w-56 flex flex-row justify-center'>
+                <div className={` flex flex-row justify-center`}>
                   {
                     editPolicy
                       ? <>
-                          <div>
+                          <div >
                             <EditPolicyComponent value={record[column.recordName]} onSubmit={submitPolciy} type='text' capitalize={true}/>
                           </div>
                         </>
                       : <>
-                          <div className='flex flex-row'>
+                          <div className={` flex flex-row`}>
                             {record[column.recordName]}
                             <Edit onClick={() => {toggleEditPolicy(column.label, record, record[column.recordName])}} height={20} width={20} className='text-sky-500 ml-2'/>
                           </div>
@@ -303,12 +318,18 @@ const CellComponent: React.FC<CellProps> = ({columns, record}) => {
                 </div>
               </>
             ) : column.type === 'boolean' ? (
-              record[column.recordName] === true ? 'Yes' : record[column.recordName] === null ? 'Unknown' : 'No'
+              <div  className={`flex flex-row`}>
+                <p>{record[column.recordName] === true ? 'Yes' : record[column.recordName] === null ? 'Unknown' : 'No'}</p>
+              </div>
             ) : column.type === 'date' ? (
-              <>{convertDateToMMDDYYYY(record[column.recordName])}</>
+              <>
+                <div>
+                  <p>{convertDateToMMDDYYYY(record[column.recordName])}</p>
+                </div>
+              </>
             ) : column.type === 'date-edit' ? (
               <>
-                <div className='min-w-64 flex flex-row justify-center'>
+                <div className={`flex flex-row justify-center`}>
                   {
                     editDate
                       ? <>
@@ -330,37 +351,59 @@ const CellComponent: React.FC<CellProps> = ({columns, record}) => {
             ) : column.type === 'select_date' ? (
               column.type === 'select_date' && column.dependent && column.dependentResults ? (
                 column.dependentResults.includes(record[column.dependent]) ? (
-                  <DateSelectionComponent selectedDate={selectedDate} handleDateChange={(date: string) => {
-                    handleDateSelectedChange(date, column.label)
-                    handleSelectChange(column.label, record, date)
-                    console.log('updated select option: ', date);
-                  }}/>
+                  <div>
+                    <DateSelectionComponent selectedDate={selectedDate} handleDateChange={(date: string) => {
+                      handleDateSelectedChange(date, column.label)
+                      handleSelectChange(column.label, record, date)
+                      console.log('updated select option: ', date);
+                    }}/>
+                  </div>
                 ) : (
                   null
                 )
               ) : ( null )
             ) : column.type === 'dollar' ? (
-              record[column.recordName] ? formatDollarAmount(record[column.recordName]) : ''
+              <div>
+                <p>
+                  {record[column.recordName] ? formatDollarAmount(record[column.recordName]) : ''}
+                </p>
+              </div>
             ) : column.type === 'delete' ? (
-              <button onClick={() => {handleDeleteRecord(record.intake_id)}} className={`py-1 px-3 rounded-lg bg-sky-700 hover:bg-sky-900`}>Remove</button>
+              <div>
+                <button onClick={() => {handleDeleteRecord(record.intake_id)}} className={`py-1 px-3 rounded-lg bg-sky-700 hover:bg-sky-900`}>Remove</button>
+              </div>
             ) : column.type === 'popup' ? (
-              <button className={`py-1 px-3 rounded-lg bg-sky-700 hover:bg-sky-900`}>View</button>
+              <div>
+                <button onChange={() => {toggleShowPopup()}} className={`py-1 px-3 rounded-lg bg-sky-700 hover:bg-sky-900`}>View</button>
+              </div>
+            ) : column.type === 'note' ? (
+              <div className='max-w-96 py-2'>
+                <p>
+                  {record[column.recordName] ? record[column.recordName] : ''}
+                </p>
+              </div>
             ) : column.type === 'people' ? (
-              <SelectPeopleComponent
-                options={intakeUsers}
-                value={cellValue}
-                onChange={(newValue) => {
-                  handleSelectChange(column.label, record, newValue)
-                  console.log('updated select option: ', newValue);
-                }}
-              />
+              <div>
+                <SelectPeopleComponent
+                  options={intakeUsers}
+                  value={cellValue}
+                  onChange={(newValue) => {
+                    handleSelectChange(column.label, record, newValue)
+                    console.log('updated select option: ', newValue);
+                  }}
+                />
+              </div>
             ) : column.type === 'text-edit' ? (
-              <><div className='flex flex-row justify-center'>
+              <><div className={`flex flex-row justify-center`}>
                 {record[column.recordName]}
                 <Edit height={20} width={20} className='text-sky-500 ml-2'/>
               </div></>
             ) : (
-              record[column.recordName] ? record[column.recordName] : ''
+              <div>
+                <p>
+                  {record[column.recordName] ? record[column.recordName] : ''}
+                </p>
+              </div>
             )}
           </td>
         );

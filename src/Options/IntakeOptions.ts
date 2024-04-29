@@ -3,7 +3,7 @@ export const intakeOColumns = [
     label:'Date',
     type:'date',
     recordName: 'date',
-    width: 64
+    width: '52'
   },
   {
     label:'Status',
@@ -18,7 +18,7 @@ export const intakeOColumns = [
       'Denied'
     ],
     recordName: 'checked_in',
-    width: 52
+    width: '72'
   },
   {
     label:'Booked',
@@ -38,7 +38,7 @@ export const intakeOColumns = [
       'Approved LB No RTC',
     ],
     recordName: 'booked',
-    width: 52
+    width: '72'
   },
   {
     label:'Reason',
@@ -56,7 +56,7 @@ export const intakeOColumns = [
       'Yellow Stripe'
     ],
     recordName: 'reason',
-    width: 52
+    width: '72'
   },
   {
     label:'Arriving Date',
@@ -66,115 +66,127 @@ export const intakeOColumns = [
       'Booked',
     ],
     recordName: 'expected_arrival_date',
-    width: 52
+    width: '72'
+  },
+  {
+    label:'Facility',
+    type:'select',
+    options: [
+      'Not Set',
+      'Affinity',
+      'Beachside',
+      'Axis',
+    ],
+    recordName: 'facility',
+    width: '52'
   },
   {
     label:'Client',
     type:'text',
     recordName: 'name',
-    width: 52
+    width: '52'
   },
   {
     label:'DOB',
     type:'date-edit',
     recordName: 'date_of_birth',
-    width: 64
+    width: '64'
   },
   {
     label:'Insurance',
     type:'insurance-edit',
     recordName: 'insurance',
-    width: 80
+    width: '80'
   },
   {
     label:'Prefix',
     type:'text',
     recordName: 'prefix',
-    width: 24
+    width: '24'
   },
   {
     label:'Policy',
     type:'policy-edit',
     recordName: 'policy_id',
-    width: 80
+    width: '80'
   },
   {
     label:'Active',
     type:'boolean',
     recordName: 'active',
-    width: 24
+    width: '24'
   },
   {
     label:'Coordinator',
     type:'people',
     recordName: 'coordinator',
     people: [],
-    width: 56
+    width: '56'
   },
   {
     label:'INN Admit %',
     type:'text',
     recordName: '',
-    width: 32
+    width: '32'
   },
   {
     label:'INN Admit',
     type:'text',
     recordName: '',
-    width: 32
+    width: '32'
   },
   {
     label:'INN Ded',
     type:'dollar',
     recordName: 'inn_deductible',
-    width: 32
+    width: '32'
   },
   {
     label:'INN OOP',
     type:'dollar',
     recordName: 'in_network_oop',
-    width: 32
+    width: '32'
   },
   {
     label:'OON Admit %',
     type:'text',
     recordName: '',
-    width: 32
+    width: '32'
   },
   {
     label:'OON Admit',
     type:'text',
     recordName: '',
-    width: 32
+    width: '32'
   },
   {
     label:'OON Ded',
     type:'dollar',
     recordName: 'onn_deductible',
-    width: 32
+    width: '32'
   },
   {
     label:'OON OOP',
     type:'dollar',
     recordName: 'out_network_oop',
-    width: 32
+    width: '32'
   },
   {
     label:'Source',
     type:'text',
     recordName: 'source',
-    width: 32
+    width: '32'
   },
   {
     label:'Notes',
     type:'popup',
     recordName: '',
-    width: 32
+    width: '32'
   },
   {
     label:'Delete',
     type:'delete',
     recordName: '',
-    width: 32
+    width: '32'
   },
 ]
