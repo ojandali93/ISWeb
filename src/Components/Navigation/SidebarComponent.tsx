@@ -23,7 +23,7 @@ const SidebarComponent = () => {
       {
         sideNavigation.map((tab) => {
           return(
-            <NavigationTabComponent tab={tab.label} icon={tab.icon} route={tab.route} position={'side'}/>
+            <NavigationTabComponent type={tab.page} tab={tab.label} icon={tab.icon} route={tab.route} position={'side'}/>
           )
         })
       }

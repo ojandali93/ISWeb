@@ -4,15 +4,18 @@ interface NavigationTab {
   label: string;
   icon: string;
   route: string;
+  page: string;
 }
 
 interface NavigationContextValue {
   sideNavigation: NavigationTab[];
   topNavigation: NavigationTab[];
   currentSidebarTab: string;
+  currentSidebarType: string;
   currentSidebarSubTab: string;
   currentContentTab: string;
   handleUpdateCurrentSidebarTab: (text: string) => void;
+  handleUpdateCurrentSidebarType: (text: string) => void;
   handleUpdateCurrentSidebarSubTab: (text: string) => void;
   handleUpdateCurrentContentTab: (text: string) => void;
 }
@@ -24,85 +27,99 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
     {
       label: 'Dashboard',
       icon: 'home',
-      route: '/'
+      route: '/',
+      page: 'table'
     },
     {
       label: 'Historic',
       icon: 'list',
-      route: '/historic'
+      route: '/historic',
+      page: 'table'
     },
     {
       label: 'External',
       icon: 'download',
-      route: '/external'
+      route: '/external',
+      page: 'table'
     },
 
     {
       label: 'Claims',
       icon: 'file-text',
-      route: '/claims'
+      route: '/claims',
+      page: 'table'
     },
     {
       label: 'Follow Up',
       icon: 'repeat',
-      route: '/follow-up'
+      route: '/follow-up',
+      page: 'table'
     },
     {
       label: 'Accounts',
       icon: 'users',
-      route: '/accounts'
+      route: '/accounts',
+      page: 'table'
     },
     {
       label: 'Tickets',
       icon: 'layers',
-      route: '/tickets'
+      route: '/tickets',
+      page: 'table'
     },
     {
       label: 'Admin',
       icon: 'lock',
-      route: '/admin'
+      route: '/admin',
+      page: 'static'
     },
     {
       label: 'Dev',
       icon: 'git-branch',
-      route: '/dev'
+      route: '/dev',
+      page: 'static'
     },
     {
       label: 'Intellachat AI',
       icon: 'zap',
-      route: '/intellachat'
+      route: '/intellachat',
+      page: 'static'
     },
   ];
 
   const topNavigation = [
     {
       label: '',
-      icon: 'info',
-      route: '/about'
+      icon: 'help-circle',
+      route: '/help',
+      page: 'static'
     },
     {
       label: '',
-      icon: 'life-buoy',
-      route: '/help'
-    },
-    {
-      label: '',
-      icon: 'sliders',
-      route: '/settings'
+      icon: 'settings',
+      route: '/settings',
+      page: 'static'
+      
     },
     {
       label: '',
       icon: 'log-out',
-      route: '/auth/logout'
+      route: '/auth/logout',
+      page: 'status'
     },
   ];
 
   const [currentSidebarTab, setCurrentSidebarTab] = useState<string>('home')
+  const [currentSidebarType, setCurrentSidebarType] = useState<string>('table')
   const [currentSidebarSubTab, setCurrentSidebarSubTab] = useState<string>('home')
   const [currentContentTab, setCurrentContentTab] = useState<string>('home')
 
   const handleUpdateCurrentSidebarTab = (text: string) => {
     setCurrentSidebarTab(text)
+  }
+
+  const handleUpdateCurrentSidebarType = (text: string) => {
+    setCurrentSidebarType(text)
   }
 
   const handleUpdateCurrentSidebarSubTab = (text: string) => {
@@ -118,9 +135,11 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
                                           sideNavigation, 
                                           topNavigation,
                                           currentSidebarTab,
+                                          currentSidebarType,
                                           currentSidebarSubTab,
                                           currentContentTab,
                                           handleUpdateCurrentSidebarTab,
+                                          handleUpdateCurrentSidebarType,
                                           handleUpdateCurrentSidebarSubTab,
                                           handleUpdateCurrentContentTab
                                          };

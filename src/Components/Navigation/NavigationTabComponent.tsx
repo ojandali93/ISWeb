@@ -1,25 +1,35 @@
 import React from 'react'
 import {Home} from 'react-feather'
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigation } from '../../Context/NavigationContext';
 
 interface NavigationTabProps {
   tab: string;
   icon: string;
   route: string;
   position: string;
+  type: string;
 }
 
 const NavigationTabComponent: React.FC<NavigationTabProps> = (props) => {
-  const {tab, icon, route, position} = props
+  const {tab, icon, route, position, type} = props
   const IconComponent = getIconComponent(icon);
   const navigate = useNavigate()
   const location = useLocation();
+
+  const { handleUpdateCurrentSidebarTab, handleUpdateCurrentSidebarType } = useNavigation()
+
+  const handleRedirect = () => {
+    handleUpdateCurrentSidebarTab(tab)
+    handleUpdateCurrentSidebarType(type)
+    navigate(route)
+  }
 
   const isActive = location.pathname === route;
 
   return (
     <div 
-      onClick={() => {navigate(route)}} 
+      onClick={() => {handleRedirect()}} 
       className={`w-full h-10 flex flex-row items-center hover:cursor-pointer 
         ${position === 'top' ? 'hover:bg-slate-700 rounded-xl text-white' : isActive ? 'bg-stone-900 text-white' : 'hover:bg-sky-800 text-white' }`}
     >
