@@ -67,6 +67,13 @@ interface InsuranceOptionsProps {
   payer_id: number;
 }
 
+// interface SupportFormProps {
+//   category: string;
+//   message: string;
+//   email: string;
+//   name: string;
+// };
+
 interface DataContextType {
   allUsers: ProfileProps[] | null;
   intakeUsers: ProfileProps[] | null;
@@ -85,6 +92,7 @@ interface DataContextType {
   handleAddRecord: () => void;
   getIntakeRecords: () => void;
   searchIntakeRecords: (search: string) => void;
+  addSupportTicket: (data:any) => void;
 }
 
 const DataContext = createContext<DataContextType>({
@@ -104,7 +112,8 @@ const DataContext = createContext<DataContextType>({
   addIntakeRecord: () => {},
   handleAddRecord: () => {},
   getIntakeRecords: () => {},
-  searchIntakeRecords: () => {}
+  searchIntakeRecords: () => {},
+  addSupportTicket: () => {},
 });
 
 export function useData() {
@@ -330,6 +339,10 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     setAddRecord(!addRecord)
   }
 
+  const addSupportTicket = (data: any) => {
+    console.log(data);
+  }
+
   const contextValue: DataContextType = {
     allUsers,
     intakeUsers,
@@ -347,7 +360,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     addIntakeRecord,
     handleAddRecord,
     getIntakeRecords,
-    searchIntakeRecords
+    searchIntakeRecords,
+    addSupportTicket
   };
 
   return (

@@ -1,18 +1,48 @@
 import React, { useState } from 'react'
 import FormInputComponent from '../Inputs/FormInputComponent';
+import ButtonComponent from '../Inputs/ButtonComponent';
+import SelectComponent from '../Inputs/SelectComponent';
+import { useData } from '../../Context/DataContext';
+import { useAuth } from '../../Context/AuthContext';
 
 const SupportForm = (props: any) => {
 
-  const [subject, setSubject] = useState<string>('');
+  const { addSupportTicket } = useData()
+  const { currentProfile } = useAuth()
+
+  const [category, setCategory] = useState<string | null>(null);
   const [message, setMessage] = useState<string>('');
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const handleUpdateSubject = ( text: string ) => {
-    setSubject(text);
-  };
+  const categories = [
+    {value: 'Tech', label: 'Technical Problem'},
+    {value: 'ui', label: 'User Interface Problem'},
+    {value: 'general', label: 'General Problem'}
+  ]
 
-  const handleUpdateMessage = ( text: string) => {
+  const handleUpdateMessage = (text: string) => {
     setMessage(text);
   }
+
+  const handleOptionClick = (value: string) => {
+    setCategory(value);
+    setIsOpen(false);
+  }
+
+  const handleTicketSubmit = () => {
+    const data = {
+      category: category,
+      message: message,
+      email: currentProfile.email,
+      name: currentProfile.name,   
+    }
+    addSupportTicket(data)
+  }
+
+  const handleOpenSelect = () => {
+    setIsOpen(true);
+  }
+
 
   return (
     <div className='flex flex-col justify-center items-center min-h-screen w-full rounded-lg'>
@@ -26,13 +56,14 @@ const SupportForm = (props: any) => {
         better for everyone.
         </p>
       </div>
-      <form className='flex flex-row'>
-        <FormInputComponent
-          value={subject}
-          handleFunction={handleUpdateSubject}
-          placeHolder={'Claims tab issue...'}
-          type={'text'}
-          icon={'Subject'}
+      <form className='flex flex-row text-color-primary'>
+        <SelectComponent
+          placeholder="Select issue category"
+          options={categories}
+          selectedValue={category}
+          handleOptionClick={handleOptionClick}
+          handleOpenSelect={handleOpenSelect}
+          isOpen={isOpen}
         />
         <FormInputComponent
           value={message}
@@ -41,6 +72,7 @@ const SupportForm = (props: any) => {
           type={'text'}
           icon={'Message'}
         />
+        <ButtonComponent label='Submit Ticket' handler={() => handleTicketSubmit()}/>
       </form>
     </div>
   )
