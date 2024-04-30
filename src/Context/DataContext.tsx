@@ -99,6 +99,7 @@ interface DataContextType {
   handleAddRecord: () => void;
   getIntakeRecords: () => void;
   searchIntakeRecords: (search: string) => void;
+  grabClaimsData: () => void;
 }
 
 
@@ -121,7 +122,8 @@ const DataContext = createContext<DataContextType>({
   addIntakeRecord: () => {},
   handleAddRecord: () => {},
   getIntakeRecords: () => {},
-  searchIntakeRecords: () => {}
+  searchIntakeRecords: () => {},
+  grabClaimsData: () => {},
 });
 
 export function useData() {
@@ -461,7 +463,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     handleAddRecord,
     getIntakeRecords,
     searchIntakeRecords,
-    grabRefreshClaims
+    grabRefreshClaims,
+    grabClaimsData
   };
 
   return (
