@@ -67,6 +67,10 @@ interface InsuranceOptionsProps {
   payer_id: number;
 }
 
+interface AvailityProps {
+
+}
+
 interface DataContextType {
   allUsers: ProfileProps[] | null;
   intakeUsers: ProfileProps[] | null;
@@ -96,6 +100,7 @@ interface DataContextType {
   getIntakeRecords: () => void;
   searchIntakeRecords: (search: string) => void;
 }
+
 
 const DataContext = createContext<DataContextType>({
   allUsers: null,
@@ -363,6 +368,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       });
   }
 
+
   function getCurrentDateFormatted() {
     const now = new Date();
     const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-based in JS, add 1
@@ -393,6 +399,34 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       })
       .catch((err) => {
         console.log(err)
+      })
+  }
+
+  const grabClaimsData = () => {
+    const url = 'https://intellasurebackend-docker.onrender.com/availity/232188216'
+    axios.get(url)
+      .then((response: any) => {
+        const newDataArray = response.data.claimStatuses.map((claimStatus: any) => {
+          const newData = {
+            claimControlNumber: claimStatus.claimControlNumber,
+            patientControlNumber: claimStatus.patientControlNumber,
+            fromDate: claimStatus.fromDate,
+            toDate: claimStatus.toDate,
+            category: claimStatus.statusDetails[0].category,
+            categoryCode: claimStatus.statusDetails[0].categoryCode,
+            checkNumber: claimStatus.statusDetails[0].checkNumber,
+            claimAmount: claimStatus.statusDetails[0].claimAmount,
+            effectiveDate: claimStatus.statusDetails[0].effectiveDate,
+            finalizedDate: claimStatus.statusDetails[0].finalizedDate,
+            paymentAmount: claimStatus.statusDetails[0].paymentAmount,
+            remittanceDate: claimStatus.statusDetails[0].remittanceDate,
+            status: claimStatus.statusDetails[0].status,
+            statusCode: claimStatus.statusDetails[0].statusCode,
+            traceId: claimStatus.statusDetails[0].traceId,
+          }
+          return newData;
+        })
+        console.log(newDataArray)
       })
   }
 
