@@ -262,6 +262,13 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     return number.toString()
   }
 
+  const generateFiveDigitNumber = () => {
+    const min = 10000;
+    const max = 99999;
+    const number = Math.floor(Math.random() * (max - min + 1)) + min;
+    return number.toString();
+  }
+
   const addIntakeRecord = (data: any) => {
       setLoadingNewIntake(true)
       let intakeId = generateTenDigitNumber()
@@ -344,15 +351,29 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   }
 
   const addSupportTicket = (data: any) => {
-    const url = 'https://intellasurebackend-docker.onrender.com/support/submit_ticket'
+    setLoadingNewTicket(true);
 
-    axios.post(url, data)
+    const ticket_id = generateFiveDigitNumber();
+    const ticket_data = { data: {
+      email: data.email,
+      message: data.message,
+      name: data.name,
+      status: data.status,
+      subject: data.subject,
+      ticket_id: ticket_id
+    }
+
+    }
+
+    const url = 'https://intellasurebackend-docker.onrender.com/support/submit_ticket'
+    
+
+    axios.post(url, ticket_data.data)
     .then((response) => {
-      console.log(data);
-      setLoadingNewTicket(true);
+      setLoadingNewTicket(false);
       alert('Your ticket request has been sent to our team. We will try to fix the issue and get back to your regarding this issue.')
     })
-    // console.log(data);
+
   }
 
   const contextValue: DataContextType = {

@@ -13,7 +13,7 @@ const SupportForm = (props: any) => {
   const [category, setCategory] = useState<string | null>(null);
   const [message, setMessage] = useState<string>('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  console.log(category)
+
   const categories = [
     {value: 'Technical Problem', label: 'Technical Problem'},
     {value: 'User Interface Problem', label: 'User Interface Problem'},
@@ -31,10 +31,11 @@ const SupportForm = (props: any) => {
 
   const handleTicketSubmit = () => {
     const data = {
-      category: category,
-      message: message,
       email: currentProfile.email,
+      message: message,
       name: currentProfile.name,   
+      status: true,
+      subject: category,
     }
     console.log(data)
     addSupportTicket(data)
