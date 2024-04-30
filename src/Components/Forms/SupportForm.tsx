@@ -7,13 +7,13 @@ import { useAuth } from '../../Context/AuthContext';
 
 const SupportForm = (props: any) => {
 
-  const { addSupportTicket } = useData()
+  const { addSupportTicket, loadingNewTicket } = useData()
   const { currentProfile } = useAuth()
 
   const [category, setCategory] = useState<string | null>(null);
   const [message, setMessage] = useState<string>('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
+  console.log(category)
   const categories = [
     {value: 'Technical Problem', label: 'Technical Problem'},
     {value: 'User Interface Problem', label: 'User Interface Problem'},
@@ -36,6 +36,7 @@ const SupportForm = (props: any) => {
       email: currentProfile.email,
       name: currentProfile.name,   
     }
+    console.log(data)
     addSupportTicket(data)
   }
 
@@ -76,7 +77,7 @@ const SupportForm = (props: any) => {
         />
         <div className='mt-7'>
           <ButtonComponent
-            label='Submit Ticket' 
+            label={loadingNewTicket ? 'submitting' : 'Submit Ticket'} 
             handler={() => handleTicketSubmit()}/>
         </div>
       </form>

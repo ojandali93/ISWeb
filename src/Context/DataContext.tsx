@@ -83,6 +83,7 @@ interface DataContextType {
   intakeRecords: IntakeProps[] | null;
   insuranceOptions: InsuranceOptionsProps[] | null;
   loadingNewIntake: boolean;
+  loadingNewTicket: boolean;
   addRecord: boolean;
   billingDetails: HistoricProps[] | null;
   claimsRecords: ClaimsProps[] | null;
@@ -104,6 +105,7 @@ const DataContext = createContext<DataContextType>({
   intakeRecords: null,
   insuranceOptions: null,
   loadingNewIntake: false,
+  loadingNewTicket: false,
   addRecord: false, 
   billingDetails: null,
   claimsRecords: null,
@@ -137,6 +139,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   const [loadingNewIntake, setLoadingNewIntake] = useState<boolean>(false)
   const [addRecord, setAddRecord] = useState<boolean>(false)
+
+  const [loadingNewTicket, setLoadingNewTicket] = useState<boolean>(false);
 
   const [billingDetails, setBillingDetails] = useState<HistoricProps[] | null>(null)
 
@@ -340,7 +344,15 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   }
 
   const addSupportTicket = (data: any) => {
-    console.log(data);
+    const url = 'https://intellasurebackend-docker.onrender.com/support/submit_ticket'
+
+    axios.post(url, data)
+    .then((response) => {
+      console.log(data);
+      setLoadingNewTicket(true);
+      alert('Your ticket request has been sent to our team. We will try to fix the issue and get back to your regarding this issue.')
+    })
+    // console.log(data);
   }
 
   const contextValue: DataContextType = {
@@ -361,7 +373,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     handleAddRecord,
     getIntakeRecords,
     searchIntakeRecords,
-    addSupportTicket
+    addSupportTicket,
+    loadingNewTicket
   };
 
   return (
