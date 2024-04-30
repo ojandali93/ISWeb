@@ -18,49 +18,31 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({ handlePageCha
             handlePageChange(currentPage - 1)
           }
         }}
-          className='h-8 w-8 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500 my-2 mr-1'
+          className='p-1 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500  my-1 mr-1'
       >
         <ChevronLeft size={20} className='text-white' strokeWidth={3}/>
       </div>
       <div className='flex flex-row'>
-        <div className='h-8 w-8 hover:cursor-pointe rounded-md flex justify-center items-center bg-stone-300  my-2 mr-1'>
+        <div className='p-1 min-w-6 hover:cursor-pointe rounded-md flex justify-center items-center bg-stone-300  my-1 mr-1'>
           <p className='font-bold text-black'>{currentPage}</p>
         </div> 
         <div
           onClick={() => {
             handlePageChange(currentPage + 1)
           }}
-          className='h-8 w-8 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500 my-2 mr-1'
+          className='p-1 min-w-6 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500 my-1 mr-1'
         >
           <p className='font-bold text-white'>{currentPage + 1}</p>
         </div>
-        <div 
+        <div
           onClick={() => {
             handlePageChange(currentPage + 2)
           }}
-          className='h-8 w-8 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500  my-2 mr-1'
+          className='p-1 min-w-6 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500 my-1 mr-1'
         >
           <p className='font-bold text-white'>{currentPage + 2}</p>
         </div>
-        <div 
-          onClick={() => {
-            handlePageChange(currentPage + 3)
-          }}
-          className='h-8 w-8 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500  my-2 mr-1'
-        >
-          <p className='font-bold text-white'>{currentPage + 3}</p>
-        </div>
-        <div className='h-8 w-8 rounded-md flex justify-center items-end m-2'>
-          <p className='font-bold text-stone-500'>...</p>
-        </div>
-        <div 
-          onClick={() => {
-            handlePageChange(pageCount)
-          }}
-          className='h-8 w-8 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500  my-2 mr-1'
-        >
-          <p className='font-bold text-white'>{pageCount}</p>
-        </div>
+        
       </div>
       <div 
         onClick={() => {
@@ -68,7 +50,7 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({ handlePageCha
             handlePageChange(currentPage + 1)
           }
         }}
-        className='h-8 w-8 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500  my-2 mr-1'
+        className='p-1 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500  my-1 mr-1'
         >
         <ChevronRight size={20} className='text-white' strokeWidth={3}/>
       </div>

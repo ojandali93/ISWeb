@@ -81,6 +81,16 @@ interface DataContextType {
   claimsRecords: ClaimsProps[] | null;
   collectAllData: () => void;
   grabAllProfiles: () => void;
+  grabClaims: () => void;
+  grabRefreshClaims: (
+    startDate: Date, 
+    endDate: Date, 
+    minPercent: number, 
+    maxPercent: number, 
+    page: number, 
+    facility: string, 
+    status: string,
+  ) => void;
   addIntakeRecord: (data: any) => void;
   handleAddRecord: () => void;
   getIntakeRecords: () => void;
@@ -101,6 +111,8 @@ const DataContext = createContext<DataContextType>({
   claimsRecords: null,
   collectAllData: () => {},
   grabAllProfiles: () => {},
+  grabClaims: () => {},
+  grabRefreshClaims: () => {},
   addIntakeRecord: () => {},
   handleAddRecord: () => {},
   getIntakeRecords: () => {},
@@ -184,7 +196,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     const url = 'https://intellasurebackend-docker.onrender.com/level3'
     axios.get(url)
     .then((response) => {
-      console.log('billing details records length: ', response.data[0])
       setBillingDetails(response.data)
     })
     .catch((error) => {
@@ -202,11 +213,13 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   const grabClaims = () => {
     let data = {
-      'start-date': formatDate(startDate),
-      'end-date': formatDate(endDate),
-      'min-payout': 0,
-      'max-payout': 0,
-      'page': 1,
+      'start_date': formatDate(new Date(Date.UTC(2018, 1, 1))),
+      'end_date': formatDate(endDate),
+      "min_percent": 0.0,
+      "max_percent": 1.0,
+      "page": 1,
+      "facilities":"ALL",
+      "status": "ALL"
     }
     let config = {
       method: 'post',
@@ -220,6 +233,43 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     axios.request(config)
     .then((response) => {
       console.log('claims records length: ', response.data.length)
+      setClaimsRcords(response.data)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
+  const grabRefreshClaims = (
+    startDate: Date, 
+    endDate: Date, 
+    minPercent: number, 
+    maxPercent: number, 
+    page: number, 
+    facility: string, 
+    status: string,
+  ) => {
+    let data = {
+      'start_date': formatDate(startDate),
+      'end_date': formatDate(endDate),
+      'min_percent': (minPercent / 100),
+      'max_percent': (maxPercent / 100),
+      'page': page,
+      'facilities': facility,
+      'status': status
+    }
+    console.log('refresh claims: ', data)
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://intellasurebackend-docker.onrender.com/claims/claim_main_page',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+    axios.request(config)
+    .then((response) => {
       setClaimsRcords(response.data)
     })
     .catch((error) => {
@@ -243,7 +293,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     };
     axios.request(config)
     .then((response) => {
-      console.log('intake record: ', response.data.data[0])
       setIntakeRecords(sortRecordsByDateDesc(response.data.data))
     })
     .catch((error) => {
@@ -372,11 +421,13 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     billingDetails, 
     claimsRecords,
     collectAllData,
+    grabClaims,
     grabAllProfiles,
     addIntakeRecord,
     handleAddRecord,
     getIntakeRecords,
-    searchIntakeRecords
+    searchIntakeRecords,
+    grabRefreshClaims
   };
 
   return (

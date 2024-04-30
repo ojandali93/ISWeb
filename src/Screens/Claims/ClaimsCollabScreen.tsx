@@ -12,12 +12,12 @@ const ClaimsCollabScreen = () => {
   return (
     <LayoutComponent 
       header={
-        <div className='h-14 w-full mb-2'>
+        <div className='h-12 w-full mb-2'>
           <ClaimsFilterComponent />
         </div>
       } 
       content={
-        <div className='h-full w-full max-h-full max-w-ful'>
+        <div className='h-full w-full max-h-full max-w-full'>
           <TableComponent table={'Claims'} users={allUsers} columns={ClaimOptions} records={claimsRecords}/>
         </div>
       }

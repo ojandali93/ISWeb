@@ -54,11 +54,7 @@ interface TableProps {
 const TableComponent: React.FC<TableProps> = (props) => {
   const { columns, records, users, table} = props;
 
-  const { selectedClaims } = useClaims()
-
-  useEffect(() => {
-    console.log(selectedClaims)
-  }, [selectedClaims])
+  const { selectedClaims, allClaims, unselectAllClaims, selectAllClaims } = useClaims()
 
   return (
     <div className='max-w-full max-h-full'>
@@ -69,7 +65,21 @@ const TableComponent: React.FC<TableProps> = (props) => {
               const width = `min-w-${column.width}`
               return(
                 <th key={index} className={width}>
-                  <p className='text-lg text-white'>{column.label}</p>
+                  {
+                    column.type === 'checkbox'
+                      ? <input
+                          type="checkbox"
+                          checked={allClaims}
+                          onChange={() => {
+                            if(allClaims){
+                              unselectAllClaims()
+                            } else {
+                              selectAllClaims(records)
+                            }
+                          }}
+                        />
+                      : <p className='text-lg text-white'>{column.label}</p>
+                  } 
                 </th>
               )
             })}
