@@ -83,6 +83,7 @@ interface DataContextType {
   addRecord: boolean;
   billingDetails: HistoricProps[] | null;
   claimsRecords: ClaimsProps[] | null;
+  availityData: any;
   collectAllData: () => void;
   grabAllProfiles: () => void;
   grabClaims: () => void;
@@ -99,7 +100,7 @@ interface DataContextType {
   handleAddRecord: () => void;
   getIntakeRecords: () => void;
   searchIntakeRecords: (search: string) => void;
-  grabClaimsData: () => void;
+  grabAvailityData: (claim_id: any) => void;
 }
 
 
@@ -115,6 +116,7 @@ const DataContext = createContext<DataContextType>({
   addRecord: false, 
   billingDetails: null,
   claimsRecords: null,
+  availityData: null,
   collectAllData: () => {},
   grabAllProfiles: () => {},
   grabClaims: () => {},
@@ -123,7 +125,7 @@ const DataContext = createContext<DataContextType>({
   handleAddRecord: () => {},
   getIntakeRecords: () => {},
   searchIntakeRecords: () => {},
-  grabClaimsData: () => {},
+  grabAvailityData: () => {},
 });
 
 export function useData() {
@@ -151,6 +153,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [billingDetails, setBillingDetails] = useState<HistoricProps[] | null>(null)
 
   const [claimsRecords, setClaimsRcords] = useState<ClaimsProps[] | null>(null)
+
+  const [availityData, setAvailityData] = useState<any>(null)
 
   const [startDate, setStartDate] = useState(new Date(Date.UTC(2018, 1, 1)));
   const [endDate, setEndDate] = useState(new Date())
@@ -404,8 +408,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       })
   }
 
-  const grabClaimsData = () => {
-    const url = 'https://intellasurebackend-docker.onrender.com/availity/232188216'
+  const grabAvailityData = (claim_id: any) => {
+    const url = `https://intellasurebackend-docker.onrender.com/availity/${claim_id}`
     axios.get(url)
       .then((response: any) => {
         const newDataArray = response.data.claimStatuses.map((claimStatus: any) => {
@@ -424,11 +428,12 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
             remittanceDate: claimStatus.statusDetails[0].remittanceDate,
             status: claimStatus.statusDetails[0].status,
             statusCode: claimStatus.statusDetails[0].statusCode,
-            traceId: claimStatus.statusDetails[0].traceId,
+            traceId: claimStatus.traceId,
           }
           return newData;
         })
-        console.log(newDataArray)
+        console.log(newDataArray);
+        setAvailityData(newDataArray)
       })
   }
 
@@ -464,7 +469,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     getIntakeRecords,
     searchIntakeRecords,
     grabRefreshClaims,
-    grabClaimsData
+    grabAvailityData,
+    availityData
   };
 
   return (
