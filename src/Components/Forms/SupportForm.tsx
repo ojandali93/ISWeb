@@ -15,9 +15,9 @@ const SupportForm = (props: any) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const categories = [
-    {value: 'Tech', label: 'Technical Problem'},
-    {value: 'ui', label: 'User Interface Problem'},
-    {value: 'general', label: 'General Problem'}
+    {value: 'Technical Problem', label: 'Technical Problem'},
+    {value: 'User Interface Problem', label: 'User Interface Problem'},
+    {value: 'General Problem', label: 'General Problem'}
   ]
 
   const handleUpdateMessage = (text: string) => {
@@ -46,8 +46,8 @@ const SupportForm = (props: any) => {
 
   return (
     <div className='flex flex-col justify-center items-center min-h-screen w-full rounded-lg'>
-      <div className="text-center max-w-md mx-auto rounded-md border-2 border-primary p-8">
-        <h3 className='text-lg text-gray-400 font-bold mb-5'>Encountered an Issue? Let Us Know!</h3>
+      <div className="text-center max-w-md mx-auto rounded-md border-2 border-primary p-8 mb-3">
+        <h3 className='text-lg text-gray-400 font-bold mb-7'>Encountered an Issue? Let Us Know!</h3>
         <p className='text-white mb-4'>If you encounter any issues or have any concerns while using our website, 
         please don't hesitate to reach out. Whether it's a technical problem, a user interface query, or any 
         other challenge, we're here to help. We understand that encountering issues can be frustrating, but rest 
@@ -56,7 +56,8 @@ const SupportForm = (props: any) => {
         better for everyone.
         </p>
       </div>
-      <form className='flex flex-row text-color-primary'>
+      <form className='flex flex-row text-color-primary items-center relative'>
+        <div className='mt-3 overflow-visible text-white'>
         <SelectComponent
           placeholder="Select issue category"
           options={categories}
@@ -65,6 +66,7 @@ const SupportForm = (props: any) => {
           handleOpenSelect={handleOpenSelect}
           isOpen={isOpen}
         />
+        </div>
         <FormInputComponent
           value={message}
           handleFunction={handleUpdateMessage}
@@ -72,7 +74,11 @@ const SupportForm = (props: any) => {
           type={'text'}
           icon={'Message'}
         />
-        <ButtonComponent label='Submit Ticket' handler={() => handleTicketSubmit()}/>
+        <div className='mt-7'>
+          <ButtonComponent
+            label='Submit Ticket' 
+            handler={() => handleTicketSubmit()}/>
+        </div>
       </form>
     </div>
   )
