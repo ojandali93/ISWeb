@@ -40,6 +40,13 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
       subTabs: null
     },
     {
+      label: 'Intake Analytics',
+      icon: 'trending-up',
+      route: '/',
+      page: 'table',
+      subTabs: null
+    },
+    {
       label: 'Historic',
       icon: 'list',
       route: '/historic',
@@ -99,27 +106,6 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
       icon: 'users',
       route: '/accounts',
       page: 'table',
-      subTabs: null
-    },
-    {
-      label: 'Tickets',
-      icon: 'layers',
-      route: '/tickets',
-      page: 'table',
-      subTabs: null
-    },
-    {
-      label: 'Admin',
-      icon: 'lock',
-      route: '/admin',
-      page: 'static',
-      subTabs: null
-    },
-    {
-      label: 'Dev',
-      icon: 'git-branch',
-      route: '/dev',
-      page: 'static',
       subTabs: null
     },
     {
