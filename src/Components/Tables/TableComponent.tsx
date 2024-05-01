@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import CellComponent from './CellComponent';
 import { useClaims } from '../../Context/ClaimsContext';
+import { useNavigation } from '../../Context/NavigationContext';
+import { useFollowup } from '../../Context/FollowupContext';
 
 interface PeopleOptions {
   name: string;
@@ -54,7 +56,9 @@ interface TableProps {
 const TableComponent: React.FC<TableProps> = (props) => {
   const { columns, records, users, table} = props;
 
+  const { currentSidebarTab } = useNavigation()
   const { selectedClaims, allClaims, unselectAllClaims, selectAllClaims } = useClaims()
+  const { selectAllFollowup, unselectAllFollowup, allFollowup } = useFollowup()
 
   return (
     <div className='max-w-full max-h-full'>
@@ -67,17 +71,29 @@ const TableComponent: React.FC<TableProps> = (props) => {
                 <th key={index} className={width}>
                   {
                     column.type === 'checkbox'
-                      ? <input
-                          type="checkbox"
-                          checked={allClaims}
-                          onChange={() => {
-                            if(allClaims){
-                              unselectAllClaims()
-                            } else {
-                              selectAllClaims(records)
-                            }
-                          }}
-                        />
+                      ? currentSidebarTab === 'Claims' 
+                          ? <input
+                              type="checkbox"
+                              checked={allClaims}
+                              onChange={() => {
+                                if(allClaims){
+                                  unselectAllClaims()
+                                } else {
+                                  selectAllClaims(records)
+                                }
+                              }}
+                            />
+                          : <input
+                              type="checkbox"
+                              checked={allFollowup}
+                              onChange={() => {
+                                if(allFollowup){
+                                  unselectAllFollowup()
+                                } else {
+                                  selectAllFollowup(records)
+                                }
+                              }}
+                            />
                       : <p className='text-lg text-white'>{column.label}</p>
                   } 
                 </th>
