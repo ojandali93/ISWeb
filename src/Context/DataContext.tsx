@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface ProfileProps {
   active: boolean;
@@ -161,6 +162,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   const [minPercent, setMinPercent] = useState(0);
   const [maxPercent, setMaxPercent] = useState(100)
+
+  const navigate = useNavigate()
 
   const collectAllData = () => {
     grabAllProfiles()
@@ -409,10 +412,14 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   }
 
   const grabAvailityData = (claim_id: any) => {
+    console.log(claim_id, "this is the claim_id")
     const url = `https://intellasurebackend-docker.onrender.com/availity/${claim_id}`
+    console.log(url, "this is the url with params")
     axios.get(url)
       .then((response: any) => {
+        // console.log(response.data, "inside of availity data")
         const newDataArray = response.data.claimStatuses.map((claimStatus: any) => {
+
           const newData = {
             claimControlNumber: claimStatus.claimControlNumber,
             patientControlNumber: claimStatus.patientControlNumber,
@@ -430,10 +437,15 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
             statusCode: claimStatus.statusDetails[0].statusCode,
             traceId: claimStatus.traceId,
           }
-          return newData;
+          console.log(newData)
+          return newData
         })
-        console.log(newDataArray);
+        console.log(newDataArray)
         setAvailityData(newDataArray)
+        navigate('/availityScreen')
+        // .catch((err) => {
+        //   
+        // })
       })
   }
 

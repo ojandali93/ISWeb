@@ -13,7 +13,7 @@ export const ClaimOptions = [
   },
   {
     label:'Name',
-    type:'text',
+    type:'clickable',
     recordName: 'name',
     width: '52'
   },

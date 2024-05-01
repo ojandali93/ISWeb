@@ -5,6 +5,7 @@ import { AvailityOptions } from "../../../Options/AvailityOptions";
 
 const AvailityComponent = () => {
   const {grabAvailityData, availityData, allUsers} = useData();
+  // try calling useEffect here after routing to see if this will work for us.
   return (
     <div>
       {availityData.map( (record: any, index: any) => (

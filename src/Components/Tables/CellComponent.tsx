@@ -41,7 +41,7 @@ interface CellProps {
 
 const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedClaims}) => {
 
-  const {intakeUsers, getIntakeRecords, insuranceOptions} = useData()
+  const {intakeUsers, getIntakeRecords, insuranceOptions, grabAvailityData, availityData} = useData()
   const {updateSelectedClaims} = useClaims()
 
   // console.log(updateSelectedClaims)
@@ -417,6 +417,10 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                 {record[column.recordName]}
                 <Edit height={20} width={20} className='text-sky-500 ml-2'/>
               </div></>
+            ) : column.type === 'clickable' ? (
+              <div>
+                <p className='text-primary' onClick={() => grabAvailityData(record['claim_id'])}>{record[column.recordName]}</p>
+              </div>
             ) : (
               <div>
                 <p>
