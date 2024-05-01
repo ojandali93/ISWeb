@@ -85,6 +85,7 @@ interface DataContextType {
   billingDetails: HistoricProps[] | null;
   claimsRecords: ClaimsProps[] | null;
   availityData: any;
+  loadingAvailityData: boolean;
   collectAllData: () => void;
   grabAllProfiles: () => void;
   grabClaims: () => void;
@@ -118,6 +119,7 @@ const DataContext = createContext<DataContextType>({
   billingDetails: null,
   claimsRecords: null,
   availityData: null,
+  loadingAvailityData: false,
   collectAllData: () => {},
   grabAllProfiles: () => {},
   grabClaims: () => {},
@@ -156,6 +158,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [claimsRecords, setClaimsRcords] = useState<ClaimsProps[] | null>(null)
 
   const [availityData, setAvailityData] = useState<any>(null)
+  const [loadingAvailityData, setLoadingAvailityData] = useState<boolean>(false)
 
   const [startDate, setStartDate] = useState(new Date(Date.UTC(2018, 1, 1)));
   const [endDate, setEndDate] = useState(new Date())
@@ -412,14 +415,12 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   }
 
   const grabAvailityData = (claim_id: any) => {
-    console.log(claim_id, "this is the claim_id")
+    setLoadingAvailityData(true);
     const url = `https://intellasurebackend-docker.onrender.com/availity/${claim_id}`
-    console.log(url, "this is the url with params")
     axios.get(url)
       .then((response: any) => {
-        // console.log(response.data, "inside of availity data")
         const newDataArray = response.data.claimStatuses.map((claimStatus: any) => {
-
+          setLoadingAvailityData(false)
           const newData = {
             claimControlNumber: claimStatus.claimControlNumber,
             patientControlNumber: claimStatus.patientControlNumber,
@@ -440,12 +441,14 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
           console.log(newData)
           return newData
         })
-        console.log(newDataArray)
         setAvailityData(newDataArray)
         navigate('/availityScreen')
-        // .catch((err) => {
-        //   
-        // })
+      } 
+    )
+      .catch((err: any) => {
+        setLoadingAvailityData(false)
+        alert("Failed to load data")
+        console.error(err)
       })
   }
 
@@ -482,7 +485,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     searchIntakeRecords,
     grabRefreshClaims,
     grabAvailityData,
-    availityData
+    availityData,
+    loadingAvailityData
   };
 
   return (
