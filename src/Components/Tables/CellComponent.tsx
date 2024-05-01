@@ -11,6 +11,7 @@ import InsuranceSelectComponent from './InsuranceSelectComponent';
 import EditPolicyComponent from './EditPolicyComponent';
 import DateSelectionComponent from '../Inputs/DateSelectionComponent';
 import { useClaims } from '../../Context/ClaimsContext';
+import { useNavigation } from '../../Context/NavigationContext';
 
 interface PeopleOptions {
   name: string;
@@ -41,8 +42,9 @@ interface CellProps {
 
 const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedClaims}) => {
 
-  const {intakeUsers, getIntakeRecords, insuranceOptions} = useData()
+  const {intakeUsers, getIntakeRecords, insuranceOptions, grabAllProfiles, } = useData()
   const {updateSelectedClaims} = useClaims()
+  const {currentSidebarTab} = useNavigation()
 
   // console.log(updateSelectedClaims)
 
@@ -243,6 +245,33 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
     submitUpdate(data)
   }
 
+  const handlePrivilegeChange = (columnName: string | undefined, record: any, value: any) => {
+    console.log(record)
+    const data = {
+      "department": columnName === 'Department' ? value : record.department,
+      "privileges": columnName === 'Privileges' ? value : record.privileges,
+      "active": record.active
+    };
+    console.log("data object: ", data);
+    let config = {
+      method: 'put',
+      maxBodyLength: Infinity,
+      url: `https://intellasurebackend-docker.onrender.com/users/update/${record.userid}`,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: data,
+    };
+    axios.request(config)
+      .then((response: any) => {
+        grabAllProfiles();
+        console.log(response)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   return (
     <>
       {columns.map((column, columnIndex) => {
@@ -266,7 +295,24 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                 ) : (
                   null
                 )
+              ) : currentSidebarTab === 'Accounts' ? (
+                <div>
+                  <SelectOptionComponent
+                    options={column.options}
+                    value={cellValue}
+                    onChange={(newValue) => {
+                      // handlePrivilegeChange(column.label,record, newValue)
+                      console.log(column.label)
+                      // console.log('updated select option: ', newValue);
+                      // console.log('current sidebar tab: ',currentSidebarTab)
+                    }}
+                  />
+                </div>
               ) : (
+                // currenttab === avvounts
+                  // selectOptionComponet
+                    // different: onChange => columnName, record, Value
+                // below: else
                 <div>
                   <SelectOptionComponent
                     options={column.options}
@@ -394,7 +440,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                   options={intakeUsers}
                   value={cellValue}
                   onChange={(newValue) => {
-                    handleSelectChange(column.label, record, newValue)
+                    handleSelectChange(column.label, record, newValue) //column name 
                     console.log('updated select option: ', newValue);
                   }}
                 />
