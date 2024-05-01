@@ -42,7 +42,7 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
     {
       label: 'Intake Analytics',
       icon: 'trending-up',
-      route: '/',
+      route: '/intake-analytics',
       page: 'table',
       subTabs: null
     },
@@ -60,7 +60,6 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
       page: 'table',
       subTabs: null
     },
-
     {
       label: 'Claims',
       icon: 'file-text',
@@ -90,13 +89,13 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
         {
           label: 'Collab Md',
           icon: 'download',
-          route: '/claims/collab',
+          route: '/follow-up/collab',
           page: 'table',
         },
         {
           label: 'Avea',
           icon: 'download',
-          route: '/claims/avea',
+          route: '/follow-up/avea',
           page: 'table',
         },
       ]
@@ -142,7 +141,7 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
     },
   ];
 
-  const [currentSidebarTab, setCurrentSidebarTab] = useState<string>('Home')
+  const [currentSidebarTab, setCurrentSidebarTab] = useState<string>('Dashboard')
   const [currentSidebarType, setCurrentSidebarType] = useState<string>('table')
   const [currentSidebarSubTab, setCurrentSidebarSubTab] = useState<string>('Collab Md')
   const [currentContentTab, setCurrentContentTab] = useState<string>('home')

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useIntake } from './IntakeContext';
 
 interface ProfileProps {
   active: boolean;
@@ -63,6 +63,24 @@ interface ClaimsProps {
   status: string
 }
 
+interface FolloupProps {
+  balance_total: number,
+  charged_total: number,
+  claim_id: string,
+  claim_status: string,
+  coordinator: string,
+  end_date: string,
+  facility: string,
+  favorites: number,
+  fu_note: string | null,
+  name: string,
+  network: string,
+  paid_total: number,
+  payout_ratio: boolean,
+  start_date: string,
+  status: string
+}
+
 interface InsuranceOptionsProps {
   insurance: string;
   payer_id: number;
@@ -86,6 +104,10 @@ interface DataContextType {
   claimsRecords: ClaimsProps[] | null;
   availityData: any;
   loadingAvailityData: boolean;
+  followupRecords: FolloupProps[] | null;
+  pendingRecords: FolloupProps[] | null;
+  successfullRecords: FolloupProps[] | null;
+  failedRecords: FolloupProps[] | null;
   collectAllData: () => void;
   grabAllProfiles: () => void;
   grabClaims: () => void;
@@ -103,6 +125,7 @@ interface DataContextType {
   getIntakeRecords: () => void;
   searchIntakeRecords: (search: string) => void;
   grabAvailityData: (claim_id: any) => void;
+  getClaimsFollowup: () => void;
 }
 
 
@@ -120,6 +143,10 @@ const DataContext = createContext<DataContextType>({
   claimsRecords: null,
   availityData: null,
   loadingAvailityData: false,
+  followupRecords: null,
+  pendingRecords: null,
+  successfullRecords: null,
+  failedRecords: null,
   collectAllData: () => {},
   grabAllProfiles: () => {},
   grabClaims: () => {},
@@ -129,6 +156,7 @@ const DataContext = createContext<DataContextType>({
   getIntakeRecords: () => {},
   searchIntakeRecords: () => {},
   grabAvailityData: () => {},
+  getClaimsFollowup: () => {}
 });
 
 export function useData() {
@@ -156,6 +184,11 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [billingDetails, setBillingDetails] = useState<HistoricProps[] | null>(null)
 
   const [claimsRecords, setClaimsRcords] = useState<ClaimsProps[] | null>(null)
+  
+  const [followupRecords, setFollowupClaims] = useState<ClaimsProps[] | null>(null)
+  const [pendingRecords, setPendingRecords] = useState<ClaimsProps[] | null>(null)
+  const [successfullRecords, setSuccessfulRecords] = useState<ClaimsProps[] | null>(null)
+  const [failedRecords, setFailedRecords] = useState<ClaimsProps[] | null>(null)
 
   const [availityData, setAvailityData] = useState<any>(null)
   const [loadingAvailityData, setLoadingAvailityData] = useState<boolean>(false)
@@ -175,6 +208,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     grabRecords()
     grabRecords()
     grabClaims()
+    getClaimsFollowup()
   }
 
   const grabAllProfiles = () => {
@@ -380,6 +414,39 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       });
   }
 
+  const getClaimsFollowup = () => {
+    let pendingRecords: any = []
+    let successfulRecords: any = []
+    let rejectedRecords: any = []
+    let config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: 'https://intellasurebackend-docker.onrender.com/claims/favorites',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    axios.request(config)
+    .then((response) => {
+      console.log('sample followup record: ', response.data[0])
+      response.data.map((record: any) => {
+        record.claim_status === 'Successful'
+          ? successfulRecords.push(record)
+          : record.claim_status === 'pending'
+              ? pendingRecords.push(record)
+              : record.claim_status == 'Failed'
+                  ? rejectedRecords.push(record)
+                  : pendingRecords.push(record)
+      })
+      setFailedRecords(rejectedRecords)
+      setSuccessfulRecords(successfulRecords)
+      setPendingRecords(pendingRecords)
+      setFollowupClaims(response.data)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
 
   function getCurrentDateFormatted() {
     const now = new Date();
@@ -476,6 +543,10 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     addRecord, 
     billingDetails, 
     claimsRecords,
+    followupRecords,
+    pendingRecords,
+    successfullRecords,
+    failedRecords,
     collectAllData,
     grabClaims,
     grabAllProfiles,
@@ -486,7 +557,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     grabRefreshClaims,
     grabAvailityData,
     availityData,
-    loadingAvailityData
+    loadingAvailityData,
+    getClaimsFollowup
   };
 
   return (

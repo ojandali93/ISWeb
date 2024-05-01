@@ -26,6 +26,7 @@ import LoadingScreen from './Screens/LoadingScreen';
 import { useData } from './Context/DataContext';
 import ClaimsCollabScreen from './Screens/Claims/ClaimsCollabScreen';
 import ClaimsAveaScreen from './Screens/Claims/ClaimsAveaScreen';
+import IntakeAnalytivsScreen from './Screens/Analytics/IntakeAnalytivsScreen';
 import ClaimsAvailityScreen from './Screens/Claims/ClaimsAvailityScreen';
 
 Amplify.configure(amplifyconfig)
@@ -55,6 +56,12 @@ function App() {
           }
         />
         <Route
+          path="/intake-analytics"
+          element={
+            authLoading ? <LoadingScreen /> : currentUser.username ? <IntakeAnalytivsScreen /> : <Navigate to="/auth/login" />
+          }
+        />
+        <Route
           path="/intellachat"
           element={
             authLoading ? <LoadingScreen /> : currentUser.username ? <IntellachatScreen /> : <Navigate to="/auth/login" />
@@ -79,6 +86,12 @@ function App() {
           }
         />
         <Route
+          path="/availty"
+          element={
+            authLoading ? <LoadingScreen /> : currentUser.username ? <ClaimsScreen/> : <Navigate to="/auth/login" />
+          }
+        />
+        <Route
           path="/claims/collab"
           element={
             authLoading ? <LoadingScreen /> : currentUser.username ? <ClaimsCollabScreen /> : <Navigate to="/auth/login" />
@@ -98,6 +111,18 @@ function App() {
         />
         <Route
           path="/follow-up"
+          element={
+            authLoading ? <LoadingScreen /> : currentUser.username ? <FollowUpScreen /> : <Navigate to="/auth/login" />
+          }
+        />
+        <Route
+          path="/follow-up/collab"
+          element={
+            authLoading ? <LoadingScreen /> : currentUser.username ? <FollowUpScreen /> : <Navigate to="/auth/login" />
+          }
+        />
+        <Route
+          path="/follow-up/avea"
           element={
             authLoading ? <LoadingScreen /> : currentUser.username ? <FollowUpScreen /> : <Navigate to="/auth/login" />
           }
