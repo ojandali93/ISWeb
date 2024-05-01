@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { useIntake } from './IntakeContext';
 
 interface ProfileProps {
   active: boolean;
@@ -62,17 +63,28 @@ interface ClaimsProps {
   status: string
 }
 
+interface FolloupProps {
+  balance_total: number,
+  charged_total: number,
+  claim_id: string,
+  claim_status: string,
+  coordinator: string,
+  end_date: string,
+  facility: string,
+  favorites: number,
+  fu_note: string | null,
+  name: string,
+  network: string,
+  paid_total: number,
+  payout_ratio: boolean,
+  start_date: string,
+  status: string
+}
+
 interface InsuranceOptionsProps {
   insurance: string;
   payer_id: number;
 }
-
-// interface SupportFormProps {
-//   category: string;
-//   message: string;
-//   email: string;
-//   name: string;
-// };
 
 interface DataContextType {
   allUsers: ProfileProps[] | null;
@@ -87,14 +99,33 @@ interface DataContextType {
   addRecord: boolean;
   billingDetails: HistoricProps[] | null;
   claimsRecords: ClaimsProps[] | null;
+  availityData: any;
+  loadingAvailityData: boolean;
+  followupRecords: FolloupProps[] | null;
+  pendingRecords: FolloupProps[] | null;
+  successfullRecords: FolloupProps[] | null;
+  failedRecords: FolloupProps[] | null;
   collectAllData: () => void;
   grabAllProfiles: () => void;
+  grabClaims: () => void;
+  grabRefreshClaims: (
+    startDate: Date, 
+    endDate: Date, 
+    minPercent: number, 
+    maxPercent: number, 
+    page: number, 
+    facility: string, 
+    status: string,
+  ) => void;
   addIntakeRecord: (data: any) => void;
   handleAddRecord: () => void;
   getIntakeRecords: () => void;
   searchIntakeRecords: (search: string) => void;
   addSupportTicket: (data:any) => void;
+  grabAvailityData: (claim_id: any) => void;
+  getClaimsFollowup: () => void;
 }
+
 
 const DataContext = createContext<DataContextType>({
   allUsers: null,
@@ -109,13 +140,23 @@ const DataContext = createContext<DataContextType>({
   addRecord: false, 
   billingDetails: null,
   claimsRecords: null,
+  availityData: null,
+  loadingAvailityData: false,
+  followupRecords: null,
+  pendingRecords: null,
+  successfullRecords: null,
+  failedRecords: null,
   collectAllData: () => {},
   grabAllProfiles: () => {},
+  grabClaims: () => {},
+  grabRefreshClaims: () => {},
   addIntakeRecord: () => {},
   handleAddRecord: () => {},
   getIntakeRecords: () => {},
   searchIntakeRecords: () => {},
   addSupportTicket: () => {},
+  grabAvailityData: () => {},
+  getClaimsFollowup: () => {}
 });
 
 export function useData() {
@@ -145,6 +186,22 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [billingDetails, setBillingDetails] = useState<HistoricProps[] | null>(null)
 
   const [claimsRecords, setClaimsRcords] = useState<ClaimsProps[] | null>(null)
+  
+  const [followupRecords, setFollowupClaims] = useState<ClaimsProps[] | null>(null)
+  const [pendingRecords, setPendingRecords] = useState<ClaimsProps[] | null>(null)
+  const [successfullRecords, setSuccessfulRecords] = useState<ClaimsProps[] | null>(null)
+  const [failedRecords, setFailedRecords] = useState<ClaimsProps[] | null>(null)
+
+  const [availityData, setAvailityData] = useState<any>(null)
+  const [loadingAvailityData, setLoadingAvailityData] = useState<boolean>(false)
+
+  const [startDate, setStartDate] = useState(new Date(Date.UTC(2018, 1, 1)));
+  const [endDate, setEndDate] = useState(new Date())
+
+  const [minPercent, setMinPercent] = useState(0);
+  const [maxPercent, setMaxPercent] = useState(100)
+
+  const navigate = useNavigate()
 
   const collectAllData = () => {
     grabAllProfiles()
@@ -153,6 +210,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     grabRecords()
     grabRecords()
     grabClaims()
+    getClaimsFollowup()
   }
 
   const grabAllProfiles = () => {
@@ -191,7 +249,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     const url = 'https://intellasurebackend-docker.onrender.com/level3'
     axios.get(url)
     .then((response) => {
-      console.log('billing details records length: ', response.data[0])
       setBillingDetails(response.data)
     })
     .catch((error) => {
@@ -199,11 +256,73 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     });
   }
 
+  function formatDate(date: Date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}`;
+  }
+
   const grabClaims = () => {
-    const url = 'https://intellasurebackend-docker.onrender.com/claims/claim_main_page'
-    axios.get(url)
+    let data = {
+      'start_date': formatDate(new Date(Date.UTC(2018, 1, 1))),
+      'end_date': formatDate(endDate),
+      "min_percent": 0.0,
+      "max_percent": 1.0,
+      "page": 1,
+      "facilities":"ALL",
+      "status": "ALL"
+    }
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://intellasurebackend-docker.onrender.com/claims/claim_main_page',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+    axios.request(config)
     .then((response) => {
-      console.log('claims records length: ', response.data[0])
+      console.log('claims records length: ', response.data.length)
+      setClaimsRcords(response.data)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
+  const grabRefreshClaims = (
+    startDate: Date, 
+    endDate: Date, 
+    minPercent: number, 
+    maxPercent: number, 
+    page: number, 
+    facility: string, 
+    status: string,
+  ) => {
+    let data = {
+      'start_date': formatDate(startDate),
+      'end_date': formatDate(endDate),
+      'min_percent': (minPercent / 100),
+      'max_percent': (maxPercent / 100),
+      'page': page,
+      'facilities': facility,
+      'status': status
+    }
+    console.log('refresh claims: ', data)
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://intellasurebackend-docker.onrender.com/claims/claim_main_page',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+    axios.request(config)
+    .then((response) => {
       setClaimsRcords(response.data)
     })
     .catch((error) => {
@@ -227,7 +346,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     };
     axios.request(config)
     .then((response) => {
-      console.log('intake record: ', response.data.data[0])
       setIntakeRecords(sortRecordsByDateDesc(response.data.data))
     })
     .catch((error) => {
@@ -305,6 +423,40 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       });
   }
 
+  const getClaimsFollowup = () => {
+    let pendingRecords: any = []
+    let successfulRecords: any = []
+    let rejectedRecords: any = []
+    let config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: 'https://intellasurebackend-docker.onrender.com/claims/favorites',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    axios.request(config)
+    .then((response) => {
+      console.log('sample followup record: ', response.data[0])
+      response.data.map((record: any) => {
+        record.claim_status === 'Successful'
+          ? successfulRecords.push(record)
+          : record.claim_status === 'pending'
+              ? pendingRecords.push(record)
+              : record.claim_status == 'Failed'
+                  ? rejectedRecords.push(record)
+                  : pendingRecords.push(record)
+      })
+      setFailedRecords(rejectedRecords)
+      setSuccessfulRecords(successfulRecords)
+      setPendingRecords(pendingRecords)
+      setFollowupClaims(response.data)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
   function getCurrentDateFormatted() {
     const now = new Date();
     const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-based in JS, add 1
@@ -335,6 +487,44 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       })
       .catch((err) => {
         console.log(err)
+      })
+  }
+
+  const grabAvailityData = (claim_id: any) => {
+    setLoadingAvailityData(true);
+    const url = `https://intellasurebackend-docker.onrender.com/availity/${claim_id}`
+    axios.get(url)
+      .then((response: any) => {
+        const newDataArray = response.data.claimStatuses.map((claimStatus: any) => {
+          setLoadingAvailityData(false)
+          const newData = {
+            claimControlNumber: claimStatus.claimControlNumber,
+            patientControlNumber: claimStatus.patientControlNumber,
+            fromDate: claimStatus.fromDate,
+            toDate: claimStatus.toDate,
+            category: claimStatus.statusDetails[0].category,
+            categoryCode: claimStatus.statusDetails[0].categoryCode,
+            checkNumber: claimStatus.statusDetails[0].checkNumber,
+            claimAmount: claimStatus.statusDetails[0].claimAmount,
+            effectiveDate: claimStatus.statusDetails[0].effectiveDate,
+            finalizedDate: claimStatus.statusDetails[0].finalizedDate,
+            paymentAmount: claimStatus.statusDetails[0].paymentAmount,
+            remittanceDate: claimStatus.statusDetails[0].remittanceDate,
+            status: claimStatus.statusDetails[0].status,
+            statusCode: claimStatus.statusDetails[0].statusCode,
+            traceId: claimStatus.traceId,
+          }
+          console.log(newData)
+          return newData
+        })
+        setAvailityData(newDataArray)
+        navigate('/availityScreen')
+      } 
+    )
+      .catch((err: any) => {
+        setLoadingAvailityData(false)
+        alert("Failed to load data")
+        console.error(err)
       })
   }
 
@@ -388,14 +578,24 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     addRecord, 
     billingDetails, 
     claimsRecords,
+    followupRecords,
+    pendingRecords,
+    successfullRecords,
+    failedRecords,
     collectAllData,
+    grabClaims,
     grabAllProfiles,
     addIntakeRecord,
     handleAddRecord,
     getIntakeRecords,
     searchIntakeRecords,
     addSupportTicket,
-    loadingNewTicket
+    loadingNewTicket,
+    grabRefreshClaims,
+    grabAvailityData,
+    availityData,
+    loadingAvailityData,
+    getClaimsFollowup
   };
 
   return (

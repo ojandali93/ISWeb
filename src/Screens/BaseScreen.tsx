@@ -1,6 +1,7 @@
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import TopRowComponent from '../Components/Navigation/TopRowComponent';
 import SidebarComponent from '../Components/Navigation/SidebarComponent';
+import { useNavigation } from '../Context/NavigationContext';
 
 interface LayoutComponentProps {
   header: ReactNode | null;
@@ -12,6 +13,8 @@ const LayoutComponent: React.FC<LayoutComponentProps> = ({ header, content }) =>
   const containerRef = useRef<HTMLDivElement>(null);
   const [maxHeight, setMaxHeight] = useState(0);
   const [maxWidth, setMaxWidth] = useState(0);
+
+  const { currentSidebarType } = useNavigation()
 
   useEffect(() => {
     const updateSize = () => {
@@ -50,9 +53,15 @@ const LayoutComponent: React.FC<LayoutComponentProps> = ({ header, content }) =>
           <div className='sticky top-0 z-20'>
             {header}
           </div>
-          <div id='main-content' style={{flex: 1}} className='z-10 bg-stone-800 overflow-scroll' >
-            {content}
-          </div>
+          {
+            currentSidebarType === 'static' 
+              ? <div id='main-content' style={{flex: 1}} className='z-10 bg-stone-800' >
+                  {content}
+                </div>
+              : <div id='main-content' style={{flex: 1}} className='z-10 bg-stone-800 overflow-scroll' >
+                  {content}
+                </div>
+          }
         </div>
       </div>
     </div>

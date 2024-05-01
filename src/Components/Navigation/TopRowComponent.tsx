@@ -17,7 +17,7 @@ const TopRowComponent = () => {
         {
           topNavigation.map((tab) => {
             return(
-              <NavigationTabComponent tab={tab.label} icon={tab.icon} route={tab.route} position={'top'}/>
+              <NavigationTabComponent type={tab.page} tab={tab.label} icon={tab.icon} route={tab.route} position={'top'}/>
             )
           })
         }

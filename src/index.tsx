@@ -8,6 +8,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { NavigationProvider } from './Context/NavigationContext';
 import { DataProvider } from './Context/DataContext';
 import { ClaimsProvider } from './Context/ClaimsContext';
+import { FollowupProvider } from './Context/FollowupContext';
+import { IntakeProvider } from './Context/IntakeContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -19,7 +21,11 @@ root.render(
         <NavigationProvider>
           <DataProvider>
             <ClaimsProvider>
-              <App/>
+              <FollowupProvider>
+                <IntakeProvider>
+                  <App/>
+                </IntakeProvider>
+              </FollowupProvider>
             </ClaimsProvider>
           </DataProvider>
         </NavigationProvider>

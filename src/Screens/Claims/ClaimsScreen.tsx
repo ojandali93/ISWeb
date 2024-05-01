@@ -5,7 +5,7 @@ import LayoutComponent from '../BaseScreen'
 import ClaimsFilterComponent from '../../Components/SortAndFilter/ClaimsFilterComponent'
 import TableComponent from '../../Components/Tables/TableComponent'
 import { useData } from '../../Context/DataContext'
-import { ClaimOptions } from '../../Options/ClaimOptions'
+import { ClaimOptions } from '../../Options/ClaimOptions';
 import { useClaims } from '../../Context/ClaimsContext'
 
 const ClaimsScreen = () => {

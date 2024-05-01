@@ -1,22 +1,29 @@
 import React from 'react';
 import NavigationTabComponent from './NavigationTabComponent';
+import { useNavigation } from '../../Context/NavigationContext';
+import { useNavigate } from 'react-router-dom';
 
-interface Option {
-  tab: string;
+interface TabSubOptions {
+  label: string;
   icon: string;
   route: string;
+  page: string;
+}
+
+interface TabOptions {
+  label: string;
+  icon: string;
+  route: string;
+  page: string;
+  subTabs: TabSubOptions[] | null;
 }
 
 interface NavigationTabProps {
-  options: Option[];
-  selectedSubTab: string;
-  handleMenuChange: (text: string) => void;
+  tab: TabOptions;
 }
 
 const SidebarSubMenuComponent: React.FC<NavigationTabProps> = ({
-  options,
-  selectedSubTab,
-  handleMenuChange,
+  tab
 }) => {
   const getIconComponent = (icon: string) => {
     try {
@@ -26,32 +33,45 @@ const SidebarSubMenuComponent: React.FC<NavigationTabProps> = ({
     }
   };
 
+  const { currentSidebarSubTab, 
+    handleUpdateCurrentSidebarTab,
+    handleUpdateCurrentSidebarSubTab } = useNavigation()
+  const navigate = useNavigate()
+
+  const handleRedirectTab = (tab: TabOptions, subTab: TabSubOptions) => {
+    console.log('tab: ', tab.label)
+    console.log('sub tab: ', subTab.label)
+    handleUpdateCurrentSidebarTab(tab.label)
+    handleUpdateCurrentSidebarSubTab(subTab.label)
+    navigate(subTab.route)
+  }
+
   return (
-    <div className="m-4 w-52 pt-0 rounded-tr-sm bg-sky-100">
-      {options.map((tab) => {
+    <div className="text-white">
+      {tab.subTabs?.map((singleTab) => {
         const IconComponent = getIconComponent(tab.icon);
         return (
-          <div key={tab.tab} className={`pl-4 ${
-            selectedSubTab === tab.tab
-              ? 'bg-sky-400'
-              : 'hover:bg-sky-400'
+          <div key={singleTab.label} className={`pl-4 ${
+            currentSidebarSubTab === singleTab.label
+              ? 'bg-stone-900'
+              : 'hover:bg-sky-800'
           }`}>
-              <div className='flex flex-row items-center' onClick={() => {handleMenuChange(tab.tab)}}>
+              <div className='flex flex-row items-center' onClick={() => {handleRedirectTab(tab, singleTab)}}>
                 {IconComponent && (
                   <IconComponent
                     size={18}
-                    color={selectedSubTab === tab.tab ? 'white' : 'black'}
+                    color={currentSidebarSubTab === singleTab.label ? 'white' : 'white'}
                     className="ml-2 mr-2 stroke-[3px]"
                   />
                 )}
                 <p
                   className={`h-10 text-black flex items-center hover:cursor-pointer ${
-                    selectedSubTab === tab.tab
+                    currentSidebarSubTab === singleTab.label
                       ? 'text-white'
-                      : 'text-black'
+                      : 'text-white'
                   }`}
                 >
-                  {tab.tab}
+                  {singleTab.label}
                 </p>
               </div>
           </div>

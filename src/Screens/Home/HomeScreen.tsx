@@ -8,11 +8,7 @@ import IntakeFilterComponent from '../../Components/SortAndFilter/IntakeFilterCo
 const HomeScreen = () => {
 
   const {currentProfile} = useAuth()
-
-  useEffect(() => {
-    console.log(currentProfile.department)
-  }, [currentProfile])
-
+  
   return (
     <LayoutComponent
       header={

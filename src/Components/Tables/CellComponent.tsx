@@ -11,6 +11,8 @@ import InsuranceSelectComponent from './InsuranceSelectComponent';
 import EditPolicyComponent from './EditPolicyComponent';
 import DateSelectionComponent from '../Inputs/DateSelectionComponent';
 import { useClaims } from '../../Context/ClaimsContext';
+import { useNavigation } from '../../Context/NavigationContext';
+import { useFollowup } from '../../Context/FollowupContext';
 
 interface PeopleOptions {
   name: string;
@@ -41,10 +43,11 @@ interface CellProps {
 
 const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedClaims}) => {
 
-  const {intakeUsers, getIntakeRecords, insuranceOptions} = useData()
+  const {intakeUsers, getIntakeRecords, insuranceOptions, grabAvailityData, loadingAvailityData, billingUsers} = useData()
   const {updateSelectedClaims} = useClaims()
+  const {currentSidebarTab} = useNavigation()
+  const {selectedFollowup, updateSelectedFollowup, updateCoordinatorFollwup} = useFollowup()
 
-  // console.log(updateSelectedClaims)
 
   const [selectedDate, setSelectedDate] = useState(record.expected_arrival_date ? record.expected_arrival_date : new Date())
   const [dobDate, setDobDate] = useState(record.date_of_birth)
@@ -121,7 +124,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
       url: `https://intellasurebackend-docker.onrender.com/intake/${intake_id}`,
       headers: { }
     };
-    
+
     axios.request(config)
     .then((response) => {
       console.log(JSON.stringify(response.data));
@@ -146,16 +149,16 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
     const mm = String(date.getUTCMonth() + 1).padStart(2, '0'); 
     const dd = String(date.getUTCDate()).padStart(2, '0'); 
     const yyyy = date.getUTCFullYear(); 
-  
+
     return `${mm}/${dd}/${yyyy}`;
   }
-  
+
   function convertDobDateToMMDDYYYY(dateString: string) {
     const date = new Date(dateString);
     const mm = String(date.getUTCMonth() + 1).padStart(2, '0'); 
     const dd = String(date.getUTCDate()).padStart(2, '0'); 
     const yyyy = date.getUTCFullYear(); 
-  
+
     return `${mm}/${dd}/${yyyy}`;
   }
 
@@ -181,13 +184,13 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
     const yyyy = date.getUTCFullYear(); 
     return `${yyyy}-${mm}-${dd}`;
   }
-  
+
   const handleDateSelectedChange = (date: string, column: string) => {
     column === 'DOB'
       ? setDobDate(date)
       : setSelectedDate(date)
   }
-  
+
   const formatDollarAmount = (str: string) => {
     const num = parseFloat(str);
     return num.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
@@ -199,6 +202,11 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
     }
     return input;
   }
+
+  const getCoordinatorName = (userId: string) => {
+    const coordinator = billingUsers?.find(user => user.userid === userId);
+    return coordinator ? coordinator.name : '';
+  };
 
   const submitUpdate = (data: any) => {
     let config = {
@@ -241,6 +249,25 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
     }
     console.log('updated record: ', data)
     submitUpdate(data)
+  }
+
+  const formattedBillingUsers = () => {
+    let newUsers: any = []
+    newUsers.push({
+      active: false,
+      company: 'PHG',
+      department: 'billing',
+      email: '-',
+      first_name: '-',
+      last_name: '-',
+      name: 'Select Coodinator',
+      privileges: 'staff',
+      userid: '-',
+    })
+    billingUsers?.map((user) => {
+      newUsers.push(user)
+    })
+    return newUsers
   }
 
   return (
@@ -389,34 +416,62 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                 </p>
               </div>
             ) : column.type === 'people' ? (
-              <div>
-                <SelectPeopleComponent
-                  options={intakeUsers}
-                  value={cellValue}
-                  onChange={(newValue) => {
-                    handleSelectChange(column.label, record, newValue)
-                    console.log('updated select option: ', newValue);
-                  }}
-                />
-              </div>
+              currentSidebarTab === 'Dashboard'
+                ? <div>
+                    <SelectPeopleComponent
+                      options={intakeUsers}
+                      value={cellValue}
+                      onChange={(newValue) => {
+                        handleSelectChange(column.label, record, newValue)
+                        console.log('updated select option: ', newValue);
+                      }}
+                    />
+                  </div>
+                : <div>
+                    <SelectPeopleComponent
+                      options={formattedBillingUsers()}
+                      value={cellValue === null ? 'Select Coordinator' : getCoordinatorName(cellValue)}
+                      onChange={(newValue) => {
+                        console.log('default value: ', cellValue)
+                        console.log('updated select option: ', newValue);
+                        updateCoordinatorFollwup(record['claim_id'], newValue)
+                      }}
+                    />
+                  </div>
             ) : column.type === 'checkbox' ? (
-              <>
-                <input
-                  type="checkbox"
-                  checked={table === 'Claims' ? selectedClaims?.includes(record['claim_id']) : false}
-                  onChange={() => {
-                    if(table === 'Claims'){
-                      console.log('new function call: ', record['claim_id'])
-                      updateSelectedClaims(record['claim_id'])
-                    }
-                  }}
-                />
-              </>
+              currentSidebarTab === 'Claims'
+                ? <>
+                    <input
+                      type="checkbox"
+                      checked={table === 'Claims' ? selectedClaims?.includes(record['claim_id']) : false}
+                      onChange={() => {
+                        updateSelectedClaims(record['claim_id'])
+                      }}
+                    />
+                  </>
+                : <>
+                    <input
+                      type="checkbox"
+                      checked={table === 'Claims' ? selectedFollowup?.includes(record['claim_id']) : false}
+                      onChange={() => {
+                        updateSelectedFollowup(record['claim_id'])
+                      }}
+                    />
+                  </>
             ) : column.type === 'text-edit' ? (
               <><div className={`flex flex-row justify-center`}>
                 {record[column.recordName]}
                 <Edit height={20} width={20} className='text-sky-500 ml-2'/>
               </div></>
+            ) : column.type === 'clickable' ? (
+              loadingAvailityData === false ? (
+                <div>
+                <p className='text-primary' onClick={() => grabAvailityData(record['claim_id'])}>{record[column.recordName]}</p>
+              </div>
+              ) :
+              <div className='animate-spin'>
+                <p className='text-primary'>Loading Availity</p>
+              </div>
             ) : (
               <div>
                 <p>
@@ -429,6 +484,6 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
       })}
     </>
   )
-}
+  }
 
-export default CellComponent
+  export default CellComponent
