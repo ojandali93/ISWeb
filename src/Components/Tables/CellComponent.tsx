@@ -277,6 +277,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
       .catch((error) => {
         console.log(error);
       });
+  }
 
   const formattedBillingUsers = () => {
     let newUsers: any = []
@@ -521,6 +522,6 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
       })}
     </>
   )
-  }
+}
 
-  export default CellComponent
+export default CellComponent
