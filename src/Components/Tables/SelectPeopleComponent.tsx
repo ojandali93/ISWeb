@@ -21,10 +21,6 @@ interface SelectPeopleComponentProps {
 const SelectPeopleComponent: React.FC<SelectPeopleComponentProps> = ({ options, value, onChange }) => {
 
   const selectedUser = options?.find(option => option.userid === value);
-  
-  useEffect(() => {
-    console.log(selectedUser)
-  }, [])
 
   return (
     <select

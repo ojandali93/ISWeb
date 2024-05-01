@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { useIntake } from './IntakeContext';
 
 interface ProfileProps {
   active: boolean;

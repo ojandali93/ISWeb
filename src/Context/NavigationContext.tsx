@@ -42,7 +42,7 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
     {
       label: 'Intake Analytics',
       icon: 'trending-up',
-      route: '/',
+      route: '/intake-analytics',
       page: 'table',
       subTabs: null
     },

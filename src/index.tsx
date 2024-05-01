@@ -9,6 +9,7 @@ import { NavigationProvider } from './Context/NavigationContext';
 import { DataProvider } from './Context/DataContext';
 import { ClaimsProvider } from './Context/ClaimsContext';
 import { FollowupProvider } from './Context/FollowupContext';
+import { IntakeProvider } from './Context/IntakeContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -21,7 +22,9 @@ root.render(
           <DataProvider>
             <ClaimsProvider>
               <FollowupProvider>
-                <App/>
+                <IntakeProvider>
+                  <App/>
+                </IntakeProvider>
               </FollowupProvider>
             </ClaimsProvider>
           </DataProvider>
