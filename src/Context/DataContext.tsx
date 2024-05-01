@@ -86,10 +86,6 @@ interface InsuranceOptionsProps {
   payer_id: number;
 }
 
-interface AvailityProps {
-
-}
-
 interface DataContextType {
   allUsers: ProfileProps[] | null;
   intakeUsers: ProfileProps[] | null;
@@ -99,6 +95,7 @@ interface DataContextType {
   intakeRecords: IntakeProps[] | null;
   insuranceOptions: InsuranceOptionsProps[] | null;
   loadingNewIntake: boolean;
+  loadingNewTicket: boolean;
   addRecord: boolean;
   billingDetails: HistoricProps[] | null;
   claimsRecords: ClaimsProps[] | null;
@@ -124,6 +121,7 @@ interface DataContextType {
   handleAddRecord: () => void;
   getIntakeRecords: () => void;
   searchIntakeRecords: (search: string) => void;
+  addSupportTicket: (data:any) => void;
   grabAvailityData: (claim_id: any) => void;
   getClaimsFollowup: () => void;
 }
@@ -138,6 +136,7 @@ const DataContext = createContext<DataContextType>({
   intakeRecords: null,
   insuranceOptions: null,
   loadingNewIntake: false,
+  loadingNewTicket: false,
   addRecord: false, 
   billingDetails: null,
   claimsRecords: null,
@@ -155,6 +154,7 @@ const DataContext = createContext<DataContextType>({
   handleAddRecord: () => {},
   getIntakeRecords: () => {},
   searchIntakeRecords: () => {},
+  addSupportTicket: () => {},
   grabAvailityData: () => {},
   getClaimsFollowup: () => {}
 });
@@ -180,6 +180,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   const [loadingNewIntake, setLoadingNewIntake] = useState<boolean>(false)
   const [addRecord, setAddRecord] = useState<boolean>(false)
+
+  const [loadingNewTicket, setLoadingNewTicket] = useState<boolean>(false);
 
   const [billingDetails, setBillingDetails] = useState<HistoricProps[] | null>(null)
 
@@ -378,6 +380,13 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     return number.toString()
   }
 
+  const generateFiveDigitNumber = () => {
+    const min = 10000;
+    const max = 99999;
+    const number = Math.floor(Math.random() * (max - min + 1)) + min;
+    return number.toString();
+  }
+
   const addIntakeRecord = (data: any) => {
       setLoadingNewIntake(true)
       let intakeId = generateTenDigitNumber()
@@ -531,6 +540,32 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     setAddRecord(!addRecord)
   }
 
+  const addSupportTicket = (data: any) => {
+    setLoadingNewTicket(true);
+
+    const ticket_id = generateFiveDigitNumber();
+    const ticket_data = { data: {
+      email: data.email,
+      message: data.message,
+      name: data.name,
+      status: data.status,
+      subject: data.subject,
+      ticket_id: ticket_id
+    }
+
+    }
+
+    const url = 'https://intellasurebackend-docker.onrender.com/support/submit_ticket'
+    
+
+    axios.post(url, ticket_data.data)
+    .then((response) => {
+      setLoadingNewTicket(false);
+      alert('Your ticket request has been sent to our team. We will try to fix the issue and get back to your regarding this issue.')
+    })
+
+  }
+
   const contextValue: DataContextType = {
     allUsers,
     intakeUsers,
@@ -554,6 +589,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     handleAddRecord,
     getIntakeRecords,
     searchIntakeRecords,
+    addSupportTicket,
+    loadingNewTicket,
     grabRefreshClaims,
     grabAvailityData,
     availityData,
