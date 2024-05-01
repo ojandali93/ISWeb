@@ -301,18 +301,11 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                     options={column.options}
                     value={cellValue}
                     onChange={(newValue) => {
-                      // handlePrivilegeChange(column.label,record, newValue)
-                      console.log(column.label)
-                      // console.log('updated select option: ', newValue);
-                      // console.log('current sidebar tab: ',currentSidebarTab)
+                      handlePrivilegeChange(column.label,record, newValue)
                     }}
                   />
                 </div>
               ) : (
-                // currenttab === avvounts
-                  // selectOptionComponet
-                    // different: onChange => columnName, record, Value
-                // below: else
                 <div>
                   <SelectOptionComponent
                     options={column.options}

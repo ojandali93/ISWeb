@@ -23,7 +23,13 @@ export const accountsOptions = [
   },
   {
     label:'Department',
-    type:'text',
+    type:'select',
+    options: [
+      'intake',
+      'administration',
+      'dev',
+      'billing'
+    ],
     recordName: 'department'
   },
   {
