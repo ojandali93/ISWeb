@@ -43,11 +43,11 @@ interface CellProps {
 
 const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedClaims}) => {
 
-  const {intakeUsers, getIntakeRecords, insuranceOptions, billingUsers} = useData()
+  const {intakeUsers, getIntakeRecords, insuranceOptions, grabAvailityData, loadingAvailityData, billingUsers} = useData()
   const {updateSelectedClaims} = useClaims()
   const {currentSidebarTab} = useNavigation()
   const {selectedFollowup, updateSelectedFollowup, updateCoordinatorFollwup} = useFollowup()
-  
+
 
   const [selectedDate, setSelectedDate] = useState(record.expected_arrival_date ? record.expected_arrival_date : new Date())
   const [dobDate, setDobDate] = useState(record.date_of_birth)
@@ -124,7 +124,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
       url: `https://intellasurebackend-docker.onrender.com/intake/${intake_id}`,
       headers: { }
     };
-    
+
     axios.request(config)
     .then((response) => {
       console.log(JSON.stringify(response.data));
@@ -149,16 +149,16 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
     const mm = String(date.getUTCMonth() + 1).padStart(2, '0'); 
     const dd = String(date.getUTCDate()).padStart(2, '0'); 
     const yyyy = date.getUTCFullYear(); 
-  
+
     return `${mm}/${dd}/${yyyy}`;
   }
-  
+
   function convertDobDateToMMDDYYYY(dateString: string) {
     const date = new Date(dateString);
     const mm = String(date.getUTCMonth() + 1).padStart(2, '0'); 
     const dd = String(date.getUTCDate()).padStart(2, '0'); 
     const yyyy = date.getUTCFullYear(); 
-  
+
     return `${mm}/${dd}/${yyyy}`;
   }
 
@@ -184,13 +184,13 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
     const yyyy = date.getUTCFullYear(); 
     return `${yyyy}-${mm}-${dd}`;
   }
-  
+
   const handleDateSelectedChange = (date: string, column: string) => {
     column === 'DOB'
       ? setDobDate(date)
       : setSelectedDate(date)
   }
-  
+
   const formatDollarAmount = (str: string) => {
     const num = parseFloat(str);
     return num.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
@@ -463,6 +463,15 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                 {record[column.recordName]}
                 <Edit height={20} width={20} className='text-sky-500 ml-2'/>
               </div></>
+            ) : column.type === 'clickable' ? (
+              loadingAvailityData === false ? (
+                <div>
+                <p className='text-primary' onClick={() => grabAvailityData(record['claim_id'])}>{record[column.recordName]}</p>
+              </div>
+              ) :
+              <div className='animate-spin'>
+                <p className='text-primary'>Loading Availity</p>
+              </div>
             ) : (
               <div>
                 <p>
@@ -475,6 +484,6 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
       })}
     </>
   )
-}
+  }
 
-export default CellComponent
+  export default CellComponent

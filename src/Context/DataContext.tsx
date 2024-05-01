@@ -86,6 +86,10 @@ interface InsuranceOptionsProps {
   payer_id: number;
 }
 
+interface AvailityProps {
+
+}
+
 interface DataContextType {
   allUsers: ProfileProps[] | null;
   intakeUsers: ProfileProps[] | null;
@@ -98,6 +102,8 @@ interface DataContextType {
   addRecord: boolean;
   billingDetails: HistoricProps[] | null;
   claimsRecords: ClaimsProps[] | null;
+  availityData: any;
+  loadingAvailityData: boolean;
   followupRecords: FolloupProps[] | null;
   pendingRecords: FolloupProps[] | null;
   successfullRecords: FolloupProps[] | null;
@@ -118,8 +124,10 @@ interface DataContextType {
   handleAddRecord: () => void;
   getIntakeRecords: () => void;
   searchIntakeRecords: (search: string) => void;
+  grabAvailityData: (claim_id: any) => void;
   getClaimsFollowup: () => void;
 }
+
 
 const DataContext = createContext<DataContextType>({
   allUsers: null,
@@ -133,6 +141,8 @@ const DataContext = createContext<DataContextType>({
   addRecord: false, 
   billingDetails: null,
   claimsRecords: null,
+  availityData: null,
+  loadingAvailityData: false,
   followupRecords: null,
   pendingRecords: null,
   successfullRecords: null,
@@ -145,6 +155,7 @@ const DataContext = createContext<DataContextType>({
   handleAddRecord: () => {},
   getIntakeRecords: () => {},
   searchIntakeRecords: () => {},
+  grabAvailityData: () => {},
   getClaimsFollowup: () => {}
 });
 
@@ -179,11 +190,16 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [successfullRecords, setSuccessfulRecords] = useState<ClaimsProps[] | null>(null)
   const [failedRecords, setFailedRecords] = useState<ClaimsProps[] | null>(null)
 
+  const [availityData, setAvailityData] = useState<any>(null)
+  const [loadingAvailityData, setLoadingAvailityData] = useState<boolean>(false)
+
   const [startDate, setStartDate] = useState(new Date(Date.UTC(2018, 1, 1)));
   const [endDate, setEndDate] = useState(new Date())
 
   const [minPercent, setMinPercent] = useState(0);
   const [maxPercent, setMaxPercent] = useState(100)
+
+  const navigate = useNavigate()
 
   const collectAllData = () => {
     grabAllProfiles()
@@ -465,6 +481,44 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       })
   }
 
+  const grabAvailityData = (claim_id: any) => {
+    setLoadingAvailityData(true);
+    const url = `https://intellasurebackend-docker.onrender.com/availity/${claim_id}`
+    axios.get(url)
+      .then((response: any) => {
+        const newDataArray = response.data.claimStatuses.map((claimStatus: any) => {
+          setLoadingAvailityData(false)
+          const newData = {
+            claimControlNumber: claimStatus.claimControlNumber,
+            patientControlNumber: claimStatus.patientControlNumber,
+            fromDate: claimStatus.fromDate,
+            toDate: claimStatus.toDate,
+            category: claimStatus.statusDetails[0].category,
+            categoryCode: claimStatus.statusDetails[0].categoryCode,
+            checkNumber: claimStatus.statusDetails[0].checkNumber,
+            claimAmount: claimStatus.statusDetails[0].claimAmount,
+            effectiveDate: claimStatus.statusDetails[0].effectiveDate,
+            finalizedDate: claimStatus.statusDetails[0].finalizedDate,
+            paymentAmount: claimStatus.statusDetails[0].paymentAmount,
+            remittanceDate: claimStatus.statusDetails[0].remittanceDate,
+            status: claimStatus.statusDetails[0].status,
+            statusCode: claimStatus.statusDetails[0].statusCode,
+            traceId: claimStatus.traceId,
+          }
+          console.log(newData)
+          return newData
+        })
+        setAvailityData(newDataArray)
+        navigate('/availityScreen')
+      } 
+    )
+      .catch((err: any) => {
+        setLoadingAvailityData(false)
+        alert("Failed to load data")
+        console.error(err)
+      })
+  }
+
   const reformatInsurance = (records: InsuranceOptionsProps[]) => {
     let newRecords: any[] = []
     records.map((record: any) => {
@@ -501,6 +555,9 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     getIntakeRecords,
     searchIntakeRecords,
     grabRefreshClaims,
+    grabAvailityData,
+    availityData,
+    loadingAvailityData,
     getClaimsFollowup
   };
 
