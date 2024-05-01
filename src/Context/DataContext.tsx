@@ -62,6 +62,24 @@ interface ClaimsProps {
   status: string
 }
 
+interface FolloupProps {
+  balance_total: number,
+  charged_total: number,
+  claim_id: string,
+  claim_status: string,
+  coordinator: string,
+  end_date: string,
+  facility: string,
+  favorites: number,
+  fu_note: string | null,
+  name: string,
+  network: string,
+  paid_total: number,
+  payout_ratio: boolean,
+  start_date: string,
+  status: string
+}
+
 interface InsuranceOptionsProps {
   insurance: string;
   payer_id: number;
@@ -79,6 +97,10 @@ interface DataContextType {
   addRecord: boolean;
   billingDetails: HistoricProps[] | null;
   claimsRecords: ClaimsProps[] | null;
+  followupRecords: FolloupProps[] | null;
+  pendingRecords: FolloupProps[] | null;
+  successfullRecords: FolloupProps[] | null;
+  failedRecords: FolloupProps[] | null;
   collectAllData: () => void;
   grabAllProfiles: () => void;
   grabClaims: () => void;
@@ -95,6 +117,7 @@ interface DataContextType {
   handleAddRecord: () => void;
   getIntakeRecords: () => void;
   searchIntakeRecords: (search: string) => void;
+  getClaimsFollowup: () => void;
 }
 
 const DataContext = createContext<DataContextType>({
@@ -109,6 +132,10 @@ const DataContext = createContext<DataContextType>({
   addRecord: false, 
   billingDetails: null,
   claimsRecords: null,
+  followupRecords: null,
+  pendingRecords: null,
+  successfullRecords: null,
+  failedRecords: null,
   collectAllData: () => {},
   grabAllProfiles: () => {},
   grabClaims: () => {},
@@ -116,7 +143,8 @@ const DataContext = createContext<DataContextType>({
   addIntakeRecord: () => {},
   handleAddRecord: () => {},
   getIntakeRecords: () => {},
-  searchIntakeRecords: () => {}
+  searchIntakeRecords: () => {},
+  getClaimsFollowup: () => {}
 });
 
 export function useData() {
@@ -144,6 +172,11 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [billingDetails, setBillingDetails] = useState<HistoricProps[] | null>(null)
 
   const [claimsRecords, setClaimsRcords] = useState<ClaimsProps[] | null>(null)
+  
+  const [followupRecords, setFollowupClaims] = useState<ClaimsProps[] | null>(null)
+  const [pendingRecords, setPendingRecords] = useState<ClaimsProps[] | null>(null)
+  const [successfullRecords, setSuccessfulRecords] = useState<ClaimsProps[] | null>(null)
+  const [failedRecords, setFailedRecords] = useState<ClaimsProps[] | null>(null)
 
   const [startDate, setStartDate] = useState(new Date(Date.UTC(2018, 1, 1)));
   const [endDate, setEndDate] = useState(new Date())
@@ -158,6 +191,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     grabRecords()
     grabRecords()
     grabClaims()
+    getClaimsFollowup()
   }
 
   const grabAllProfiles = () => {
@@ -363,6 +397,40 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       });
   }
 
+  const getClaimsFollowup = () => {
+    let pendingRecords: any = []
+    let successfulRecords: any = []
+    let rejectedRecords: any = []
+    let config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: 'https://intellasurebackend-docker.onrender.com/claims/favorites',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    axios.request(config)
+    .then((response) => {
+      console.log('sample followup record: ', response.data[0])
+      response.data.map((record: any) => {
+        record.claim_status === 'Successful'
+          ? successfulRecords.push(record)
+          : record.claim_status === 'pending'
+              ? pendingRecords.push(record)
+              : record.claim_status == 'Failed'
+                  ? rejectedRecords.push(record)
+                  : pendingRecords.push(record)
+      })
+      setFailedRecords(rejectedRecords)
+      setSuccessfulRecords(successfulRecords)
+      setPendingRecords(pendingRecords)
+      setFollowupClaims(response.data)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
   function getCurrentDateFormatted() {
     const now = new Date();
     const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-based in JS, add 1
@@ -420,6 +488,10 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     addRecord, 
     billingDetails, 
     claimsRecords,
+    followupRecords,
+    pendingRecords,
+    successfullRecords,
+    failedRecords,
     collectAllData,
     grabClaims,
     grabAllProfiles,
@@ -427,7 +499,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     handleAddRecord,
     getIntakeRecords,
     searchIntakeRecords,
-    grabRefreshClaims
+    grabRefreshClaims,
+    getClaimsFollowup
   };
 
   return (

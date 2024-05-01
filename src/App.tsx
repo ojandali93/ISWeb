@@ -78,6 +78,12 @@ function App() {
           }
         />
         <Route
+          path="/availty"
+          element={
+            authLoading ? <LoadingScreen /> : currentUser.username ? <ClaimsScreen/> : <Navigate to="/auth/login" />
+          }
+        />
+        <Route
           path="/claims/collab"
           element={
             authLoading ? <LoadingScreen /> : currentUser.username ? <ClaimsCollabScreen /> : <Navigate to="/auth/login" />
@@ -91,6 +97,18 @@ function App() {
         />
         <Route
           path="/follow-up"
+          element={
+            authLoading ? <LoadingScreen /> : currentUser.username ? <FollowUpScreen /> : <Navigate to="/auth/login" />
+          }
+        />
+        <Route
+          path="/follow-up/collab"
+          element={
+            authLoading ? <LoadingScreen /> : currentUser.username ? <FollowUpScreen /> : <Navigate to="/auth/login" />
+          }
+        />
+        <Route
+          path="/follow-up/avea"
           element={
             authLoading ? <LoadingScreen /> : currentUser.username ? <FollowUpScreen /> : <Navigate to="/auth/login" />
           }

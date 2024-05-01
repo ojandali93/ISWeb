@@ -1,9 +1,16 @@
-export const ClaimOptions = [
+export const FollowupOptions = [
   {
     label:'Select',
     type:'checkbox',
     recordName: '',
     width: '24'
+  },
+  {
+    label:'Coordinator',
+    type:'people',
+    recordName: 'coordinator',
+    people: [],
+    width: '56'
   },
   {
     label:'Claim Id',
@@ -12,8 +19,14 @@ export const ClaimOptions = [
     width: '52'
   },
   {
+    label:'In Collab',
+    type:'text',
+    recordName: 'claim_status',
+    width: '52'
+  },
+  {
     label:'Name',
-    type:'clickable',
+    type:'text',
     recordName: 'name',
     width: '52'
   },

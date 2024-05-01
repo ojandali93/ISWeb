@@ -11,6 +11,8 @@ import InsuranceSelectComponent from './InsuranceSelectComponent';
 import EditPolicyComponent from './EditPolicyComponent';
 import DateSelectionComponent from '../Inputs/DateSelectionComponent';
 import { useClaims } from '../../Context/ClaimsContext';
+import { useNavigation } from '../../Context/NavigationContext';
+import { useFollowup } from '../../Context/FollowupContext';
 
 interface PeopleOptions {
   name: string;
@@ -41,10 +43,11 @@ interface CellProps {
 
 const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedClaims}) => {
 
-  const {intakeUsers, getIntakeRecords, insuranceOptions} = useData()
+  const {intakeUsers, getIntakeRecords, insuranceOptions, billingUsers} = useData()
   const {updateSelectedClaims} = useClaims()
-
-  // console.log(updateSelectedClaims)
+  const {currentSidebarTab} = useNavigation()
+  const {selectedFollowup, updateSelectedFollowup, updateCoordinatorFollwup} = useFollowup()
+  
 
   const [selectedDate, setSelectedDate] = useState(record.expected_arrival_date ? record.expected_arrival_date : new Date())
   const [dobDate, setDobDate] = useState(record.date_of_birth)
@@ -200,6 +203,11 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
     return input;
   }
 
+  const getCoordinatorName = (userId: string) => {
+    const coordinator = billingUsers?.find(user => user.userid === userId);
+    return coordinator ? coordinator.name : '';
+  };
+
   const submitUpdate = (data: any) => {
     let config = {
       method: 'patch',
@@ -241,6 +249,25 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
     }
     console.log('updated record: ', data)
     submitUpdate(data)
+  }
+
+  const formattedBillingUsers = () => {
+    let newUsers: any = []
+    newUsers.push({
+      active: false,
+      company: 'PHG',
+      department: 'billing',
+      email: '-',
+      first_name: '-',
+      last_name: '-',
+      name: 'Select Coodinator',
+      privileges: 'staff',
+      userid: '-',
+    })
+    billingUsers?.map((user) => {
+      newUsers.push(user)
+    })
+    return newUsers
   }
 
   return (
@@ -389,29 +416,48 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                 </p>
               </div>
             ) : column.type === 'people' ? (
-              <div>
-                <SelectPeopleComponent
-                  options={intakeUsers}
-                  value={cellValue}
-                  onChange={(newValue) => {
-                    handleSelectChange(column.label, record, newValue)
-                    console.log('updated select option: ', newValue);
-                  }}
-                />
-              </div>
+              currentSidebarTab === 'Dashboard'
+                ? <div>
+                    <SelectPeopleComponent
+                      options={intakeUsers}
+                      value={cellValue}
+                      onChange={(newValue) => {
+                        handleSelectChange(column.label, record, newValue)
+                        console.log('updated select option: ', newValue);
+                      }}
+                    />
+                  </div>
+                : <div>
+                    <SelectPeopleComponent
+                      options={formattedBillingUsers()}
+                      value={cellValue === null ? 'Select Coordinator' : getCoordinatorName(cellValue)}
+                      onChange={(newValue) => {
+                        console.log('default value: ', cellValue)
+                        console.log('updated select option: ', newValue);
+                        updateCoordinatorFollwup(record['claim_id'], newValue)
+                      }}
+                    />
+                  </div>
             ) : column.type === 'checkbox' ? (
-              <>
-                <input
-                  type="checkbox"
-                  checked={table === 'Claims' ? selectedClaims?.includes(record['claim_id']) : false}
-                  onChange={() => {
-                    if(table === 'Claims'){
-                      console.log('new function call: ', record['claim_id'])
-                      updateSelectedClaims(record['claim_id'])
-                    }
-                  }}
-                />
-              </>
+              currentSidebarTab === 'Claims'
+                ? <>
+                    <input
+                      type="checkbox"
+                      checked={table === 'Claims' ? selectedClaims?.includes(record['claim_id']) : false}
+                      onChange={() => {
+                        updateSelectedClaims(record['claim_id'])
+                      }}
+                    />
+                  </>
+                : <>
+                    <input
+                      type="checkbox"
+                      checked={table === 'Claims' ? selectedFollowup?.includes(record['claim_id']) : false}
+                      onChange={() => {
+                        updateSelectedFollowup(record['claim_id'])
+                      }}
+                    />
+                  </>
             ) : column.type === 'text-edit' ? (
               <><div className={`flex flex-row justify-center`}>
                 {record[column.recordName]}

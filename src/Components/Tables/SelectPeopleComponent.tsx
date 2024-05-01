@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 interface PeopleOptions {
   active: boolean;
@@ -15,11 +15,16 @@ interface PeopleOptions {
 interface SelectPeopleComponentProps {
   options?: PeopleOptions[] | null;
   value: string;
-  onChange: (userId: string) => void;
+  onChange: (userId: string) => void; // The onChange now expects a userId, not a name.
 }
 
 const SelectPeopleComponent: React.FC<SelectPeopleComponentProps> = ({ options, value, onChange }) => {
+
   const selectedUser = options?.find(option => option.userid === value);
+  
+  useEffect(() => {
+    console.log(selectedUser)
+  }, [])
 
   return (
     <select

@@ -123,53 +123,53 @@ export const intakeOColumns = [
     people: [],
     width: '56'
   },
-  {
-    label:'INN Admit %',
-    type:'text',
-    recordName: '',
-    width: '32'
-  },
-  {
-    label:'INN Admit',
-    type:'text',
-    recordName: '',
-    width: '32'
-  },
+  // {
+  //   label:'INN Admit %',
+  //   type:'text',
+  //   recordName: '',
+  //   width: '52'
+  // },
+  // {
+  //   label:'INN Admit',
+  //   type:'text',
+  //   recordName: '',
+  //   width: '32'
+  // },
   {
     label:'INN Ded',
     type:'dollar',
     recordName: 'inn_deductible',
-    width: '32'
+    width: '52'
   },
   {
     label:'INN OOP',
     type:'dollar',
     recordName: 'in_network_oop',
-    width: '32'
+    width: '52'
   },
-  {
-    label:'OON Admit %',
-    type:'text',
-    recordName: '',
-    width: '32'
-  },
-  {
-    label:'OON Admit',
-    type:'text',
-    recordName: '',
-    width: '32'
-  },
+  // {
+  //   label:'OON Admit %',
+  //   type:'text',
+  //   recordName: '',
+  //   width: '52'
+  // },
+  // {
+  //   label:'OON Admit',
+  //   type:'text',
+  //   recordName: '',
+  //   width: '32'
+  // },
   {
     label:'OON Ded',
     type:'dollar',
     recordName: 'onn_deductible',
-    width: '32'
+    width: '52'
   },
   {
     label:'OON OOP',
     type:'dollar',
     recordName: 'out_network_oop',
-    width: '32'
+    width: '52'
   },
   {
     label:'Source',
