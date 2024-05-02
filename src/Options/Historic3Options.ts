@@ -1,7 +1,7 @@
 export const historicOptions = [
   {
     label:'Prefix',
-    type:'text',
+    type:'clickable',
     recordName: 'prefix'
   },
   {

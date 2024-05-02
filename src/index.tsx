@@ -10,6 +10,7 @@ import { DataProvider } from './Context/DataContext';
 import { ClaimsProvider } from './Context/ClaimsContext';
 import { FollowupProvider } from './Context/FollowupContext';
 import { IntakeProvider } from './Context/IntakeContext';
+import { HistoricProvider } from './Context/HistoricContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -23,7 +24,9 @@ root.render(
             <ClaimsProvider>
               <FollowupProvider>
                 <IntakeProvider>
-                  <App/>
+                  <HistoricProvider>
+                    <App/>
+                  </HistoricProvider>
                 </IntakeProvider>
               </FollowupProvider>
             </ClaimsProvider>

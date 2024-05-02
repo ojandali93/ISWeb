@@ -13,6 +13,8 @@ import DateSelectionComponent from '../Inputs/DateSelectionComponent';
 import { useClaims } from '../../Context/ClaimsContext';
 import { useNavigation } from '../../Context/NavigationContext';
 import { useFollowup } from '../../Context/FollowupContext';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useHistoric } from '../../Context/HistoricContext';
 
 
 interface PeopleOptions {
@@ -43,10 +45,11 @@ interface CellProps {
 }
 
 const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedClaims}) => {
-  
+  const navigate = useNavigate()
   const {intakeUsers, getIntakeRecords, insuranceOptions, grabAllProfiles, grabAvailityData, loadingAvailityData, billingUsers} = useData()
   const {updateSelectedClaims} = useClaims()
-  const {currentSidebarTab} = useNavigation()
+  const {grabPrefixRecords, grabUserRecords} = useHistoric()
+  const {currentSidebarTab, handleUpdateCurrentSidebarTab} = useNavigation()
   const {selectedFollowup, updateSelectedFollowup, updateCoordinatorFollwup} = useFollowup()
 
 
@@ -298,6 +301,18 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
     return newUsers
   }
 
+  const handleClick = (prefixId: string, network: string) => {
+    handleUpdateCurrentSidebarTab('HistoricPrefix')
+    grabPrefixRecords(prefixId, network)
+    navigate(`/historic/prefix/${prefixId}/${network}`);
+  };
+
+  const handleClickHistoric = (policy_id: string) => {
+    handleUpdateCurrentSidebarTab('HistoricPolicy')
+    grabUserRecords(policy_id)
+    navigate(`/historic/user/${policy_id}`);
+  }
+
   return (
     <>
       {columns.map((column, columnIndex) => {
@@ -502,14 +517,22 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                 <Edit height={20} width={20} className='text-sky-500 ml-2'/>
               </div></>
             ) : column.type === 'clickable' ? (
-              loadingAvailityData === false ? (
-                <div>
-                <p className='text-primary' onClick={() => grabAvailityData(record['claim_id'])}>{record[column.recordName]}</p>
-              </div>
-              ) :
-              <div className='animate-spin'>
-                <p className='text-primary'>Loading Availity</p>
-              </div>
+              currentSidebarTab === 'Historic'
+                ? <div className='hover:cursor-pointer'>
+                    <p className='text-primary' onClick={() => {handleClick(record[column.recordName], record['network'])}}>{record[column.recordName]}</p>
+                  </div>
+                : currentSidebarTab === 'HistoricPrefix'
+                    ? <div className='hover:cursor-pointer'>
+                        <p className='text-primary' onClick={() => {handleClickHistoric(record[column.recordName])}}>{record[column.recordName]}</p>
+                      </div>
+                    : loadingAvailityData === false ? (
+                        <div className='hover:cursor-pointer'>
+                          <p className='text-primary' onClick={() => grabAvailityData(record['claim_id'])}>{record[column.recordName]}</p>
+                        </div>
+                      ) :
+                        <div className='animate-spin hover:cursor-pointer'>
+                          <p className='text-primary'>Loading Availity</p>
+                        </div>
             ) : (
               <div>
                 <p>

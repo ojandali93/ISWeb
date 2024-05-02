@@ -28,6 +28,8 @@ import ClaimsCollabScreen from './Screens/Claims/ClaimsCollabScreen';
 import ClaimsAveaScreen from './Screens/Claims/ClaimsAveaScreen';
 import IntakeAnalytivsScreen from './Screens/Analytics/IntakeAnalytivsScreen';
 import ClaimsAvailityScreen from './Screens/Claims/ClaimsAvailityScreen';
+import Historic2Screen from './Screens/Historic/Historic2Screen';
+import Historic1Screen from './Screens/Historic/Historic1Screen';
 
 Amplify.configure(amplifyconfig)
 
@@ -71,6 +73,18 @@ function App() {
           path="/historic"
           element={
             authLoading ? <LoadingScreen /> : currentUser.username ? <HistoricScreen /> : <Navigate to="/auth/login" />
+          }
+        />
+        <Route
+          path="/historic/prefix/:prefix_id/:network"
+          element={
+            authLoading ? <LoadingScreen /> : currentUser.username ? <Historic2Screen /> : <Navigate to="/auth/login" />
+          }
+        />
+        <Route
+          path="/historic/user/:prefix_id"
+          element={
+            authLoading ? <LoadingScreen /> : currentUser.username ? <Historic1Screen /> : <Navigate to="/auth/login" />
           }
         />
         <Route
