@@ -13,7 +13,7 @@ import PaginationComponent from '../Pagination/PaginationComponent'
 
 const AveaClaimsFilterComponent = () => {
 
-    const {selectedClaims, addBatchToFavorites, pushingToFollowup} = useClaims()
+    const {selectedClaimsAvea, addBatchToAveaFavorites, pushingToFollowup} = useClaims()
     const { grabRefreshAveaClaims } = useData()
 
     const [page, setPage] = useState<number>(1)
@@ -104,8 +104,8 @@ const AveaClaimsFilterComponent = () => {
             <div className='w-full flex flex-row items-center justify-between'>
                 <div>
                     {
-                        selectedClaims.length > 0
-                            ? <ButtonComponent label={pushingToFollowup ? 'Submitting' : 'Reprocess'} handler={addBatchToFavorites}/>
+                        selectedClaimsAvea.length > 0
+                            ? <ButtonComponent label={pushingToFollowup ? 'Submitting' : 'Reprocess'} handler={addBatchToAveaFavorites}/>
                             : null
                     }
                 </div>

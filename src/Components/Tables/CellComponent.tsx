@@ -47,7 +47,7 @@ interface CellProps {
 const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedClaims}) => {
   const navigate = useNavigate()
   const {intakeUsers, getIntakeRecords, insuranceOptions, grabAllProfiles, grabAvailityData, loadingAvailityData, billingUsers} = useData()
-  const {updateSelectedClaims} = useClaims()
+  const {updateSelectedClaims, updateSelectedClaimsAvea} = useClaims()
   const {grabPrefixRecords, grabUserRecords} = useHistoric()
   const {currentSidebarTab, handleUpdateCurrentSidebarTab} = useNavigation()
   const {selectedFollowup, updateSelectedFollowup, updateCoordinatorFollwup} = useFollowup()
@@ -496,9 +496,14 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                 ? <>
                     <input
                       type="checkbox"
-                      checked={table === 'Claims' ? selectedClaims?.includes(record['claim_id']) : false}
+                      checked={table === 'Claims' ? selectedClaims?.includes(record['claim_id']) : table === 'Avea Claims' ? selectedClaims?.includes(record['claim_id']) : false}
                       onChange={() => {
-                        updateSelectedClaims(record['claim_id'])
+                        if(table === 'Claims'){
+                          updateSelectedClaims(record['claim_id'])
+                        }
+                        if(table === 'Avea Claims'){
+                          updateSelectedClaimsAvea(record['claim_id'])
+                        }
                       }}
                     />
                   </>

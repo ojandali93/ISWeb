@@ -57,7 +57,9 @@ const TableComponent: React.FC<TableProps> = (props) => {
   const { columns, records, users, table} = props;
 
   const { currentSidebarTab } = useNavigation()
-  const { selectedClaims, allClaims, unselectAllClaims, selectAllClaims } = useClaims()
+  const { selectedClaims, selectedClaimsAvea, allClaims, 
+    allClaimsAvea, unselectAllClaims, selectAllClaims,
+    unselectAllClaimsAvea, selectAllClaimsAvea } = useClaims()
   const { selectAllFollowup, unselectAllFollowup, allFollowup } = useFollowup()
 
   useEffect(() => {
@@ -78,12 +80,21 @@ const TableComponent: React.FC<TableProps> = (props) => {
                       ? currentSidebarTab === 'Claims' 
                           ? <input
                               type="checkbox"
-                              checked={allClaims}
+                              checked={table === 'Claims' ? allClaims : table === 'Avea Claims' ? allClaimsAvea : false}
                               onChange={() => {
-                                if(allClaims){
-                                  unselectAllClaims()
-                                } else {
-                                  selectAllClaims(records)
+                                if(table === 'Claims'){
+                                  if(allClaims){
+                                    unselectAllClaims()
+                                  } else {
+                                    selectAllClaims(records)
+                                  }
+                                }
+                                if(table === 'Avea Claims'){
+                                  if(allClaimsAvea){
+                                    unselectAllClaimsAvea()
+                                  } else {
+                                    selectAllClaimsAvea(records)
+                                  }
                                 }
                               }}
                             />
@@ -108,7 +119,7 @@ const TableComponent: React.FC<TableProps> = (props) => {
         <tbody>
           {records != null ? ( records.map((record: any, rowIndex: number) => (
             <tr key={rowIndex} className={`text-center min-h-14 h-16 text-white ${rowIndex % 2 === 0 ? 'bg-stone-900' : 'bg-stone-800'}`}>
-              <CellComponent table={table} columns={columns} record={record} selectedClaims={table === 'Claims' ? selectedClaims : null}/>
+              <CellComponent table={table} columns={columns} record={record} selectedClaims={table === 'Claims' ? selectedClaims : table === 'Avea Claims' ? selectedClaimsAvea : null}/>
             </tr>
           ))) : (null)}
         </tbody>
