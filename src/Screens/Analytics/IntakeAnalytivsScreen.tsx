@@ -1,7 +1,21 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import LayoutComponent from '../BaseScreen'
 import { useIntake } from '../../Context/IntakeContext'
 import { useData } from '../../Context/DataContext'
+import ChartComponent from '../../Components/Analytics/ChartComponent';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  BarChart,
+  Bar,
+  Rectangle,
+  ResponsiveContainer
+} from "recharts";
 
 interface IntakeProps {
   active: boolean;
@@ -24,6 +38,29 @@ interface IntakeProps {
   summary_out: string;
 }
 
+interface AnalyticsDatum {
+  clients: number;
+  date: string;
+  Arrived: number;
+  MIA: number;
+  BD: number;
+  'Pending Arrival': number;
+  Approved: number;
+  Denied: number;
+  'Private Pay': number;
+  'Approved No RTC': number;
+  'Approved LB No RTC': number;
+  'Pending Approval': number;
+  'Approved DB': number;
+  'Total Approved': number;
+  waiting_arrival: number;
+  Booked: number;
+  'Incoming Clients': number;
+  arrived_approved_percent: number;
+  approved_total_percent: number;
+  arrived_total_percent: number;
+}
+
 const IntakeAnalytivsScreen = () => {
 
   const {intakeRecords} = useData()
@@ -33,6 +70,8 @@ const IntakeAnalytivsScreen = () => {
     processIntakeInformation(intakeRecords)
   }, [])
 
+  const [analyticsData, setAnalyticsData] = useState<any>({})
+  
   const processIntakeInformation = (intakeRecords: IntakeProps[] | null) => {
     let analytics: any = {};
 
@@ -60,7 +99,7 @@ const IntakeAnalytivsScreen = () => {
     function convertDobDateToMMDDYYYY(dateString: string) {
       const date = new Date(dateString);
       const mm = String(date.getUTCMonth() + 1).padStart(2, '0'); 
-      const dd = String(date.getUTCDate()).padStart(2, '0'); 
+      const dd = String(date.getUTCDate() + 1).padStart(2, '0'); 
     
       return `${mm}/${dd}`;
     }
@@ -72,7 +111,7 @@ const IntakeAnalytivsScreen = () => {
         if (!analytics[convertDobDateToMMDDYYYY(date)]) {
           analytics[convertDobDateToMMDDYYYY(date)] = {
             clients: 0,
-            date: date,
+            date: convertDobDateToMMDDYYYY(date),
             Arrived: 0,
             MIA: 0,
             BD: 0,
@@ -88,11 +127,15 @@ const IntakeAnalytivsScreen = () => {
             waiting_arrival: 0,
             'Booked': 0,
             'Incoming Clients': 0,
+            'Total Calls': 0,
             arrived_approved_percent: 0,
             approved_total_percent: 0,
             arrived_total_percent: 0,
           };
         }
+
+        analytics[convertDobDateToMMDDYYYY(date)]['Total Calls']++;
+
         if (booked === 'Arrived') analytics[convertDobDateToMMDDYYYY(date)].Arrived++;
         if (booked === 'MIA') analytics[convertDobDateToMMDDYYYY(date)].MIA++;
         if (booked === 'BD') analytics[convertDobDateToMMDDYYYY(date)].BD++;
@@ -110,19 +153,219 @@ const IntakeAnalytivsScreen = () => {
             checked_in === 'Approved DB' || 
             checked_in === 'Approved No RTC' || 
             checked_in === 'Approved' ) analytics[convertDobDateToMMDDYYYY(date)]['Total Approved']++;
+
       }
 
-
     });
-    console.log('data: ', analytics)
-  };
+    let newData: any = []
+    Object.values(analytics).map((record) => {
+      newData.push(record)
+    })
+    console.log('data: ', newData)
+    setAnalyticsData(newData)
+  }
 
-  
+
 
   return (
     <LayoutComponent
       header={null} // Render your custom header component here
-      content={<div>extername</div>} // Render your custom content component here
+      content={
+        <div>
+          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <h1 className='text-3xl text-white font-bold mt-8 mb-3'>Status</h1>
+            <LineChart
+              width={window.innerWidth * .75}
+              height={((2/3) * (window.innerWidth * .25))}
+              data={analyticsData}
+              margin={{
+                top: 5,
+                right: 150,
+                left: 100,
+                bottom: 5
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="white" />
+              <XAxis dataKey="date"  tick={{ fill: 'white' }} />
+              <YAxis tick={{ fill: 'white' }} />
+              <Tooltip />
+              <Legend />
+              <Line
+                strokeWidth={2}
+                type="monotone"
+                dataKey="Pending Approval"
+                stroke="#fcba03"
+                label="Pending Approval"
+                activeDot={{ r: 8 }}
+              />
+              {/* <Line
+                strokeWidth={2}
+                type="monotone"
+                dataKey="Total Calls"
+                stroke="#e94f4e"
+                label="Pending Approval"
+                activeDot={{ r: 8 }}
+              /> */}
+              <Line
+                strokeWidth={2}
+                type="monotone"
+                dataKey="Total Approved"
+                stroke="#fc8003"
+                label="Total Approved"
+                activeDot={{ r: 8 }}
+              />
+              <Line
+                strokeWidth={2}
+                type="monotone"
+                dataKey="Denied"
+                stroke="red"
+                label="Denied"
+                activeDot={{ r: 8 }}
+              />
+              <Line
+                strokeWidth={2}
+                type="monotone"
+                dataKey="Private Pay"
+                stroke="#fcd303"
+                label="Private Pay"
+                activeDot={{ r: 8 }}
+              />
+            </LineChart>
+          </div>
+          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <h1 className='text-3xl text-white font-bold mt-8 mb-3'>Approved Status</h1>
+            <LineChart
+              width={window.innerWidth * .75}
+              height={((2/3) * (window.innerWidth * .25))}
+              data={analyticsData}
+              margin={{
+                top: 5,
+                right: 150,
+                left: 100,
+                bottom: 5
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="white" />
+              <XAxis dataKey="date"  tick={{ fill: 'white' }} />
+              <YAxis tick={{ fill: 'white' }} />
+              <Tooltip />
+              <Legend />
+              <Line
+                strokeWidth={2}
+                type="monotone"
+                dataKey="Approved"
+                stroke="#fcba03"
+                label="Approved"
+                activeDot={{ r: 8 }}
+              />
+              <Line
+                strokeWidth={2}
+                type="monotone"
+                dataKey="Approved No RTC"
+                stroke="#fc8003"
+                label="Approved No RTC"
+                activeDot={{ r: 8 }}
+              />
+              <Line
+                strokeWidth={2}
+                type="monotone"
+                dataKey="Approved LB No RTC"
+                stroke="red"
+                label="Approved LB No RTC"
+                activeDot={{ r: 8 }}
+              />
+              <Line
+                strokeWidth={2}
+                type="monotone"
+                dataKey="Approved DB"
+                stroke="#fcd303"
+                label="Approved DB"
+                activeDot={{ r: 8 }}
+              />
+            </LineChart>
+          </div>
+          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <h1 className='text-3xl text-white font-bold mt-8 mb-3'>Checked In</h1>
+            <LineChart
+              width={window.innerWidth * .75}
+              height={((2/3) * (window.innerWidth * .25))}
+              data={analyticsData}
+              margin={{
+                top: 5,
+                right: 150,
+                left: 100,
+                bottom: 5
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="white" />
+              <XAxis dataKey="date"  tick={{ fill: 'white' }} />
+              <YAxis tick={{ fill: 'white' }} />
+              <Tooltip />
+              <Legend />
+              <Line
+                strokeWidth={2}
+                type="monotone"
+                dataKey="Arrived"
+                stroke="#fcba03"
+                label="Arrived"
+                activeDot={{ r: 8 }}
+              />
+              <Line
+                strokeWidth={2}
+                type="monotone"
+                dataKey="Pending Arrival"
+                stroke="#fc8003"
+                label="Arrived"
+                activeDot={{ r: 8 }}
+              />
+              <Line
+                strokeWidth={2}
+                type="monotone"
+                dataKey="MIA"
+                stroke="red"
+                label="MIA"
+                activeDot={{ r: 8 }}
+              />
+              <Line
+                strokeWidth={2}
+                type="monotone"
+                dataKey="BD"
+                stroke="#fcd303"
+                label="BD"
+                activeDot={{ r: 8 }}
+              />
+            </LineChart>
+          </div>
+          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <h1 className='text-3xl text-white font-bold mt-8 mb-3'>Census</h1>
+              <BarChart
+                width={window.innerWidth * .65}
+                height={((2/3) * (window.innerWidth * .25))}
+                data={analyticsData}
+                margin={{
+                  top: 5,
+                  right: 30,
+                  left: 20,
+                  bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke="white" />
+                <XAxis dataKey="facility"  tick={{ fill: 'white' }} />
+                <YAxis tick={{ fill: 'white' }} />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="New Admits" fill="green"/>
+                <Bar dataKey="RTC" fill="blue"/>
+                <Bar dataKey="Detox" fill="teal"/>
+                <Bar dataKey="PHP" fill="orange"/>
+                <Bar dataKey="IOP" fill="violet"/>
+                <Bar dataKey="Private Pay" fill="red"/>
+                <Bar dataKey="Scholarshiped" fill="brown"/>
+                <Bar dataKey="Total Patients" fill="grey"/>
+              </BarChart>
+          </div>
+        </div>
+      } // Render your custom content component here
     />
   )
 }
