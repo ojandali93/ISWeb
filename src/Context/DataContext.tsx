@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { useIntake } from './IntakeContext';
 import { useNavigate } from 'react-router-dom';
+import ClaimsAveaScreen from "../Screens/Claims/ClaimsAveaScreen";
 
 interface ProfileProps {
   active: boolean;
@@ -110,6 +111,7 @@ interface DataContextType {
   addRecord: boolean;
   billingDetails: HistoricProps[] | null;
   claimsRecords: ClaimsProps[] | null;
+  aveaClaimsRecords: ClaimsProps[] | null;
   availityData: any;
   loadingAvailityData: boolean;
   followupRecords: FolloupProps[] | null;
@@ -120,6 +122,7 @@ interface DataContextType {
   collectAllData: () => void;
   grabAllProfiles: () => void;
   grabClaims: () => void;
+  grabAveaClaims: () => void;
   grabRefreshClaims: (
     startDate: Date, 
     endDate: Date, 
@@ -128,6 +131,15 @@ interface DataContextType {
     page: number, 
     facility: string, 
     status: string,
+  ) => void;
+  grabRefreshAveaClaims:(
+      startDate: Date,
+      endDate: Date,
+      minPercent: number,
+      maxPercent: number,
+      page: number,
+      facility: string,
+      status: string,
   ) => void;
   addIntakeRecord: (data: any) => void;
   handleAddRecord: () => void;
@@ -153,6 +165,7 @@ const DataContext = createContext<DataContextType>({
   addRecord: false, 
   billingDetails: null,
   claimsRecords: null,
+  aveaClaimsRecords: null,
   availityData: null,
   loadingAvailityData: false,
   followupRecords: null,
@@ -163,7 +176,9 @@ const DataContext = createContext<DataContextType>({
   collectAllData: () => {},
   grabAllProfiles: () => {},
   grabClaims: () => {},
+  grabAveaClaims: () => {},
   grabRefreshClaims: () => {},
+  grabRefreshAveaClaims:() =>{},
   addIntakeRecord: () => {},
   handleAddRecord: () => {},
   getIntakeRecords: () => {},
@@ -201,7 +216,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [billingDetails, setBillingDetails] = useState<HistoricProps[] | null>(null)
 
   const [claimsRecords, setClaimsRcords] = useState<ClaimsProps[] | null>(null)
-  
+  const [aveaClaimsRecords, setAveaClaimsRecords] = useState<ClaimsProps[] | null>(null)
+
   const [followupRecords, setFollowupClaims] = useState<ClaimsProps[] | null>(null)
   const [pendingRecords, setPendingRecords] = useState<ClaimsProps[] | null>(null)
   const [successfullRecords, setSuccessfulRecords] = useState<ClaimsProps[] | null>(null)
@@ -227,6 +243,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     grabRecords()
     grabRecords()
     grabClaims()
+    grabAveaClaims()
     getClaimsFollowup()
     grabExternalData()
   }
@@ -280,6 +297,33 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     const day = String(date.getDate()).padStart(2, '0');
     
     return `${year}-${month}-${day}`;
+  }
+  const grabAveaClaims = () => {
+    let data = {
+      'start_date': formatDate(new Date(Date.UTC(2018, 1, 1))),
+      'end_date': formatDate(endDate),
+      "min_percent": 0.0,
+      "max_percent": 1.0,
+      "page": 1,
+      "facilities":"ALL",
+      "status": "ALL"}
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://intellasurebackend-docker.onrender.com/claims/avea',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+    axios.request(config)
+        .then((response) => {
+          console.log('claims records length: ', response.data.length)
+          setAveaClaimsRecords(response.data)
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   }
 
   const grabClaims = () => {
@@ -346,6 +390,42 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     .catch((error) => {
       console.log(error);
     });
+  }
+  const grabRefreshAveaClaims = (
+      startDate: Date,
+      endDate: Date,
+      minPercent: number,
+      maxPercent: number,
+      page: number,
+      facility: string,
+      status: string,
+  ) => {
+    let data = {
+      'start_date': formatDate(startDate),
+      'end_date': formatDate(endDate),
+      'min_percent': (minPercent / 100),
+      'max_percent': (maxPercent / 100),
+      'page': page,
+      'facilities': facility,
+      'status': status
+    }
+    console.log('refresh claims: ', data)
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://intellasurebackend-docker.onrender.com/claims/avea',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+    axios.request(config)
+        .then((response) => {
+          setAveaClaimsRecords(response.data)
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   }
   
   const getIntakeRecords = () => {
@@ -607,12 +687,14 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     addRecord, 
     billingDetails, 
     claimsRecords,
+    aveaClaimsRecords,
     followupRecords,
     pendingRecords,
     successfullRecords,
     failedRecords,
     collectAllData,
     grabClaims,
+    grabAveaClaims,
     grabAllProfiles,
     addIntakeRecord,
     handleAddRecord,
@@ -621,6 +703,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     addSupportTicket,
     loadingNewTicket,
     grabRefreshClaims,
+    grabRefreshAveaClaims,
     grabAvailityData,
     availityData,
     loadingAvailityData,
