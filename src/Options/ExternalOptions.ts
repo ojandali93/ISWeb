@@ -1,79 +1,38 @@
-export const intakeOColumns = [
-  {
-    label:'Date',
-    type:'text',
-    recordName: 'date'
-  },
+export const ExternalOptions = [
   {
     label:'Prefix',
     type:'text',
     recordName: 'prefix'
   },
-
   {
-    label:'Insurance',
+    label:'Level of Care',
     type:'text',
-    recordName: 'insurance'
-  },
-  {
-    label:'Active',
-    type:'text',
-    recordName: 'active'
-  },
-  {
-    label:'Coordinator',
-    type:'text',
-    recordName: 'coordinator'
-  },
-  {
-    label:'INN Admit %',
-    type:'text',
-    recordName: ''
-  },
-  {
-    label:'INN Admit',
-    type:'text',
-    recordName: ''
-  },
-  {
-    label:'INN Ded',
-    type:'text',
-    recordName: 'inn_deductible'
-  },
-  {
-    label:'INN OOP',
-    type:'text',
-    recordName: 'in_network_oop'
-  },
-  {
-    label:'OON Admit %',
-    type:'text',
-    recordName: ''
-  },
-  {
-    label:'OON Admit',
-    type:'text',
-    recordName: ''
-  },
-  {
-    label:'OON Ded',
-    type:'text',
-    recordName: 'onn_deductible'
+    recordName: 'levelOfCare'
   },
 
   {
-    label:'OON OOP',
+    label:'Total Units',
     type:'text',
-    recordName: 'out_network_oop'
+    recordName: 'totalUnits'
   },
   {
-    label:'Source',
+    label:'Allowed %',
     type:'text',
-    recordName: 'source'
+    recordName: 'allowedPercent'
   },
   {
-    label:'Notes',
-    type:'expand',
-    recordName: ''
+    label:'Paid %',
+    type:'text',
+    recordName: 'paidPercent'
   },
+  {
+    label:'Average Daily Rate',
+    type:'text',
+    recordName: 'avgDailyRate'
+  },
+  {
+    label:'Last Paid',
+    type:'text',
+    recordName: 'lastPaid'
+  }
 ]

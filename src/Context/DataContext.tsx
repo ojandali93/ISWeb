@@ -87,6 +87,16 @@ interface InsuranceOptionsProps {
   payer_id: number;
 }
 
+interface ExternalDataProps {
+  allowedPercent: string;
+  avgDailyRate: string;
+  lastPaid: string;
+  levelOfCare: string;
+  paidPercent: string;
+  prefix: string;
+  totalUnits: string;
+}
+
 interface DataContextType {
   allUsers: ProfileProps[] | null;
   intakeUsers: ProfileProps[] | null;
@@ -106,6 +116,7 @@ interface DataContextType {
   pendingRecords: FolloupProps[] | null;
   successfullRecords: FolloupProps[] | null;
   failedRecords: FolloupProps[] | null;
+  externalData: ExternalDataProps[] | null;
   collectAllData: () => void;
   grabAllProfiles: () => void;
   grabClaims: () => void;
@@ -125,6 +136,7 @@ interface DataContextType {
   addSupportTicket: (data:any) => void;
   grabAvailityData: (claim_id: any) => void;
   getClaimsFollowup: () => void;
+  grabExternalData: () => void;
 }
 
 
@@ -147,6 +159,7 @@ const DataContext = createContext<DataContextType>({
   pendingRecords: null,
   successfullRecords: null,
   failedRecords: null,
+  externalData: null,
   collectAllData: () => {},
   grabAllProfiles: () => {},
   grabClaims: () => {},
@@ -157,7 +170,8 @@ const DataContext = createContext<DataContextType>({
   searchIntakeRecords: () => {},
   addSupportTicket: () => {},
   grabAvailityData: () => {},
-  getClaimsFollowup: () => {}
+  getClaimsFollowup: () => {},
+  grabExternalData: () => {}
 });
 
 export function useData() {
@@ -196,6 +210,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [availityData, setAvailityData] = useState<any>(null)
   const [loadingAvailityData, setLoadingAvailityData] = useState<boolean>(false)
 
+  const [externalData, setExternalData] = useState<ExternalDataProps[] | null>(null)
+
   const [startDate, setStartDate] = useState(new Date(Date.UTC(2018, 1, 1)));
   const [endDate, setEndDate] = useState(new Date())
 
@@ -212,6 +228,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     grabRecords()
     grabClaims()
     getClaimsFollowup()
+    grabExternalData()
   }
 
   const grabAllProfiles = () => {
@@ -529,6 +546,17 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       })
   }
 
+  const grabExternalData = () => {
+    const url = 'https://intellasurebackend-docker.onrender.com/external/getData';
+    axios.get(url)
+    .then((response:any) => {
+      setExternalData(response.data)
+    })
+    .catch((err: any) => {
+      console.error("Failed to fetch External Data!")
+    })
+  }
+
   const reformatInsurance = (records: InsuranceOptionsProps[]) => {
     let newRecords: any[] = []
     records.map((record: any) => {
@@ -596,7 +624,9 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     grabAvailityData,
     availityData,
     loadingAvailityData,
-    getClaimsFollowup
+    getClaimsFollowup,
+    grabExternalData,
+    externalData
   };
 
   return (
