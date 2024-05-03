@@ -481,8 +481,8 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
             ) : column.type === 'popup' ? (
               !showNotes 
               ?
-              <div onClick={() => {getNotes(record.intake_id, record.coordinator); console.log("This is the record: ", record);console.log(); toggleShowPopup()}}>
-                <p className='text-primary cursor-pointer'>Show Notes</p>
+              <div className="" onClick={() => {getNotes(record.intake_id, record.coordinator); console.log("This is the record: ", record);console.log(); toggleShowPopup()}}>
+                <button className='text-center px-2 py-1 bg-green-600 rounded-md font-bold text-white min-w-28 max-w-44 ml-4'>Show Notes</button>
               </div>
               : <div className='fixed inset-0 bg-black bg-opacity-80 z-40 flex justify-center items-center overflow-auto p-4 mt-20'>
                   <div className='bg-alt-on p-8 rounded-lg shadow-lg z-50 max-w-lg w-full max-h-[75vh] overflow-auto'>
