@@ -31,7 +31,7 @@ const NavigationTabComponent: React.FC<NavigationTabProps> = (props) => {
     <div 
       onClick={() => {handleRedirect()}} 
       className={`w-full h-10 flex flex-row items-center hover:cursor-pointer 
-        ${position === 'top' ? 'hover:bg-slate-700 rounded-xl text-white' : currentSidebarTab === tab ? 'bg-stone-900 text-white' : 'hover:bg-sky-800 text-white' }`}
+        ${position === 'top' ? 'hover:bg-slate-700 rounded-xl text-white' : currentSidebarTab === tab ? 'bg-stone-900 text-white' : 'hover:bg-primary text-white' }`}
     >
       {IconComponent && position === 'top' ? <IconComponent size={22} color='white' className='ml-2 mr-2 stroke-[3px]' /> : <IconComponent size={20} color={currentSidebarTab === tab ? 'white' : 'white'} className='ml-2 mr-2' />}
       <h1 className={`text-base font-semibold ${currentSidebarTab === tab ? 'text-white' : 'text-white'}`}>{tab}</h1>

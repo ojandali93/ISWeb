@@ -25,7 +25,7 @@ const SingleClickTabComponent: React.FC<SingleClickTabs> = ({ tabs, selected, ha
                   handleFunction(singleTab.value)
                 }
               }}
-              className={`${singleTab.value === selected ? 'bg-sky-800' : 'bg-sky-900'} hover:cursor-pointer h-full flex flex-col justify-center items-center min-w-24 rounded-tl-xl rounded-tr-xl`}
+              className={`${singleTab.value === selected ? 'bg-primary' : 'bg-secondary'} hover:cursor-pointer h-full flex flex-col justify-center items-center min-w-24 rounded-tl-xl rounded-tr-xl`}
             >
               <p className='text-white text-lg px-8'>{singleTab.label}</p>
             </div>

@@ -26,7 +26,7 @@ const SelectPeopleComponent: React.FC<SelectPeopleComponentProps> = ({ options, 
     <select
       value={selectedUser ? selectedUser.userid : ''}
       onChange={(e) => onChange(e.currentTarget.value)} 
-      className="bg-sky-800 p-1 text-white rounded"
+      className="bg-primary p-1 text-white rounded"
     >
       {options?.map((option, index) => (
         <option key={index} value={option.userid}>

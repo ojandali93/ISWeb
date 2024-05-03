@@ -362,7 +362,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
               <>
                 <div className={`flex flex-row justify-center`}>
                   {record[column.recordName]}
-                  <Edit height={20} width={20} className='text-sky-500 ml-2'/>
+                  <Edit height={20} width={20} className='text-secondary ml-2'/>
                 </div>
               </>
             ) : column.type === 'insurance-edit' ? (
@@ -378,7 +378,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                       : <>
                           <div className={` flex flex-row`}>
                             {record[column.recordName]}
-                            <Edit onClick={() => {toggleEditInsurance(column.label, record, record[column.recordName])}} height={20} width={20} className='text-sky-500 ml-2'/>
+                            <Edit onClick={() => {toggleEditInsurance(column.label, record, record[column.recordName])}} height={20} width={20} className='text-secondary ml-2'/>
                           </div>
                         </>
                   }
@@ -397,7 +397,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                       : <>
                           <div className={` flex flex-row`}>
                             {record[column.recordName]}
-                            <Edit onClick={() => {toggleEditPolicy(column.label, record, record[column.recordName])}} height={20} width={20} className='text-sky-500 ml-2'/>
+                            <Edit onClick={() => {toggleEditPolicy(column.label, record, record[column.recordName])}} height={20} width={20} className='text-secondary ml-2'/>
                           </div>
                         </>
                   }
@@ -429,7 +429,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                         </>
                       : <>
                           {convertDobDateToMMDDYYYY(record[column.recordName])}
-                          <Edit onClick={() => {updateEditDate(column.label, record, record[column.recordName])}} height={20} width={20} className='text-sky-500 ml-2'/>
+                          <Edit onClick={() => {updateEditDate(column.label, record, record[column.recordName])}} height={20} width={20} className='text-secondary ml-2'/>
                         </>
                   }
                 </div>
@@ -456,7 +456,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
               </div>
             ) : column.type === 'delete' ? (
               <div>
-                <button onClick={() => {handleDeleteRecord(record.intake_id)}} className={`py-1 px-3 rounded-lg bg-sky-700 hover:bg-sky-900`}>Remove</button>
+                <button onClick={() => {handleDeleteRecord(record.intake_id)}} className={`py-1 px-3 rounded-lg bg-primary hover:bg-secondary`}>Remove</button>
               </div>
             ) : column.type === 'percent' ? (
               <div>
@@ -519,24 +519,24 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
             ) : column.type === 'text-edit' ? (
               <><div className={`flex flex-row justify-center`}>
                 {record[column.recordName]}
-                <Edit height={20} width={20} className='text-sky-500 ml-2'/>
+                <Edit height={20} width={20} className='text-secondary ml-2'/>
               </div></>
             ) : column.type === 'clickable' ? (
               currentSidebarTab === 'Historic'
                 ? <div className='hover:cursor-pointer'>
-                    <p className='text-primary' onClick={() => {handleClick(record[column.recordName], record['network'])}}>{record[column.recordName]}</p>
+                    <p className='text-third' onClick={() => {handleClick(record[column.recordName], record['network'])}}>{record[column.recordName]}</p>
                   </div>
                 : currentSidebarTab === 'HistoricPrefix'
                     ? <div className='hover:cursor-pointer'>
-                        <p className='text-primary' onClick={() => {handleClickHistoric(record[column.recordName])}}>{record[column.recordName]}</p>
+                        <p className='text-third' onClick={() => {handleClickHistoric(record[column.recordName])}}>{record[column.recordName]}</p>
                       </div>
                     : loadingAvailityData === false ? (
                         <div className='hover:cursor-pointer'>
-                          <p className='text-primary' onClick={() => grabAvailityData(record['claim_id'])}>{record[column.recordName]}</p>
+                          <p className='text-third' onClick={() => grabAvailityData(record['claim_id'])}>{record[column.recordName]}</p>
                         </div>
                       ) :
                         <div className='animate-spin hover:cursor-pointer'>
-                          <p className='text-primary'>Loading Availity</p>
+                          <p className='text-third'>Loading Availity</p>
                         </div>
             ) : (
               <div>

@@ -71,7 +71,7 @@ const TableComponent: React.FC<TableProps> = (props) => {
   return (
     <div className='max-w-full max-h-full'>
       <table className='w-full border-collapse'>
-        <thead className='bg-sky-800 sticky top-0 h-14'>
+        <thead className='bg-primary sticky top-0 h-14'>
           <tr className="">
             {columns?.map((column, index) => {
               const width = `min-w-${column.width}`

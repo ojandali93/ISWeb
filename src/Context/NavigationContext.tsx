@@ -136,7 +136,7 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
     {
       label: 'Follow Up',
       icon: 'repeat',
-      route: '/follow-up',
+      route: '/follow-up/collab',
       page: 'table',
       subTabs: [
         {
