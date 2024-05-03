@@ -3,7 +3,7 @@ export const intakeOColumns = [
     label:'Notes',
     type:'popup',
     recordName: '',
-    width: '32'
+    width: '52'
   },
   {
     label:'Date',
