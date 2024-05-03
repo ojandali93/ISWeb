@@ -1,4 +1,5 @@
-import React, { createContext, useContext, ReactNode, useState } from 'react';
+import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 interface NavigationSubTab {
   label: string;
@@ -13,6 +14,8 @@ interface NavigationTab {
   route: string;
   page: string;
   subTabs: NavigationSubTab[] | null;
+  department: string[],
+  privileges: string[]
 }
 
 interface NavigationContextValue {
@@ -22,7 +25,7 @@ interface NavigationContextValue {
   currentSidebarType: string;
   currentSidebarSubTab: string;
   currentContentTab: string;
-  handleUpdateCurrentSidebarTab: (text: string) => void;
+  handleUpdateCurrentSidebarTab: (text: string, path: string) => void;
   handleUpdateCurrentSidebarType: (text: string) => void;
   handleUpdateCurrentSidebarSubTab: (text: string) => void;
   handleUpdateCurrentContentTab: (text: string) => void;
@@ -37,28 +40,70 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
       icon: 'home',
       route: '/',
       page: 'table',
-      subTabs: null
+      subTabs: null,
+      department: [
+        'intake',
+        'billing',
+        'administration',
+        'dev'
+      ],
+      privileges: [
+        'staff',
+        'manager',
+        'admin',
+        'dev',
+        'owner'
+      ]
     },
     {
       label: 'Intake Analytics',
       icon: 'trending-up',
       route: '/intake-analytics',
       page: 'table',
-      subTabs: null
+      subTabs: null,
+      department: [
+        'intake',
+        'administration',
+        'dev'
+      ],
+      privileges: [
+        'manager',
+        'admin',
+        'dev',
+        'owner'
+      ]
     },
     {
       label: 'Historic',
       icon: 'list',
       route: '/historic',
       page: 'table',
-      subTabs: null
+      subTabs: null,
+      department: [
+        'administration',
+        'dev'
+      ],
+      privileges: [
+        'admin',
+        'dev',
+        'owner'
+      ]
     },
     {
       label: 'External',
       icon: 'download',
       route: '/external',
       page: 'table',
-      subTabs: null
+      subTabs: null,
+      department: [
+        'administration',
+        'dev'
+      ],
+      privileges: [
+        'admin',
+        'dev',
+        'owner'
+      ]
     },
     {
       label: 'Claims',
@@ -78,12 +123,21 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
           route: '/claims/avea',
           page: 'table',
         },
+      ],
+      department: [
+        'administration',
+        'dev'
+      ],
+      privileges: [
+        'admin',
+        'dev',
+        'owner'
       ]
     },
     {
       label: 'Follow Up',
       icon: 'repeat',
-      route: '/follow-up',
+      route: '/follow-up/collab',
       page: 'table',
       subTabs: [
         {
@@ -98,6 +152,15 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
           route: '/follow-up/avea',
           page: 'table',
         },
+      ],
+      department: [
+        'administration',
+        'dev'
+      ],
+      privileges: [
+        'admin',
+        'dev',
+        'owner'
       ]
     },
     {
@@ -105,14 +168,32 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
       icon: 'users',
       route: '/accounts',
       page: 'table',
-      subTabs: null
+      subTabs: null,
+      department: [
+        'administration',
+        'dev'
+      ],
+      privileges: [
+        'admin',
+        'dev',
+        'owner'
+      ]
     },
     {
       label: 'Intellachat AI',
       icon: 'zap',
       route: '/intellachat',
       page: 'static',
-      subTabs: null
+      subTabs: null,
+      department: [
+        'administration',
+        'dev'
+      ],
+      privileges: [
+        'admin',
+        'dev',
+        'owner'
+      ]
     },
   ];
 
@@ -122,14 +203,40 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
       icon: 'help-circle',
       route: '/help',
       page: 'static',
-      subTabs: null
+      subTabs: null,
+      department: [
+        'intake',
+        'billing',
+        'administration',
+        'dev'
+      ],
+      privileges: [
+        'staff',
+        'manager',
+        'admin',
+        'dev',
+        'owner'
+      ]
     },
     {
       label: '',
       icon: 'settings',
       route: '/settings',
       page: 'static',
-      subTabs: null
+      subTabs: null,
+      department: [
+        'intake',
+        'billing',
+        'administration',
+        'dev'
+      ],
+      privileges: [
+        'staff',
+        'manager',
+        'admin',
+        'dev',
+        'owner'
+      ]
       
     },
     {
@@ -137,7 +244,20 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
       icon: 'log-out',
       route: '/auth/logout',
       page: 'status',
-      subTabs: null
+      subTabs: null,
+      department: [
+        'intake',
+        'billing',
+        'administration',
+        'dev'
+      ],
+      privileges: [
+        'staff',
+        'manager',
+        'admin',
+        'dev',
+        'owner'
+      ]
     },
   ];
 
@@ -146,7 +266,20 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
   const [currentSidebarSubTab, setCurrentSidebarSubTab] = useState<string>('Collab Md')
   const [currentContentTab, setCurrentContentTab] = useState<string>('home')
 
-  const handleUpdateCurrentSidebarTab = (text: string) => {
+  const location = useLocation();
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const storedRoute = localStorage.getItem('lastClickedRoute');
+    console.log(storedRoute)
+    if (storedRoute) {
+      <Navigate to={storedRoute}/>
+    }
+  }, []);
+
+  const handleUpdateCurrentSidebarTab = (text: string, path: string) => {
+    console.log(path)
+    localStorage.setItem('lastClickedRoute', path);
     setCurrentSidebarTab(text)
   }
 

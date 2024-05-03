@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 // import './App.css';
 import { useAuth } from './Context/AuthContext';
@@ -28,12 +28,14 @@ import ClaimsCollabScreen from './Screens/Claims/ClaimsCollabScreen';
 import ClaimsAveaScreen from './Screens/Claims/ClaimsAveaScreen';
 import IntakeAnalytivsScreen from './Screens/Analytics/IntakeAnalytivsScreen';
 import ClaimsAvailityScreen from './Screens/Claims/ClaimsAvailityScreen';
+import Historic2Screen from './Screens/Historic/Historic2Screen';
+import Historic1Screen from './Screens/Historic/Historic1Screen';
 
 Amplify.configure(amplifyconfig)
 
 function App() {
 
-  const {validAccessCode, currentUser, authLoading, grabCurrentUser} = useAuth()
+  const {validAccessCode, currentUser, authLoading, grabCurrentUser, currentProfile} = useAuth()
   const {collectAllData} = useData()
 
   useEffect(() => {
@@ -52,115 +54,300 @@ function App() {
         <Route
           path="/"
           element={
-            authLoading ? <LoadingScreen /> : currentUser.username ? <HomeScreen /> : <Navigate to="/auth/login" />
+            authLoading 
+              ? <LoadingScreen /> 
+              : currentUser.username 
+                  ? currentProfile.department === 'billing'
+                      ? <FollowUpScreen />
+                      : <HomeScreen /> 
+                  : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/intake-analytics"
           element={
-            authLoading ? <LoadingScreen /> : currentUser.username ? <IntakeAnalytivsScreen /> : <Navigate to="/auth/login" />
+            authLoading 
+              ? <LoadingScreen /> 
+              : currentUser.username 
+                  ? (currentProfile.department === 'intake' || 
+                    currentProfile.department === 'admin' || 
+                    currentProfile.department === 'dev' ) && 
+                    (currentProfile.privileges === 'manager' || 
+                    currentProfile.privileges === 'administration' || 
+                    currentProfile.privileges === 'dev' ||
+                    currentProfile.privileges === 'owner' )
+                      ? <IntakeAnalytivsScreen /> 
+                      : <Navigate to="/" />
+                  : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/intellachat"
           element={
-            authLoading ? <LoadingScreen /> : currentUser.username ? <IntellachatScreen /> : <Navigate to="/auth/login" />
+            authLoading 
+              ? <LoadingScreen /> 
+              : currentUser.username 
+                  ? (
+                      currentProfile.privileges === 'admin' || 
+                      currentProfile.privileges === 'owner' || 
+                      currentProfile.privileges === 'dev' 
+                    )
+                    ? <IntellachatScreen /> 
+                    : <Navigate to="/" />
+                  : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/historic"
           element={
-            authLoading ? <LoadingScreen /> : currentUser.username ? <HistoricScreen /> : <Navigate to="/auth/login" />
+            authLoading 
+              ? <LoadingScreen /> 
+              : currentUser.username 
+                  ? (
+                      currentProfile.privileges === 'admin' || 
+                      currentProfile.privileges === 'owner' || 
+                      currentProfile.privileges === 'dev' 
+                    )
+                      ? <HistoricScreen /> 
+                      : <Navigate to="/" />
+                  : <Navigate to="/auth/login" />
+          }
+        />
+        <Route
+          path="/historic/prefix/:prefix_id/:network"
+          element={
+            authLoading 
+              ? <LoadingScreen /> 
+              : currentUser.username 
+                  ? (
+                      currentProfile.privileges === 'admin' || 
+                      currentProfile.privileges === 'owner' || 
+                      currentProfile.privileges === 'dev' 
+                    )
+                      ? <Historic2Screen /> 
+                      : <Navigate to="/" />
+                  : <Navigate to="/auth/login" />
+          }
+        />
+        <Route
+          path="/historic/user/:prefix_id"
+          element={
+            authLoading 
+              ? <LoadingScreen /> 
+              : currentUser.username 
+                  ? (
+                      currentProfile.privileges === 'admin' || 
+                      currentProfile.privileges === 'owner' || 
+                      currentProfile.privileges === 'dev' 
+                    )
+                      ? <Historic1Screen /> 
+                      : <Navigate to="/" />
+                  : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/external"
           element={
-            authLoading ? <LoadingScreen /> : currentUser.username ? <ExternalScreen /> : <Navigate to="/auth/login" />
+            authLoading 
+              ? <LoadingScreen /> 
+              : currentUser.username 
+                  ? (
+                      currentProfile.privileges === 'admin' || 
+                      currentProfile.privileges === 'owner' || 
+                      currentProfile.privileges === 'dev' 
+                    )
+                      ? <ExternalScreen /> 
+                      : <Navigate to="/" />
+                  : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/claims"
           element={
-            authLoading ? <LoadingScreen /> : currentUser.username ? <ClaimsScreen /> : <Navigate to="/auth/login" />
+            authLoading 
+              ? <LoadingScreen /> 
+              : currentUser.username 
+                  ? (
+                      currentProfile.privileges === 'admin' || 
+                      currentProfile.privileges === 'owner' || 
+                      currentProfile.privileges === 'dev' 
+                    )
+                      ? <ClaimsScreen />
+                      : <Navigate to="/" />
+                  : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/availty"
           element={
-            authLoading ? <LoadingScreen /> : currentUser.username ? <ClaimsScreen/> : <Navigate to="/auth/login" />
+            authLoading 
+              ? <LoadingScreen /> 
+              : currentUser.username 
+                  ? (
+                      currentProfile.privileges === 'admin' || 
+                      currentProfile.privileges === 'owner' || 
+                      currentProfile.privileges === 'dev' 
+                    )
+                      ? <ClaimsScreen/> 
+                      : <Navigate to="/" />
+                  : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/claims/collab"
           element={
-            authLoading ? <LoadingScreen /> : currentUser.username ? <ClaimsCollabScreen /> : <Navigate to="/auth/login" />
+            authLoading 
+              ? <LoadingScreen /> 
+              : currentUser.username 
+                  ? (
+                      currentProfile.privileges === 'admin' || 
+                      currentProfile.privileges === 'owner' || 
+                      currentProfile.privileges === 'dev' 
+                    )
+                      ? <ClaimsCollabScreen /> 
+                      : <Navigate to="/" />
+                  : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/claims/avea"
           element={
-            authLoading ? <LoadingScreen /> : currentUser.username ? <ClaimsAveaScreen /> : <Navigate to="/auth/login" />
+            authLoading 
+              ? <LoadingScreen /> 
+              : currentUser.username 
+                  ? (
+                      currentProfile.privileges === 'admin' || 
+                      currentProfile.privileges === 'owner' || 
+                      currentProfile.privileges === 'dev' 
+                    )
+                    ? <ClaimsAveaScreen />
+                    : <Navigate to="/" /> 
+                  : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/availityScreen"
           element={
-            authLoading ? <LoadingScreen /> : currentUser.username ? <ClaimsAvailityScreen /> : <Navigate to="/auth/login" />
+            authLoading 
+              ? <LoadingScreen /> 
+              : currentUser.username 
+                  ? <ClaimsAvailityScreen />
+                  : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/follow-up"
           element={
-            authLoading ? <LoadingScreen /> : currentUser.username ? <FollowUpScreen /> : <Navigate to="/auth/login" />
+            authLoading 
+              ? <LoadingScreen /> 
+              : currentUser.username 
+                  ? (
+                      currentProfile.department === 'dev' ||
+                      currentProfile.department === 'administration' || 
+                      currentProfile.department === 'billing'
+                    )
+                    ? <FollowUpScreen /> 
+                    : <Navigate to="/" />
+                  : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/follow-up/collab"
           element={
-            authLoading ? <LoadingScreen /> : currentUser.username ? <FollowUpScreen /> : <Navigate to="/auth/login" />
+            authLoading 
+              ? <LoadingScreen /> 
+              : currentUser.username 
+                  ? (
+                      currentProfile.department === 'dev' ||
+                      currentProfile.department === 'administration' || 
+                      currentProfile.department === 'billing'
+                    )
+                    ? <FollowUpScreen /> 
+                    : <Navigate to="/" />
+                  : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/follow-up/avea"
           element={
-            authLoading ? <LoadingScreen /> : currentUser.username ? <FollowUpScreen /> : <Navigate to="/auth/login" />
+            authLoading 
+              ? <LoadingScreen /> 
+              : currentUser.username 
+                  ? (
+                      currentProfile.department === 'dev' ||
+                      currentProfile.department === 'administration' || 
+                      currentProfile.department === 'billing'
+                    )
+                    ? <FollowUpScreen /> 
+                    : <Navigate to="/" />
+                  : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/accounts"
           element={
-            authLoading ? <LoadingScreen /> : currentUser.username ? <AccountsScreen /> : <Navigate to="/auth/login" />
+            authLoading 
+              ? <LoadingScreen /> 
+              : currentUser.username 
+                  ? (
+                      currentProfile.department === 'admin' || 
+                      currentProfile.department === 'dev' 
+                    ) 
+                    ? <AccountsScreen /> 
+                    : <Navigate to="/" />
+                  : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/tickets"
           element={
-            authLoading ? <LoadingScreen /> : currentUser.username ? <TicketsScreen /> : <Navigate to="/auth/login" />
+            authLoading 
+              ? <LoadingScreen /> 
+              : currentUser.username 
+                  ? (currentProfile.department === 'dev' ) 
+                    ? <TicketsScreen /> 
+                    : <Navigate to="/" />
+                  : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/help"
           element={
-            authLoading ? <LoadingScreen /> : currentUser.username ? <SupportScreen /> : <Navigate to="/auth/login" />
+            authLoading 
+              ? <LoadingScreen /> 
+              : currentUser.username 
+                  ? <SupportScreen /> 
+                  : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/settings"
           element={
-            authLoading ? <LoadingScreen /> : currentUser.username ? <SettingsScreen /> : <Navigate to="/auth/login" />
+            authLoading 
+              ? <LoadingScreen /> 
+              : currentUser.username 
+                  ? <SettingsScreen /> 
+                  : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/about"
           element={
-            authLoading ? <LoadingScreen /> : currentUser.username ? <AboutScreen /> : <Navigate to="/auth/login" />
+            authLoading 
+              ? <LoadingScreen /> 
+              : currentUser.username 
+                  ? <AboutScreen /> 
+                  : <Navigate to="/auth/login" />
           }
         />
         <Route
           path="/auth/logout"
           element={
-            authLoading ? <LoadingScreen /> : currentUser.username != null ? <LogoutScreen /> : <Navigate to="/auth/login" />
+            authLoading 
+              ? <LoadingScreen />  
+              : currentUser.username != null 
+                  ? <LogoutScreen /> 
+                  : <Navigate to="/auth/login" />
           }
         />
         {/* Public routes */}

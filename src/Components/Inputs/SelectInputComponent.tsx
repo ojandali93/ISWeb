@@ -17,7 +17,7 @@ const SelectInputComponent: React.FC<SelectProps> = ({options,
       <select
         value={selectedValue}
         onChange={(e) => handleOptionClick(e.target.value)}
-        className=" p-1 border border-black bg-sky-700 text-sm rounded-md text-white focus:outline-none focus:shadow-outline"
+        className=" p-1 border border-black bg-primary text-sm rounded-md text-white focus:outline-none focus:shadow-outline"
       >
         {options.map((option) => (
           <option key={option} value={option}>

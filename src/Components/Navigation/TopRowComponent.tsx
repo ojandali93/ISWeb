@@ -2,6 +2,7 @@ import React from 'react'
 import { useNavigation } from '../../Context/NavigationContext'
 import NavigationTabComponent from './NavigationTabComponent'
 import Logo from '../../Assets/intellasure-logoqas.png'
+import Logo2 from '../../Assets/new-logo.png'
 
 const TopRowComponent = () => {
 
@@ -10,8 +11,7 @@ const TopRowComponent = () => {
   return (
     <div className='w-screen h-20 py-2 flex flex-row justify-between items-center bg-stone-900'>
       <div className='flex flex-row items-center'>
-        <img className='h-8 ml-2' src={Logo}/>
-        <p className='text-white font-bold ml-2 text-2xl'>Intellasure</p>
+        <img className='h-8 ml-2' src={Logo2}/>
       </div>
       <div className='flex flex-row mr-2'>
         {
