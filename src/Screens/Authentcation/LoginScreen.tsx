@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import InputContainerUser from '../../Components/Inputs/InputContainerUser'
 import { useAuth } from '../../Context/AuthContext'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
-import BackgrounImage from '../../Assets/background.png'
+import BackgrounImage from '../../Assets/background1.png'
 import logo from '../../Assets/logo-black.png'
 // import '../../App.css';
 
