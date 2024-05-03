@@ -3,6 +3,7 @@ import InputContainerUser from '../../Components/Inputs/InputContainerUser'
 import { useAuth } from '../../Context/AuthContext'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import BackgrounImage from '../../Assets/background.png'
+import logo from '../../Assets/logo-black.png'
 // import '../../App.css';
 
 const LoginScreen = () => {
@@ -31,13 +32,16 @@ const LoginScreen = () => {
 
   return (
     <div className='h-screen w-screen flex flex-row justify-center items-center'
-    style={{
-      backgroundImage: `url(${BackgrounImage})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-    }}
+      style={{
+        backgroundImage: `url(${BackgrounImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
     >
       <div className='w-1/4 bg-white p-5 rounded-xl'>
+        <div className='w-full flex flex-row justify-center'>
+          <img className='h-10 ml-2 z-10' src={logo}/>
+        </div>
         <h1 className='pb-2 text-3xl font-bold text-black'>Login</h1>
         {
           validLogin
