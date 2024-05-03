@@ -37,7 +37,6 @@ const SupportForm = (props: any) => {
       status: true,
       subject: category,
     }
-    console.log(data)
     addSupportTicket(data)
   }
 

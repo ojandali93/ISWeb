@@ -1,5 +1,11 @@
 export const intakeOColumns = [
   {
+    label:'Notes',
+    type:'popup',
+    recordName: '',
+    width: '32'
+  },
+  {
     label:'Date',
     type:'date',
     recordName: 'date',
@@ -175,12 +181,6 @@ export const intakeOColumns = [
     label:'Source',
     type:'text',
     recordName: 'source',
-    width: '32'
-  },
-  {
-    label:'Notes',
-    type:'popup',
-    recordName: '',
     width: '32'
   },
   {
