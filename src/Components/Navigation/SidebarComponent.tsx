@@ -22,7 +22,7 @@ const SidebarComponent = () => {
   }, []);
 
   return (
-    <div className='h-full min-w-52 max-w-52 bg-primary' style={{height: maxHeight}}>
+    <div className='h-full min-w-52 max-w-52 bg-stone-900' style={{height: maxHeight}}>
       {
         sideNavigation.map((tab) => {
           return(
