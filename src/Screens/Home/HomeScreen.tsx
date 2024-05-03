@@ -12,13 +12,9 @@ const HomeScreen = () => {
   return (
     <LayoutComponent
       header={
-        currentProfile.department === 'dev' ? (
-          <div className='h-14 w-full mb-2'>
-            <IntakeFilterComponent />
-          </div>
-        ) : (
-          null
-        )
+        <div className='h-14 w-full mb-2'>
+          <IntakeFilterComponent />
+        </div>
       }
       content={
         <div className='h-full w-full max-h-full max-w-full'>
