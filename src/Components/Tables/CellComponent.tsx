@@ -15,7 +15,8 @@ import { useClaims } from '../../Context/ClaimsContext';
 import { useNavigation } from '../../Context/NavigationContext';
 import { useFollowup } from '../../Context/FollowupContext';
 import ButtonComponent from '../Inputs/ButtonComponent';
-
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useHistoric } from '../../Context/HistoricContext';
 
 interface PeopleOptions {
   name: string;
@@ -45,10 +46,11 @@ interface CellProps {
 }
 
 const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedClaims}) => {
-  
+  const navigate = useNavigate()
   const {intakeUsers, getIntakeRecords, insuranceOptions, grabAllProfiles, grabAvailityData, loadingAvailityData, billingUsers, getNotes} = useData()
-  const {updateSelectedClaims} = useClaims()
-  const {currentSidebarTab} = useNavigation()
+  const {updateSelectedClaims, updateSelectedClaimsAvea} = useClaims()
+  const {grabPrefixRecords, grabUserRecords} = useHistoric()
+  const {currentSidebarTab, handleUpdateCurrentSidebarTab} = useNavigation()
   const {selectedFollowup, updateSelectedFollowup, updateCoordinatorFollwup} = useFollowup()
 
 
@@ -300,6 +302,18 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
     return newUsers
   }
 
+  const handleClick = (prefixId: string, network: string) => {
+    handleUpdateCurrentSidebarTab('HistoricPrefix')
+    grabPrefixRecords(prefixId, network)
+    navigate(`/historic/prefix/${prefixId}/${network}`);
+  };
+
+  const handleClickHistoric = (policy_id: string) => {
+    handleUpdateCurrentSidebarTab('HistoricPolicy')
+    grabUserRecords(policy_id)
+    navigate(`/historic/user/${policy_id}`);
+  }
+
   return (
     <>
       {columns.map((column, columnIndex) => {
@@ -349,7 +363,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
               <>
                 <div className={`flex flex-row justify-center`}>
                   {record[column.recordName]}
-                  <Edit height={20} width={20} className='text-sky-500 ml-2'/>
+                  <Edit height={20} width={20} className='text-secondary ml-2'/>
                 </div>
               </>
             ) : column.type === 'insurance-edit' ? (
@@ -365,7 +379,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                       : <>
                           <div className={` flex flex-row`}>
                             {record[column.recordName]}
-                            <Edit onClick={() => {toggleEditInsurance(column.label, record, record[column.recordName])}} height={20} width={20} className='text-sky-500 ml-2'/>
+                            <Edit onClick={() => {toggleEditInsurance(column.label, record, record[column.recordName])}} height={20} width={20} className='text-secondary ml-2'/>
                           </div>
                         </>
                   }
@@ -384,7 +398,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                       : <>
                           <div className={` flex flex-row`}>
                             {record[column.recordName]}
-                            <Edit onClick={() => {toggleEditPolicy(column.label, record, record[column.recordName])}} height={20} width={20} className='text-sky-500 ml-2'/>
+                            <Edit onClick={() => {toggleEditPolicy(column.label, record, record[column.recordName])}} height={20} width={20} className='text-secondary ml-2'/>
                           </div>
                         </>
                   }
@@ -416,7 +430,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                         </>
                       : <>
                           {convertDobDateToMMDDYYYY(record[column.recordName])}
-                          <Edit onClick={() => {updateEditDate(column.label, record, record[column.recordName])}} height={20} width={20} className='text-sky-500 ml-2'/>
+                          <Edit onClick={() => {updateEditDate(column.label, record, record[column.recordName])}} height={20} width={20} className='text-secondary ml-2'/>
                         </>
                   }
                 </div>
@@ -443,7 +457,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
               </div>
             ) : column.type === 'delete' ? (
               <div>
-                <button onClick={() => {handleDeleteRecord(record.intake_id)}} className={`py-1 px-3 rounded-lg bg-sky-700 hover:bg-sky-900`}>Remove</button>
+                <button onClick={() => {handleDeleteRecord(record.intake_id)}} className={`py-1 px-3 rounded-lg bg-primary hover:bg-secondary`}>Remove</button>
               </div>
             ) : column.type === 'percent' ? (
               <div>
@@ -496,9 +510,14 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                 ? <>
                     <input
                       type="checkbox"
-                      checked={table === 'Claims' ? selectedClaims?.includes(record['claim_id']) : false}
+                      checked={table === 'Claims' ? selectedClaims?.includes(record['claim_id']) : table === 'Avea Claims' ? selectedClaims?.includes(record['claim_id']) : false}
                       onChange={() => {
-                        updateSelectedClaims(record['claim_id'])
+                        if(table === 'Claims'){
+                          updateSelectedClaims(record['claim_id'])
+                        }
+                        if(table === 'Avea Claims'){
+                          updateSelectedClaimsAvea(record['claim_id'])
+                        }
                       }}
                     />
                   </>
@@ -514,17 +533,25 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
             ) : column.type === 'text-edit' ? (
               <><div className={`flex flex-row justify-center`}>
                 {record[column.recordName]}
-                <Edit height={20} width={20} className='text-sky-500 ml-2'/>
+                <Edit height={20} width={20} className='text-secondary ml-2'/>
               </div></>
             ) : column.type === 'clickable' ? (
-              loadingAvailityData === false ? (
-                <div>
-                <p className='text-primary' onClick={() => grabAvailityData(record['claim_id'])}>{record[column.recordName]}</p>
-              </div>
-              ) :
-              <div className='animate-spin'>
-                <p className='text-primary'>Loading Availity</p>
-              </div>
+              currentSidebarTab === 'Historic'
+                ? <div className='hover:cursor-pointer'>
+                    <p className='text-third' onClick={() => {handleClick(record[column.recordName], record['network'])}}>{record[column.recordName]}</p>
+                  </div>
+                : currentSidebarTab === 'HistoricPrefix'
+                    ? <div className='hover:cursor-pointer'>
+                        <p className='text-third' onClick={() => {handleClickHistoric(record[column.recordName])}}>{record[column.recordName]}</p>
+                      </div>
+                    : loadingAvailityData === false ? (
+                        <div className='hover:cursor-pointer'>
+                          <p className='text-third' onClick={() => grabAvailityData(record['claim_id'])}>{record[column.recordName]}</p>
+                        </div>
+                      ) :
+                        <div className='animate-spin hover:cursor-pointer'>
+                          <p className='text-third'>Loading Availity</p>
+                        </div>
             ) : (
               <div>
                 <p>

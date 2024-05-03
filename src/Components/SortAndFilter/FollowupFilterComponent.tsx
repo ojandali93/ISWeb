@@ -28,16 +28,16 @@ const FollowupFilterComponent = () => {
         </div>
         <div>
           <div className='bg-stone-500 flex flex-row rounded-lg hover:cursor-pointer'>
-            <div onClick={() => {updateFollowupTab('ALL')}} className={`${followupTab === 'ALL' ? 'bg-sky-500 p-2 py-1 text-sm rounded-lg font-bold' : 'bg-stone-500  p-2 py-1 text-sm rounded-lg font-bold' } text-white`}>
+            <div onClick={() => {updateFollowupTab('ALL')}} className={`${followupTab === 'ALL' ? 'bg-primary p-2 py-1 text-sm rounded-lg font-bold' : 'bg-stone-500  p-2 py-1 text-sm rounded-lg font-bold' } text-white`}>
               <p>ALL</p>
             </div>
-            <div onClick={() => {updateFollowupTab('PENDING')}} className={`${followupTab === 'PENDING' ? 'bg-sky-500 p-2 py-1 text-sm rounded-lg font-bold' : 'bg-stone-500  p-2 py-1 text-sm rounded-lg font-bold' } text-white`}>
+            <div onClick={() => {updateFollowupTab('PENDING')}} className={`${followupTab === 'PENDING' ? 'bg-primary p-2 py-1 text-sm rounded-lg font-bold' : 'bg-stone-500  p-2 py-1 text-sm rounded-lg font-bold' } text-white`}>
               <p>PENDING</p>
             </div>
-            <div onClick={() => {updateFollowupTab('SUCCESSFULL')}} className={`${followupTab === 'SUCCESSFULL' ? 'bg-sky-500 p-2 py-1 text-sm rounded-lg font-bold' : 'bg-stone-500  p-2 py-1 text-sm rounded-lg font-bold' } text-white`}>
+            <div onClick={() => {updateFollowupTab('SUCCESSFULL')}} className={`${followupTab === 'SUCCESSFULL' ? 'bg-primary p-2 py-1 text-sm rounded-lg font-bold' : 'bg-stone-500  p-2 py-1 text-sm rounded-lg font-bold' } text-white`}>
               <p>SUCCESSFULL</p>
             </div>
-            <div onClick={() => {updateFollowupTab('FAILED')}} className={`${followupTab === 'FAILED' ? 'bg-sky-500 p-2 py-1 text-sm rounded-lg font-bold' : 'bg-stone-500  p-2 py-1 text-sm rounded-lg font-bold' } text-white`}>
+            <div onClick={() => {updateFollowupTab('FAILED')}} className={`${followupTab === 'FAILED' ? 'bg-primary p-2 py-1 text-sm rounded-lg font-bold' : 'bg-stone-500  p-2 py-1 text-sm rounded-lg font-bold' } text-white`}>
               <p>FAILED</p>
             </div>
           </div>

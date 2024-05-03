@@ -54,7 +54,7 @@ const SidebarSubMenuComponent: React.FC<NavigationTabProps> = ({
           <div key={singleTab.label} className={`pl-4 ${
             currentSidebarSubTab === singleTab.label
               ? 'bg-stone-900'
-              : 'hover:bg-sky-800'
+              : 'hover:bg-primary'
           }`}>
               <div className='flex flex-row items-center' onClick={() => {handleRedirectTab(tab, singleTab)}}>
                 {IconComponent && (

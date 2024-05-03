@@ -26,7 +26,7 @@ const InsuranceSelectComponent: React.FC<SelectProps> = ({ placeholder,
     <div className='w-full flex my-2 px-3 py-2 flex-col justify-center rounded-lg'>
       <p className='pb-1 mb-2 font-bold text-primary text-md mr-4 text-white'>Select Insurance:</p>
       <div 
-        className="h-10 text-lg bg-sky-700 px-2
+        className="h-10 text-lg bg-primary px-2
                     rounded-md flex items-center justify-between" 
         onClick={handleOpenSelect}
       >
@@ -38,7 +38,7 @@ const InsuranceSelectComponent: React.FC<SelectProps> = ({ placeholder,
         }
       </div>
       {isOpen && (
-        <div className="max-h-48 max-w-full overflow-y-scroll max-w-2/12 bg-sky-700 text-white rounded-md px-4">
+        <div className="max-h-48 max-w-full overflow-y-scroll max-w-2/12 bg-primary text-white rounded-md px-4">
           {options && options.map((option: Option) => (
             <div
               key={option.value}

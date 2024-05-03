@@ -181,12 +181,12 @@ export const intakeOColumns = [
     label:'Source',
     type:'text',
     recordName: 'source',
-    width: '32'
+    width: '52'
   },
   {
     label:'Delete',
     type:'delete',
     recordName: '',
-    width: '32'
+    width: '52'
   },
 ]

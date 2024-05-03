@@ -3,6 +3,7 @@ import CellComponent from './CellComponent';
 import { useClaims } from '../../Context/ClaimsContext';
 import { useNavigation } from '../../Context/NavigationContext';
 import { useFollowup } from '../../Context/FollowupContext';
+import { useAuth } from '../../Context/AuthContext';
 
 interface PeopleOptions {
   name: string;
@@ -57,13 +58,20 @@ const TableComponent: React.FC<TableProps> = (props) => {
   const { columns, records, users, table} = props;
 
   const { currentSidebarTab } = useNavigation()
-  const { selectedClaims, allClaims, unselectAllClaims, selectAllClaims } = useClaims()
+  const { selectedClaims, selectedClaimsAvea, allClaims, 
+    allClaimsAvea, unselectAllClaims, selectAllClaims,
+    unselectAllClaimsAvea, selectAllClaimsAvea } = useClaims()
   const { selectAllFollowup, unselectAllFollowup, allFollowup } = useFollowup()
+  const {currentProfile} = useAuth()
+
+  useEffect(() => {
+    console.log('records length: ', records?.length)
+  }, [records])
 
   return (
     <div className='max-w-full max-h-full'>
       <table className='w-full border-collapse'>
-        <thead className='bg-sky-800 sticky top-0 h-14'>
+        <thead className='bg-primary sticky top-0 h-14'>
           <tr className="">
             {columns?.map((column, index) => {
               const width = `min-w-${column.width}`
@@ -74,12 +82,21 @@ const TableComponent: React.FC<TableProps> = (props) => {
                       ? currentSidebarTab === 'Claims' 
                           ? <input
                               type="checkbox"
-                              checked={allClaims}
+                              checked={table === 'Claims' ? allClaims : table === 'Avea Claims' ? allClaimsAvea : false}
                               onChange={() => {
-                                if(allClaims){
-                                  unselectAllClaims()
-                                } else {
-                                  selectAllClaims(records)
+                                if(table === 'Claims'){
+                                  if(allClaims){
+                                    unselectAllClaims()
+                                  } else {
+                                    selectAllClaims(records)
+                                  }
+                                }
+                                if(table === 'Avea Claims'){
+                                  if(allClaimsAvea){
+                                    unselectAllClaimsAvea()
+                                  } else {
+                                    selectAllClaimsAvea(records)
+                                  }
                                 }
                               }}
                             />
@@ -103,9 +120,15 @@ const TableComponent: React.FC<TableProps> = (props) => {
         </thead>
         <tbody>
           {records != null ? ( records.map((record: any, rowIndex: number) => (
-            <tr key={rowIndex} className={`text-center min-h-14 h-16 text-white ${rowIndex % 2 === 0 ? 'bg-stone-900' : 'bg-stone-800'}`}>
-              <CellComponent table={table} columns={columns} record={record} selectedClaims={table === 'Claims' ? selectedClaims : null}/>
-            </tr>
+            table === 'intake' && currentProfile.department === 'intake' && currentProfile.privileges === 'staff'
+              ? currentProfile.userid === record.coordinator
+                  ? <tr key={rowIndex} className={`text-center min-h-14 h-16 text-white ${rowIndex % 2 === 0 ? 'bg-stone-900' : 'bg-stone-800'}`}>
+                      <CellComponent table={table} columns={columns} record={record} selectedClaims={null}/>
+                    </tr>
+                  :  null
+              :  <tr key={rowIndex} className={`text-center min-h-14 h-16 text-white ${rowIndex % 2 === 0 ? 'bg-stone-900' : 'bg-stone-800'}`}>
+                  <CellComponent table={table} columns={columns} record={record} selectedClaims={table === 'Claims' ? selectedClaims : table === 'Avea Claims' ? selectedClaimsAvea : null}/>
+                </tr>
           ))) : (null)}
         </tbody>
       </table>
