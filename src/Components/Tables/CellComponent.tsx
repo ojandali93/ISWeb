@@ -481,11 +481,11 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
             ) : column.type === 'popup' ? (
               !showNotes 
               ?
-              <div className="" onClick={() => {getNotes(record.intake_id, record.coordinator); console.log("This is the record: ", record);console.log(); toggleShowPopup()}}>
-                <button className='text-center px-2 py-1 bg-green-600 rounded-md font-bold text-white min-w-28 max-w-44 ml-4'>Show Notes</button>
+              <div className="" onClick={() => {getNotes(record.intake_id, record.coordinator); toggleShowPopup()}}>
+                <button className='text-center px-2 py-1 bg-primary rounded-md font-bold text-white min-w-28 ml-4'>Show Notes</button>
               </div>
-              : <div className='fixed inset-0 bg-black bg-opacity-80 z-40 flex justify-center items-center overflow-auto p-4 mt-20'>
-                  <div className='bg-alt-on p-8 rounded-lg shadow-lg z-50 max-w-lg w-full max-h-[75vh] overflow-auto'>
+              : <div className='fixed inset-0 bg-black bg-opacity-80 z-40 flex justify-center items-center overflow-auto w-full min-w-full mt-18'>
+                  <div className='bg-alt-on p-4 rounded-lg shadow-lg z-50 max-h-[75vh] overflow-aut min-w-[75vw]'>
                     <NotesForm />
                     <ButtonComponent label='Close' handler={() => { toggleShowPopup() }}/>
                   </div>

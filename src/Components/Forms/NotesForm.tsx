@@ -44,6 +44,22 @@ const NotesForm = () => {
     return `${year}-${month}-${day}`;
   }
 
+  function reformatDateString(date: string): string {
+    const dateString = new Date();
+  
+    
+    const year: number = dateString.getFullYear();
+    let month: string = (dateString.getMonth() + 1).toString();
+    let day: string = dateString.getDate().toString();
+  
+
+    month = month.length < 2 ? '0' + month : month;
+    day = day.length < 2 ? '0' + day : day;
+  
+
+    return `${year}-${month}-${day}`;
+  }
+
     useEffect(() => {
 
     setTimeout(() => {
@@ -51,19 +67,26 @@ const NotesForm = () => {
     }, 1000);
   }, []);
 
+        // {/* <FormInputComponent
+        // handleFunction={setNoteContent}
+        // value={noteContent}
+        // type={'text'}
+        // icon={'Enter New Note'}
+        // /> */}
+
 
   return (
-    <div className="">
-      <table className="min-w-full divide-y divide-primary">
-        <thead className="bg-black">
+    <div className="w-full">
+      <table className="min-w-full divide-y divide-primary w-full">
+        <thead className="bg-black min-w-full">
           <tr>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">
               Date
             </th>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+            <th scope="col" className="px-4 py-3 text-center text-xs font-medium text-white uppercase tracking-wider ">
               Notes
             </th>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">
               Name
             </th>
           </tr>
@@ -72,9 +95,9 @@ const NotesForm = () => {
           {currentNotes && currentNotes.map((note, index) => (
             <tr key={index}>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-white">
-                {note.date || "N/A"}
+                {reformatDateString(note.date) || "N/A"}
               </td>
-              <td className="px-6 py-4 whitespace-wrap text-sm text-white">
+              <td className="px-6 py-4 whitespace-wrap text-sm text-white ">
                 {note.notes || "N/A"}
               </td>
               <td className="px-6 py-4 whitespace-wrap text-sm text-white">
@@ -85,12 +108,14 @@ const NotesForm = () => {
         </tbody>
       </table>
       <form>
-        <FormInputComponent
-        handleFunction={setNoteContent}
-        value={noteContent}
-        type={'text'}
-        icon={'Enter New Note'}
+        <div className='flex my-2 px-3 py-2 flex-col justify-center rounded-lg'>
+        <p className="b-1 font-bold text-sky-400 text-md mr-4 mb-1">Enter New Note</p>
+        <input 
+          className="flex-1 text-lg border-b-2 border-b-slate-300 bg-stone-700 text-white"
+          value={noteContent}
+          onChange={(e) => setNoteContent(e.target.value)}
         />
+        </div>
         <div className="mb-5">
         <ButtonComponent label="Submit Notes" handler={handleSubmitNotes}/>
         </div>
