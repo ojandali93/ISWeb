@@ -21,16 +21,9 @@ const HomeScreen = () => {
         )
       }
       content={
-        currentProfile.department === 'dev' ? (
-          <div className='h-full w-full max-h-full max-w-full'>
-            <IntakeHome />
-          </div>
-        ) : (
-          <div className=''>
-            Content for Other
-            {/* Add some text or other elements here */}
-          </div>
-        )
+        <div className='h-full w-full max-h-full max-w-full'>
+          <IntakeHome />
+        </div>
       }
     />
   )

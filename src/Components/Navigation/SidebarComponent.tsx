@@ -2,10 +2,12 @@ import React, { useEffect } from 'react'
 import NavigationTabComponent from './NavigationTabComponent'
 import { useNavigation } from '../../Context/NavigationContext'
 import SidebarSubMenuComponent from './SidebarSubMenuComponent'
+import { useAuth } from '../../Context/AuthContext'
 
 const SidebarComponent = () => {
 
   const { sideNavigation, currentSidebarTab } = useNavigation()
+  const {currentProfile} = useAuth()
 
   const [maxHeight, setMaxHeight] = React.useState(window.innerHeight - 52);
 
@@ -25,7 +27,12 @@ const SidebarComponent = () => {
         sideNavigation.map((tab) => {
           return(
             <>
-              <NavigationTabComponent type={tab.page} tab={tab.label} icon={tab.icon} route={tab.route} position={'side'}/>
+              {
+                tab.privileges.includes(currentProfile.privileges ? currentProfile.privileges : '') 
+                && tab.department.includes(currentProfile.department ? currentProfile.department : '')
+                  ? <NavigationTabComponent type={tab.page} tab={tab.label} icon={tab.icon} route={tab.route} position={'side'}/>
+                  : null
+              }
               {
                 tab.subTabs === null 
                   ? null
