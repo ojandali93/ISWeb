@@ -17,6 +17,8 @@ import { useFollowup } from '../../Context/FollowupContext';
 import ButtonComponent from '../Inputs/ButtonComponent';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useHistoric } from '../../Context/HistoricContext';
+import SingleClickTabComponent from '../Navigation/SingleClickTabComponent';
+import SingleSelectClickComponent from './SingleSelectClickComponent';
 
 interface PeopleOptions {
   name: string;
@@ -47,7 +49,7 @@ interface CellProps {
 
 const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedClaims}) => {
   const navigate = useNavigate()
-  const {intakeUsers, getIntakeRecords, insuranceOptions, grabAllProfiles, grabAvailityData, loadingAvailityData, billingUsers, getNotes} = useData()
+  const {intakeUsers, getIntakeRecords, insuranceOptions, grabAllProfiles, grabAvailityData, billingUsers, getNotes} = useData()
   const {updateSelectedClaims, updateSelectedClaimsAvea} = useClaims()
   const {grabPrefixRecords, grabUserRecords} = useHistoric()
   const {currentSidebarTab, handleUpdateCurrentSidebarTab} = useNavigation()
@@ -544,14 +546,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                     ? <div className='hover:cursor-pointer'>
                         <p className='text-third' onClick={() => {handleClickHistoric(record[column.recordName])}}>{record[column.recordName]}</p>
                       </div>
-                    : loadingAvailityData === false ? (
-                        <div className='hover:cursor-pointer'>
-                          <p className='text-third' onClick={() => grabAvailityData(record['claim_id'])}>{record[column.recordName]}</p>
-                        </div>
-                      ) :
-                        <div className='animate-spin hover:cursor-pointer'>
-                          <p className='text-third'>Loading Availity</p>
-                        </div>
+                    : <SingleSelectClickComponent value={record[column.recordName]} onChange={grabAvailityData} record={record}/>
             ) : (
               <div>
                 <p>
