@@ -10,12 +10,13 @@ import DateChangeComponent from '../Inputs/DateChangeComponent';
 import InsuranceSelectComponent from './InsuranceSelectComponent';
 import EditPolicyComponent from './EditPolicyComponent';
 import DateSelectionComponent from '../Inputs/DateSelectionComponent';
+import NotesForm from '../Forms/NotesForm';
 import { useClaims } from '../../Context/ClaimsContext';
 import { useNavigation } from '../../Context/NavigationContext';
 import { useFollowup } from '../../Context/FollowupContext';
+import ButtonComponent from '../Inputs/ButtonComponent';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useHistoric } from '../../Context/HistoricContext';
-
 
 interface PeopleOptions {
   name: string;
@@ -46,7 +47,7 @@ interface CellProps {
 
 const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedClaims}) => {
   const navigate = useNavigate()
-  const {intakeUsers, getIntakeRecords, insuranceOptions, grabAllProfiles, grabAvailityData, loadingAvailityData, billingUsers} = useData()
+  const {intakeUsers, getIntakeRecords, insuranceOptions, grabAllProfiles, grabAvailityData, loadingAvailityData, billingUsers, getNotes} = useData()
   const {updateSelectedClaims, updateSelectedClaimsAvea} = useClaims()
   const {grabPrefixRecords, grabUserRecords} = useHistoric()
   const {currentSidebarTab, handleUpdateCurrentSidebarTab} = useNavigation()
@@ -491,6 +492,19 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                       }}
                     />
                   </div>
+            ) : column.type === 'popup' ? (
+              !showNotes 
+              ?
+              <div onClick={() => {getNotes(record.intake_id, record.coordinator); console.log("This is the record: ", record);console.log(); toggleShowPopup()}}>
+                <p className='text-primary cursor-pointer'>Show Notes</p>
+              </div>
+              : <div className='fixed inset-0 bg-black bg-opacity-80 z-40 flex justify-center items-center overflow-auto p-4 mt-20'>
+                  <div className='bg-alt-on p-8 rounded-lg shadow-lg z-50 max-w-lg w-full max-h-[75vh] overflow-auto'>
+                    <NotesForm />
+                    <ButtonComponent label='Close' handler={() => { toggleShowPopup() }}/>
+                  </div>
+                </div>
+            
             ) : column.type === 'checkbox' ? (
               currentSidebarTab === 'Claims'
                 ? <>

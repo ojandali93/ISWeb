@@ -98,6 +98,13 @@ interface ExternalDataProps {
   totalUnits: string;
 }
 
+interface NotesProps {
+  date: string;
+  intake_id: string;
+  notes: string;
+  name: string;
+}
+
 interface DataContextType {
   allUsers: ProfileProps[] | null;
   intakeUsers: ProfileProps[] | null;
@@ -119,6 +126,8 @@ interface DataContextType {
   successfullRecords: FolloupProps[] | null;
   failedRecords: FolloupProps[] | null;
   externalData: ExternalDataProps[] | null;
+  currentNotes: NotesProps[] | null;
+  currentIntakeId: any;
   collectAllData: () => void;
   grabAllProfiles: () => void;
   grabClaims: () => void;
@@ -149,6 +158,8 @@ interface DataContextType {
   grabAvailityData: (claim_id: any) => void;
   getClaimsFollowup: () => void;
   grabExternalData: () => void;
+  getNotes: (intake_id: string, coordinator: string) => void;
+  sendNewNotes: (notesData: any) => void;
 }
 
 
@@ -173,6 +184,8 @@ const DataContext = createContext<DataContextType>({
   successfullRecords: null,
   failedRecords: null,
   externalData: null,
+  currentNotes: null,
+  currentIntakeId: null,
   collectAllData: () => {},
   grabAllProfiles: () => {},
   grabClaims: () => {},
@@ -186,7 +199,9 @@ const DataContext = createContext<DataContextType>({
   addSupportTicket: () => {},
   grabAvailityData: () => {},
   getClaimsFollowup: () => {},
-  grabExternalData: () => {}
+  grabExternalData: () => {},
+  getNotes: () => {},
+  sendNewNotes: () => {}
 });
 
 export function useData() {
@@ -225,6 +240,9 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   const [availityData, setAvailityData] = useState<any>(null)
   const [loadingAvailityData, setLoadingAvailityData] = useState<boolean>(false)
+
+  const [currentNotes, setCurrentNotes] = useState<NotesProps[] | null>(null)
+  const [currentIntakeId, setCurrentIntakeId] = useState<any>(null)
 
   const [externalData, setExternalData] = useState<ExternalDataProps[] | null>(null)
 
@@ -637,6 +655,41 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     })
   }
 
+  const getNotes = (intake_id: string, coordinator: string) => {
+    setCurrentIntakeId(intake_id)
+    const url = `https://intellasurebackend-docker.onrender.com/intake/get_intake_note/${intake_id}`
+    axios.get(url)
+    .then((response: any) => {
+      if (response){
+        const newData = response.data
+        const secondUrl = `https://intellasurebackend-docker.onrender.com/users/${coordinator}`
+        axios.get(secondUrl)
+        .then((response2: any) => {
+          const newData2 = newData.map((note: any) => {
+            note.name = response2.data.data.name
+            return note
+          })
+          console.log(newData2);
+          setCurrentNotes(newData2)
+        })
+      }
+    })
+    .catch((err: any) => {
+      console.error("Error fetching notes.", err)
+    })
+  }
+
+  const sendNewNotes = (notesData: any) => {
+    const url = 'https://intellasurebackend-docker.onrender.com/intake/update_intake_note'
+    axios.post(url, notesData)
+    .then((response: any) => {
+      console.log("New response added.",response);
+    })
+    .catch((err: any) => {
+      console.error("Error sending new notes.", err)
+    })
+  }
+
   const reformatInsurance = (records: InsuranceOptionsProps[]) => {
     let newRecords: any[] = []
     records.map((record: any) => {
@@ -675,6 +728,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   }
 
+
+
   const contextValue: DataContextType = {
     allUsers,
     intakeUsers,
@@ -709,7 +764,11 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     loadingAvailityData,
     getClaimsFollowup,
     grabExternalData,
-    externalData
+    externalData,
+    getNotes,
+    currentNotes,
+    sendNewNotes,
+    currentIntakeId
   };
 
   return (
