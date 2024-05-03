@@ -22,7 +22,7 @@ const NavigationTabComponent: React.FC<NavigationTabProps> = (props) => {
      handleUpdateCurrentSidebarType } = useNavigation()
 
   const handleRedirect = () => {
-    handleUpdateCurrentSidebarTab(tab)
+    handleUpdateCurrentSidebarTab(tab, location.pathname)
     handleUpdateCurrentSidebarType(type)
     navigate(route)
   }

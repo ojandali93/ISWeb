@@ -1,4 +1,5 @@
-import React, { createContext, useContext, ReactNode, useState } from 'react';
+import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 interface NavigationSubTab {
   label: string;
@@ -24,7 +25,7 @@ interface NavigationContextValue {
   currentSidebarType: string;
   currentSidebarSubTab: string;
   currentContentTab: string;
-  handleUpdateCurrentSidebarTab: (text: string) => void;
+  handleUpdateCurrentSidebarTab: (text: string, path: string) => void;
   handleUpdateCurrentSidebarType: (text: string) => void;
   handleUpdateCurrentSidebarSubTab: (text: string) => void;
   handleUpdateCurrentContentTab: (text: string) => void;
@@ -265,7 +266,20 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
   const [currentSidebarSubTab, setCurrentSidebarSubTab] = useState<string>('Collab Md')
   const [currentContentTab, setCurrentContentTab] = useState<string>('home')
 
-  const handleUpdateCurrentSidebarTab = (text: string) => {
+  const location = useLocation();
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const storedRoute = localStorage.getItem('lastClickedRoute');
+    console.log(storedRoute)
+    if (storedRoute) {
+      <Navigate to={storedRoute}/>
+    }
+  }, []);
+
+  const handleUpdateCurrentSidebarTab = (text: string, path: string) => {
+    console.log(path)
+    localStorage.setItem('lastClickedRoute', path);
     setCurrentSidebarTab(text)
   }
 

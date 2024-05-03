@@ -102,10 +102,6 @@ export const ClaimsProvider: React.FC<AppProviderProps> = ({ children }) => {
     });
   }
 
-  useEffect(() => {
-    console.log('selected claims avea: ', selectedClaimsAvea)
-  }, [selectedClaimsAvea])
-
   const selectAllClaimsAvea = (records: any) => {
     setAllClaimsAvea(true)
     let recordList: any = []

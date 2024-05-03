@@ -73,7 +73,7 @@ const HistoricContext = createContext<HistoricContextType>({
   selectedUserCare: null,
   selectedUserFinancial: null,
   grabPrefixRecords: () => {},
-  grabUserRecords: () => {}
+  grabUserRecords: () => {},
 });
 
 export function useHistoric() {
