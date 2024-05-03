@@ -160,6 +160,7 @@ interface DataContextType {
   grabExternalData: () => void;
   getNotes: (intake_id: string, coordinator: string) => void;
   sendNewNotes: (notesData: any) => void;
+  searchHistoricRecords: (text: string) => void;
 }
 
 
@@ -201,7 +202,8 @@ const DataContext = createContext<DataContextType>({
   getClaimsFollowup: () => {},
   grabExternalData: () => {},
   getNotes: () => {},
-  sendNewNotes: () => {}
+  sendNewNotes: () => {},
+  searchHistoricRecords: () => {}
 });
 
 export function useData() {
@@ -309,6 +311,21 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     });
   }
 
+  const searchHistoricRecords = (search: string) => {
+    let searchResults:any = []
+    if(search === ''){
+      grabRecords()
+    } else {
+      billingDetails?.map((record: any) => {
+        if(record.prefix.includes(search)){
+          searchResults.push(record)
+        }
+      })
+      setBillingDetails(searchResults)
+    }
+    
+  }
+
   function formatDate(date: Date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -336,7 +353,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     };
     axios.request(config)
         .then((response) => {
-          console.log('claims records length: ', response.data.length)
           setAveaClaimsRecords(response.data)
         })
         .catch((error) => {
@@ -365,7 +381,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     };
     axios.request(config)
     .then((response) => {
-      console.log('claims records length: ', response.data.length)
       setClaimsRcords(response.data)
     })
     .catch((error) => {
@@ -553,7 +568,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     };
     axios.request(config)
     .then((response) => {
-      console.log('sample followup record: ', response.data[0])
       response.data.map((record: any) => {
         record.claim_status === 'Successful'
           ? successfulRecords.push(record)
@@ -768,7 +782,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     getNotes,
     currentNotes,
     sendNewNotes,
-    currentIntakeId
+    currentIntakeId,
+    searchHistoricRecords
   };
 
   return (

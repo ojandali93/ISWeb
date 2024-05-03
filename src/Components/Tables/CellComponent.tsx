@@ -54,6 +54,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
   const {grabPrefixRecords, grabUserRecords} = useHistoric()
   const {currentSidebarTab, handleUpdateCurrentSidebarTab} = useNavigation()
   const {selectedFollowup, updateSelectedFollowup, updateCoordinatorFollwup} = useFollowup()
+  const location = useLocation()
 
 
   const [selectedDate, setSelectedDate] = useState(record.expected_arrival_date ? record.expected_arrival_date : new Date())
@@ -305,13 +306,13 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
   }
 
   const handleClick = (prefixId: string, network: string) => {
-    handleUpdateCurrentSidebarTab('HistoricPrefix')
+    handleUpdateCurrentSidebarTab('HistoricPrefix', location.pathname)
     grabPrefixRecords(prefixId, network)
     navigate(`/historic/prefix/${prefixId}/${network}`);
   };
 
   const handleClickHistoric = (policy_id: string) => {
-    handleUpdateCurrentSidebarTab('HistoricPolicy')
+    handleUpdateCurrentSidebarTab('HistoricPolicy', location.pathname)
     grabUserRecords(policy_id)
     navigate(`/historic/user/${policy_id}`);
   }
@@ -365,7 +366,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
               <>
                 <div className={`flex flex-row justify-center`}>
                   {record[column.recordName]}
-                  <Edit height={20} width={20} className='text-secondary ml-2'/>
+                  <Edit height={20} width={20} className='text-sky-500 ml-2'/>
                 </div>
               </>
             ) : column.type === 'insurance-edit' ? (
@@ -381,7 +382,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                       : <>
                           <div className={` flex flex-row`}>
                             {record[column.recordName]}
-                            <Edit onClick={() => {toggleEditInsurance(column.label, record, record[column.recordName])}} height={20} width={20} className='text-secondary ml-2'/>
+                            <Edit onClick={() => {toggleEditInsurance(column.label, record, record[column.recordName])}} height={20} width={20} className='text-sky-500 ml-2'/>
                           </div>
                         </>
                   }
@@ -400,7 +401,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                       : <>
                           <div className={` flex flex-row`}>
                             {record[column.recordName]}
-                            <Edit onClick={() => {toggleEditPolicy(column.label, record, record[column.recordName])}} height={20} width={20} className='text-secondary ml-2'/>
+                            <Edit onClick={() => {toggleEditPolicy(column.label, record, record[column.recordName])}} height={20} width={20} className='text-sky-500 ml-2'/>
                           </div>
                         </>
                   }
@@ -432,7 +433,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                         </>
                       : <>
                           {convertDobDateToMMDDYYYY(record[column.recordName])}
-                          <Edit onClick={() => {updateEditDate(column.label, record, record[column.recordName])}} height={20} width={20} className='text-secondary ml-2'/>
+                          <Edit onClick={() => {updateEditDate(column.label, record, record[column.recordName])}} height={20} width={20} className='text-sky-500 ml-2'/>
                         </>
                   }
                 </div>
@@ -497,11 +498,11 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
             ) : column.type === 'popup' ? (
               !showNotes 
               ?
-              <div onClick={() => {getNotes(record.intake_id, record.coordinator); console.log("This is the record: ", record);console.log(); toggleShowPopup()}}>
-                <p className='text-primary cursor-pointer'>Show Notes</p>
+              <div className="" onClick={() => {getNotes(record.intake_id, record.coordinator); toggleShowPopup()}}>
+                <button className='text-center px-2 py-1 bg-primary rounded-md font-bold text-white min-w-28 ml-4'>Show Notes</button>
               </div>
-              : <div className='fixed inset-0 bg-black bg-opacity-80 z-40 flex justify-center items-center overflow-auto p-4 mt-20'>
-                  <div className='bg-alt-on p-8 rounded-lg shadow-lg z-50 max-w-lg w-full max-h-[75vh] overflow-auto'>
+              : <div className='fixed inset-0 bg-black bg-opacity-80 z-40 flex justify-center items-center overflow-auto w-full min-w-full mt-18'>
+                  <div className='bg-alt-on p-4 rounded-lg shadow-lg z-50 max-h-[75vh] overflow-aut min-w-[75vw]'>
                     <NotesForm />
                     <ButtonComponent label='Close' handler={() => { toggleShowPopup() }}/>
                   </div>
@@ -540,11 +541,11 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
             ) : column.type === 'clickable' ? (
               currentSidebarTab === 'Historic'
                 ? <div className='hover:cursor-pointer'>
-                    <p className='text-third' onClick={() => {handleClick(record[column.recordName], record['network'])}}>{record[column.recordName]}</p>
+                    <p className='text-sky-500' onClick={() => {handleClick(record[column.recordName], record['network'])}}>{record[column.recordName]}</p>
                   </div>
                 : currentSidebarTab === 'HistoricPrefix'
                     ? <div className='hover:cursor-pointer'>
-                        <p className='text-third' onClick={() => {handleClickHistoric(record[column.recordName])}}>{record[column.recordName]}</p>
+                        <p className='text-sky-500' onClick={() => {handleClickHistoric(record[column.recordName])}}>{record[column.recordName]}</p>
                       </div>
                     : <SingleSelectClickComponent value={record[column.recordName]} onChange={grabAvailityData} record={record}/>
             ) : (

@@ -34,6 +34,7 @@ export const intakeOColumns = [
       'Arrived',
       'MIA',
       'Booked',
+      'Booked BD',
       'Yellow Stripe'
     ],
     dependent: 'checked_in',

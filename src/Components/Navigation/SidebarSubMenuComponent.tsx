@@ -1,7 +1,7 @@
 import React from 'react';
 import NavigationTabComponent from './NavigationTabComponent';
 import { useNavigation } from '../../Context/NavigationContext';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface TabSubOptions {
   label: string;
@@ -33,6 +33,8 @@ const SidebarSubMenuComponent: React.FC<NavigationTabProps> = ({
     }
   };
 
+  const location = useLocation()
+
   const { currentSidebarSubTab, 
     handleUpdateCurrentSidebarTab,
     handleUpdateCurrentSidebarSubTab } = useNavigation()
@@ -41,7 +43,7 @@ const SidebarSubMenuComponent: React.FC<NavigationTabProps> = ({
   const handleRedirectTab = (tab: TabOptions, subTab: TabSubOptions) => {
     console.log('tab: ', tab.label)
     console.log('sub tab: ', subTab.label)
-    handleUpdateCurrentSidebarTab(tab.label)
+    handleUpdateCurrentSidebarTab(tab.label, location.pathname)
     handleUpdateCurrentSidebarSubTab(subTab.label)
     navigate(subTab.route)
   }

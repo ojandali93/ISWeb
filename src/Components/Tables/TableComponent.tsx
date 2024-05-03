@@ -64,10 +64,6 @@ const TableComponent: React.FC<TableProps> = (props) => {
   const { selectAllFollowup, unselectAllFollowup, allFollowup } = useFollowup()
   const {currentProfile} = useAuth()
 
-  useEffect(() => {
-    console.log('records length: ', records?.length)
-  }, [records])
-
   return (
     <div className='max-w-full max-h-full'>
       <table className='w-full border-collapse'>

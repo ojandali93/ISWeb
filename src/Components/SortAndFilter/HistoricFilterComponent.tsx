@@ -1,18 +1,19 @@
 import React, { useState } from 'react'
 import SearchComponent from '../Inputs/SearchComponent'
+import { useHistoric } from '../../Context/HistoricContext'
+import { useData } from '../../Context/DataContext'
 
 const HistoricFilterComponent = () => {
+
+  const {searchHistoricRecords} = useData()
 
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [activeSearch, setActiveSearch] = useState<boolean>(false)
 
   const handleSearchChange = (text: string) => {
+    console.log('searched text: ', text)
     setSearchTerm(text)
-    // if(text === ''){
-    //   getIntakeRecords()
-    // } else {
-    //   searchIntakeRecords(text)
-    // }
+    searchHistoricRecords(text)
   }
 
   const handleActiveSearchChange = () => {
