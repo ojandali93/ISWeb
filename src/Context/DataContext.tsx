@@ -703,6 +703,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     axios.post(url, notesData)
     .then((response: any) => {
       console.log("New response added.",response);
+      getNotes(currentIntakeId, notesData.coordinator)
     })
     .catch((err: any) => {
       console.error("Error sending new notes.", err)
