@@ -21,7 +21,7 @@ const FollowupContext = createContext<FollowupContextType>({
   selectedFollowup: [],
   allFollowup: false,
   pushingToFollowup: false,
-  followupTab: 'ALL',
+  followupTab: 'PENDING',
   submuttingData: false,
   updateSelectedFollowup: () => {},
   addBatchToFavorites: () => {},
@@ -44,7 +44,7 @@ export const FollowupProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [selectedFollowup, setSelectedFollowup] = useState<string[]>([])
   const [pushingToFollowup, setPushingToFollowup] = useState<boolean>(false)
   const [allFollowup, setAllFollowup] = useState<boolean>(false)
-  const [followupTab, setFollowupTab] = useState<string>('ALL')
+  const [followupTab, setFollowupTab] = useState<string>('PENDING')
   const [submuttingData, setSubmittingData] = useState<boolean>(false)
 
   const { getClaimsFollowup } = useData()
