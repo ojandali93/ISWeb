@@ -107,7 +107,11 @@ const TableComponent: React.FC<TableProps> = (props) => {
                                 }
                               }}
                             />
-                      : <p className='text-lg text-white'>{column.label}</p>
+                      : column.label === 'Delete'
+                          ? currentProfile.privileges === 'admin' || currentProfile.privileges === 'manager' || currentProfile.privileges === 'dev' || currentProfile.privileges === 'owner'
+                              ? <p className='text-lg text-white'>{column.label}</p>
+                              : null
+                          : <p className='text-lg text-white'>{column.label}</p>
                   } 
                 </th>
               )

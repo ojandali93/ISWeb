@@ -161,6 +161,7 @@ interface DataContextType {
   getNotes: (intake_id: string, coordinator: string) => void;
   sendNewNotes: (notesData: any) => void;
   searchHistoricRecords: (text: string) => void;
+  searchExternalData: (search: string) => void;
 }
 
 
@@ -203,7 +204,8 @@ const DataContext = createContext<DataContextType>({
   grabExternalData: () => {},
   getNotes: () => {},
   sendNewNotes: () => {},
-  searchHistoricRecords: () => {}
+  searchHistoricRecords: () => {},
+  searchExternalData: () => {}
 });
 
 export function useData() {
@@ -317,7 +319,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       grabRecords()
     } else {
       billingDetails?.map((record: any) => {
-        if(record.prefix.includes(search)){
+        const reference = record.prefix.toLowerCase()
+        if(reference.includes(search.toLowerCase())){
           searchResults.push(record)
         }
       })
@@ -487,7 +490,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   const searchIntakeRecords = (search: string) => {
     let searchResults:any = []
     intakeRecords?.map((record) => {
-      if(record.name.includes(search)){
+      const reference = record.name.toLowerCase()
+      if(reference.includes(search.toLowerCase())){
         searchResults.push(record)
       }
     })
@@ -663,6 +667,21 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   }
   
 
+  const searchExternalData = (search: string) => {
+    if(search === ''){
+      grabExternalData()
+    } else {
+      let searchResults:any = []
+      externalData?.map((record) => {
+        const reference = record.prefix.toLowerCase()
+        if(reference.includes(search.toLowerCase())){
+          searchResults.push(record)
+        }
+      })
+      setExternalData(searchResults)
+    }
+  }
+
   const grabExternalData = () => {
     const url = 'https://intellasurebackend-docker.onrender.com/external/getData';
     axios.get(url)
@@ -789,7 +808,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     currentNotes,
     sendNewNotes,
     currentIntakeId,
-    searchHistoricRecords
+    searchHistoricRecords,
+    searchExternalData
   };
 
   return (

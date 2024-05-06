@@ -19,6 +19,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useHistoric } from '../../Context/HistoricContext';
 import SingleClickTabComponent from '../Navigation/SingleClickTabComponent';
 import SingleSelectClickComponent from './SingleSelectClickComponent';
+import { useAuth } from '../../Context/AuthContext';
 
 interface PeopleOptions {
   name: string;
@@ -54,6 +55,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
   const {grabPrefixRecords, grabUserRecords} = useHistoric()
   const {currentSidebarTab, handleUpdateCurrentSidebarTab} = useNavigation()
   const {selectedFollowup, updateSelectedFollowup, updateCoordinatorFollwup} = useFollowup()
+  const {currentProfile} = useAuth()
   const location = useLocation()
 
 
@@ -459,9 +461,15 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                 </p>
               </div>
             ) : column.type === 'delete' ? (
-              <div>
-                <button onClick={() => {handleDeleteRecord(record.intake_id)}} className={`py-1 px-3 rounded-lg bg-primary hover:bg-secondary`}>Remove</button>
-              </div>
+              <>
+                {
+                  currentProfile.privileges === 'admin' || currentProfile.privileges === 'manager' || currentProfile.privileges === 'dev' || currentProfile.privileges === 'owner'
+                    ? <div>
+                        <button onClick={() => {handleDeleteRecord(record.intake_id)}} className={`py-1 px-3 rounded-lg bg-primary hover:bg-secondary`}>Remove</button>
+                      </div>
+                    : null
+                }
+              </>
             ) : column.type === 'percent' ? (
               <div>
                 <p>{record[column.recordName] === 0 ? '0%' : `${(record[column.recordName] * 100).toFixed(1)}%`}</p>
