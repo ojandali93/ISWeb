@@ -10,7 +10,7 @@ interface ClaimsContextType {
   allClaimsAvea: boolean;
   updateSelectedClaims: (text: string) => void;
   updateSelectedClaimsAvea: (text: string) => void;
-  addBatchToFavorites: () => void;
+  addBatchToFavorites: (navigate: any, location: any) => void;
   selectAllClaims: (records: any) => void;
   selectAllClaimsAvea: (records: any) => void;
   unselectAllClaims: () => void;
@@ -116,9 +116,10 @@ export const ClaimsProvider: React.FC<AppProviderProps> = ({ children }) => {
     setSelectedClaimsAvea([])
   }
 
-  const addBatchToFavorites = () => {
+  const addBatchToFavorites = (navigate: any, location: any) => {
     setPushingToFollowup(true)
     let newData = arrayToIndexedObject(selectedClaims)
+    console.log(newData)
     let config = {
       method: 'patch',
       maxBodyLength: Infinity,
@@ -129,15 +130,15 @@ export const ClaimsProvider: React.FC<AppProviderProps> = ({ children }) => {
       data: newData
     };
     axios.request(config)
-    .then((response) => {
-      setSelectedClaims([])
-      grabClaims()
-      setPushingToFollowup(false)
-    })
-    .catch((error) => {
-      console.log(error);
-      setPushingToFollowup(false)
-    });
+      .then((response) => {
+        setSelectedClaims([])
+        setSelectedClaimsAvea([])
+        grabClaims()
+        setPushingToFollowup(false)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   const addBatchToAveaFavorites = () => {
@@ -156,6 +157,7 @@ export const ClaimsProvider: React.FC<AppProviderProps> = ({ children }) => {
     
     axios.request(config)
       .then((response) => {
+        setSelectedClaims([])
         setSelectedClaimsAvea([])
         grabAveaClaims()
         setPushingToFollowup(false)

@@ -16,6 +16,7 @@ import {
   Rectangle,
   ResponsiveContainer
 } from "recharts";
+import axios from 'axios';
 
 interface IntakeProps {
   active: boolean;
@@ -68,9 +69,39 @@ const IntakeAnalytivsScreen = () => {
 
   useEffect(() => {
     processIntakeInformation(intakeRecords)
+    grabCensusData()
   }, [])
 
   const [analyticsData, setAnalyticsData] = useState<any>({})
+  const [censusData, setCensusData] = useState<any>({})
+
+  const grabCensusData = () => {
+    let config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: 'https://intellasurebackend-docker.onrender.com/get_census_data',
+      headers: { }
+    };
+    
+    axios.request(config)
+    .then((response) => {
+      console.log(JSON.stringify(response.data))
+      setCensusData(addTotalPatients(response.data))
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
+  function addTotalPatients(data: any) {
+    data.forEach((facility: any) => {
+      const facilityName = facility.facility;
+      delete facility.facility;
+      const totalPatients = Object.values(facility).reduce((acc: any, value: any) => acc + value, 0);
+      facility['Total Patients'] = totalPatients;
+    });
+    console.log(data)
+  }
   
   const processIntakeInformation = (intakeRecords: IntakeProps[] | null) => {
     let analytics: any = {};
@@ -341,7 +372,7 @@ const IntakeAnalytivsScreen = () => {
               <BarChart
                 width={window.innerWidth * .65}
                 height={((2/3) * (window.innerWidth * .25))}
-                data={analyticsData}
+                data={censusData}
                 margin={{
                   top: 5,
                   right: 30,

@@ -10,8 +10,12 @@ import { useData } from '../../Context/DataContext'
 import { start } from 'repl'
 import { faC } from '@fortawesome/free-solid-svg-icons'
 import PaginationComponent from '../Pagination/PaginationComponent'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const ClaimsFilterComponent = () => {
+
+  const navigate = useNavigate()
+  const location = useLocation()
 
   const {selectedClaims, addBatchToFavorites, pushingToFollowup} = useClaims()
   const { grabRefreshClaims } = useData()
@@ -105,7 +109,7 @@ const ClaimsFilterComponent = () => {
         <div>
           {
             selectedClaims.length > 0
-              ? <ButtonComponent label={pushingToFollowup ? 'Submitting' : 'Reprocess'} handler={addBatchToFavorites}/>
+              ? <ButtonComponent label={pushingToFollowup ? 'Submitting' : 'Reprocess'} handler={() => {addBatchToFavorites(navigate, location)}}/>
               : null
           }
         </div>
