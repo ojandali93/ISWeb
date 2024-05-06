@@ -646,7 +646,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
               statusCode: claimStatus.statusDetails[0].statusCode,
               traceId: claimStatus.traceId,
             };
-            console.log(newData);
             acc.push(newData);
           }
           return acc;
