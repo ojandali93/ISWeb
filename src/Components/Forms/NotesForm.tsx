@@ -6,13 +6,13 @@ import FormInputComponent from "../Inputs/FormInputComponent";
 
 
 const NotesForm = () => {
-  const {currentNotes, sendNewNotes, currentIntakeId} = useData();
+  const {currentNotes, sendNewNotes, currentIntakeId, getNotes} = useData();
 
   const {currentUser} = useAuth();
 
   const [noteContent, setNoteContent] = useState("");
+  const [submitCount, setSubmitCount] = useState(0)
   const [isLoading, setIsLoading] = useState(true);
-  const [notesDisplay, setNotesDisplay] = useState("");
 
   const handleSubmitNotes = () => {
     const data = {
@@ -21,11 +21,10 @@ const NotesForm = () => {
       notes: noteContent,
       coordinator: currentUser.userId
     }
-    console.log("This is currentIntakeId",currentIntakeId)
-    console.log("This is the sent Data ",data);
-    sendNewNotes(data);
-    console.log("This is userId",currentUser.userId)
+    sendNewNotes(data)
+
     setNoteContent("");
+
   }
 
   function getCurrentDateString(): string {
@@ -60,19 +59,6 @@ const NotesForm = () => {
     return `${year}-${month}-${day}`;
   }
 
-    useEffect(() => {
-
-    setTimeout(() => {
-      setIsLoading(false); 
-    }, 1000);
-  }, []);
-
-        // {/* <FormInputComponent
-        // handleFunction={setNoteContent}
-        // value={noteContent}
-        // type={'text'}
-        // icon={'Enter New Note'}
-        // /> */}
 
 
   return (

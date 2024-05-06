@@ -625,6 +625,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     const url = `https://intellasurebackend-docker.onrender.com/availity/${claim_id}`
     axios.get(url)
       .then((response: any) => {
+        const hashMap = new Set();
         const newDataArray = response.data.claimStatuses.map((claimStatus: any) => {
           setLoadingAvailityData(false)
           const newData = {
@@ -644,6 +645,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
             statusCode: claimStatus.statusDetails[0].statusCode,
             traceId: claimStatus.traceId,
           }
+          
           console.log(newData)
           return newData
         })
@@ -698,6 +700,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     axios.post(url, notesData)
     .then((response: any) => {
       console.log("New response added.",response);
+      getNotes(currentIntakeId, notesData.coordinator)
     })
     .catch((err: any) => {
       console.error("Error sending new notes.", err)
