@@ -13,7 +13,7 @@ const ClaimsAveaScreen = () => {
 
     <LayoutComponent
       header={
-        <div className='h-12 w-full mb-2'>
+        <div className='h-20 w-full mb-2'>
           <AveaClaimsFilterComponent />
         </div>
       } 

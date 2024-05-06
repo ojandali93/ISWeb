@@ -18,19 +18,19 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({ handlePageCha
             handlePageChange(currentPage - 1)
           }
         }}
-          className='p-1 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500  my-1 mr-1'
+          className='h-6 w-6 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500  my-1 mr-1'
       >
         <ChevronLeft size={20} className='text-white' strokeWidth={3}/>
       </div>
       <div className='flex flex-row'>
-        <div className='p-1 min-w-6 hover:cursor-pointe rounded-md flex justify-center items-center bg-stone-300  my-1 mr-1'>
+        <div className='h-6 w-6 min-w-6 hover:cursor-pointe rounded-md flex justify-center items-center bg-stone-300  my-1 mr-1'>
           <p className='font-bold text-black'>{currentPage}</p>
         </div> 
         <div
           onClick={() => {
             handlePageChange(currentPage + 1)
           }}
-          className='p-1 min-w-6 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500 my-1 mr-1'
+          className='h-6 w-6 min-w-6 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500 my-1 mr-1'
         >
           <p className='font-bold text-white'>{currentPage + 1}</p>
         </div>
@@ -38,7 +38,7 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({ handlePageCha
           onClick={() => {
             handlePageChange(currentPage + 2)
           }}
-          className='p-1 min-w-6 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500 my-1 mr-1'
+          className='h-6 w-6 min-w-6 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500 my-1 mr-1'
         >
           <p className='font-bold text-white'>{currentPage + 2}</p>
         </div>
@@ -50,7 +50,7 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({ handlePageCha
             handlePageChange(currentPage + 1)
           }
         }}
-        className='p-1 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500  my-1 mr-1'
+        className='h-6 w-6 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500  my-1 mr-1'
         >
         <ChevronRight size={20} className='text-white' strokeWidth={3}/>
       </div>

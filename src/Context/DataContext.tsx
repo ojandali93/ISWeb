@@ -543,15 +543,15 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       const url = 'https://intellasurebackend-docker.onrender.com/intake/'
       
       axios.post(url, intakeData)
-      .then((response) => {
-        setLoadingNewIntake(false)
-        handleAddRecord()
-        getIntakeRecords()
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoadingNewIntake(false)
-      });
+        .then((response) => {
+          setLoadingNewIntake(false)
+          handleAddRecord()
+          getIntakeRecords()
+        })
+        .catch((error) => {
+          console.log(error);
+          setLoadingNewIntake(false)
+        });
   }
 
   const getClaimsFollowup = () => {
