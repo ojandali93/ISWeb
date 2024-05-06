@@ -9,6 +9,7 @@ import { historic2Options } from '../../Options/Historic2Options';
 import UserInfo from '../../Components/Forms/UserInfo';
 import { Historic1CareOptions } from '../../Options/Historic1CareOptions';
 import { Historic1FinancialOptions } from '../../Options/Historic1FinancialCOptions';
+import Historic1FilterComponent from '../../Components/SortAndFilter/Historic1FilterComponent';
 
 const Historic1Screen = () => {
   const {selectedUserInfo, selectedUserCare, selectedUserFinancial} = useHistoric()
@@ -17,7 +18,7 @@ const Historic1Screen = () => {
   return (
       <LayoutComponent 
         header={
-          <div></div>
+          <Historic1FilterComponent />
         } 
         content={
           <div className='h-full w-full max-h-full max-w-full'>

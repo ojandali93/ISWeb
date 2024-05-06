@@ -89,6 +89,7 @@ export const FollowupProvider: React.FC<AppProviderProps> = ({ children }) => {
   const addBatchToFavorites = () => {
     setPushingToFollowup(true)
     let newData = arrayToIndexedObject(selectedFollowup)
+    console.log(JSON.stringify(newData))
     let config = {
       method: 'patch',
       maxBodyLength: Infinity,
@@ -134,6 +135,7 @@ export const FollowupProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   const submitBatchToCollab = () => {
     setSubmittingData(true)
+
     const data = {
       "claim_ids": selectedFollowup
     }
@@ -146,6 +148,7 @@ export const FollowupProvider: React.FC<AppProviderProps> = ({ children }) => {
       },
       data : data
     };
+    console.log(JSON.stringify(config))
     axios.request(config)
       .then((response) => {
         getClaimsFollowup()
