@@ -6,6 +6,7 @@ import TableComponent from '../../Components/Tables/TableComponent'
 import { useData } from '../../Context/DataContext'
 import { useHistoric } from '../../Context/HistoricContext';
 import { historic2Options } from '../../Options/Historic2Options';
+import Historic2FilterComponent from '../../Components/SortAndFilter/Historic2FilterComponent';
 
 const Historic2Screen = () => {
   const { prefix_id, network } = useParams();
@@ -20,7 +21,7 @@ const Historic2Screen = () => {
   return (
       <LayoutComponent 
         header={
-          <div></div>
+          <Historic2FilterComponent />
         } 
         content={
           <div className='h-full w-full max-h-full max-w-ful'>
