@@ -50,7 +50,7 @@ export const ClaimsProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [allClaims, setAllClaims] = useState<boolean>(false)
   const [allClaimsAvea, setAllClaimsAvea] = useState<boolean>(false)
 
-  const { grabClaims, grabAveaClaims } = useData()
+  const { grabRefreshClaims, grabClaims, grabAveaClaims } = useData()
 
   const updateSelectedClaims = (text: string) => {
     console.log('new added item: ', text)
@@ -130,9 +130,9 @@ export const ClaimsProvider: React.FC<AppProviderProps> = ({ children }) => {
     };
     axios.request(config)
     .then((response) => {
-      setPushingToFollowup(false)
       setSelectedClaims([])
       grabClaims()
+      setPushingToFollowup(false)
     })
     .catch((error) => {
       console.log(error);

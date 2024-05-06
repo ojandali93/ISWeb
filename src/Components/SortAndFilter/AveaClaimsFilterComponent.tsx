@@ -100,42 +100,46 @@ const AveaClaimsFilterComponent = () => {
     }
 
     return (
-        <div className="h-12 px-2 w-full flex flex-col justify-center bg-stone-700 rounded-md mb-4">
-            <div className='w-full flex flex-row items-center justify-between'>
-                <div>
-                    {
-                        selectedClaimsAvea.length > 0
-                            ? <ButtonComponent label={pushingToFollowup ? 'Submitting' : 'Reprocess'} handler={addBatchToAveaFavorites}/>
-                            : null
-                    }
-                </div>
-                <div className='w-full flex flex-row items-center justify-end'>
-                    <div className='flex flex-row items-center'>
-                        <p className='mx-2 min-w-16 max-w-24 text-white font-bold'>Date Range: </p>
-                        <CalendarSelectComponent selectedDate={startDate} handleDateChange={handleStartDate}/>
-                        <p className='mx-2 text-white font-bold'> - </p>
-                        <CalendarSelectComponent selectedDate={endtDate} handleDateChange={handleEndDate}/>
-                    </div>
-                    <div className='flex flex-row items-center'>
-                        <p className='mx-2 ml-6  min-w-16 max-w-24 text-white font-bold'>Payout: </p>
-                        <PercentOptionComponent placeholder='0' options={percentOptions} selectedValue={minPercent} handleOptionClick={handleMinPercent}/>
-                        <p className='mx-2 text-white font-bold'> - </p>
-                        <PercentOptionComponent placeholder='0' options={percentOptions} selectedValue={maxPercent} handleOptionClick={handleMaxPercent}/>
-                    </div>
-                    <div className='flex flex-row items-center'>
-                        <p className='mx-2 ml-6  min-w-16 max-w-24 text-white font-bold'>Facility: </p>
-                        <SelectInputComponent placeholder='All' options={facilityOptions} selectedValue={facility} handleOptionClick={handleFacilityChange}/>
-                    </div>
-                    <div className='flex flex-row items-center'>
-                        <p className='mx-2 ml-6 min-w-16 max-w-24 text-white font-bold'>Status: </p>
-                        <SelectInputComponent placeholder='All' options={statusOptions} selectedValue={status} handleOptionClick={handleStatusChange}/>
-                    </div>
-                </div>
-                <div className='ml-4'>
-                    <PaginationComponent pageCount={50} currentPage={page} handlePageChange={handlePageChange}/>
-                </div>
+      <div className="h-full px-2 w-full flex flex-col justify-between bg-stone-700 rounded-md mb-4">        
+        <div className='w-full flex flex-row items-center justify-between mt-1'>
+          <div className=''>
+            <PaginationComponent pageCount={50} currentPage={page} handlePageChange={handlePageChange}/>
+          </div>
+          <div className='flex flex-row items-center justify-end'>
+            <div className='flex flex-row items-center'>
+              <p className='mx-2 min-w-16 max-w-24 text-white font-bold'>Date Range: </p>
+              <CalendarSelectComponent selectedDate={startDate} handleDateChange={handleStartDate}/>
+              <p className='mx-2 text-white font-bold'> - </p>
+              <CalendarSelectComponent selectedDate={endtDate} handleDateChange={handleEndDate}/>
             </div>
+            <div className='flex flex-row items-center'>
+              <p className='mx-2 ml-6  min-w-16 max-w-24 text-white font-bold'>Payout: </p>
+              <PercentOptionComponent placeholder='0' options={percentOptions} selectedValue={minPercent} handleOptionClick={handleMinPercent}/>
+              <p className='mx-2 text-white font-bold'> - </p>
+              <PercentOptionComponent placeholder='0' options={percentOptions} selectedValue={maxPercent} handleOptionClick={handleMaxPercent}/>
+            </div>
+          </div>
         </div>
+        <div className='w-full flex flex-row items-center justify-between  mb-1'>
+          <div>
+            {
+              selectedClaimsAvea.length > 0
+                ? <ButtonComponent label={pushingToFollowup ? 'Submitting' : 'Reprocess'} handler={addBatchToAveaFavorites}/>
+                : null
+            }
+          </div>
+          <div className='w-full flex flex-row items-center justify-end'>
+            <div className='flex flex-row items-center'>
+              <p className='mx-2 ml-6  min-w-16 max-w-24 text-white font-bold'>Facility: </p>
+              <SelectInputComponent placeholder='All' options={facilityOptions} selectedValue={facility} handleOptionClick={handleFacilityChange}/>
+            </div>
+            <div className='flex flex-row items-center'>
+              <p className='mx-2 ml-6 min-w-16 max-w-24 text-white font-bold'>Status: </p>
+              <SelectInputComponent placeholder='All' options={statusOptions} selectedValue={status} handleOptionClick={handleStatusChange}/>
+            </div>
+          </div>
+        </div>
+      </div>
     )
 }
 

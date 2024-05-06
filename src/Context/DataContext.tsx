@@ -543,15 +543,15 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       const url = 'https://intellasurebackend-docker.onrender.com/intake/'
       
       axios.post(url, intakeData)
-      .then((response) => {
-        setLoadingNewIntake(false)
-        handleAddRecord()
-        getIntakeRecords()
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoadingNewIntake(false)
-      });
+        .then((response) => {
+          setLoadingNewIntake(false)
+          handleAddRecord()
+          getIntakeRecords()
+        })
+        .catch((error) => {
+          console.log(error);
+          setLoadingNewIntake(false)
+        });
   }
 
   const getClaimsFollowup = () => {
@@ -622,43 +622,46 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   const grabAvailityData = (claim_id: any) => {
     setLoadingAvailityData(true);
-    const url = `https://intellasurebackend-docker.onrender.com/availity/${claim_id}`
+    const url = `https://intellasurebackend-docker.onrender.com/availity/${claim_id}`;
     axios.get(url)
       .then((response: any) => {
-        const hashMap = new Set();
-        const newDataArray = response.data.claimStatuses.map((claimStatus: any) => {
-          setLoadingAvailityData(false)
-          const newData = {
-            claimControlNumber: claimStatus.claimControlNumber,
-            patientControlNumber: claimStatus.patientControlNumber,
-            fromDate: claimStatus.fromDate,
-            toDate: claimStatus.toDate,
-            category: claimStatus.statusDetails[0].category,
-            categoryCode: claimStatus.statusDetails[0].categoryCode,
-            checkNumber: claimStatus.statusDetails[0].checkNumber,
-            claimAmount: claimStatus.statusDetails[0].claimAmount,
-            effectiveDate: claimStatus.statusDetails[0].effectiveDate,
-            finalizedDate: claimStatus.statusDetails[0].finalizedDate,
-            paymentAmount: claimStatus.statusDetails[0].paymentAmount,
-            remittanceDate: claimStatus.statusDetails[0].remittanceDate,
-            status: claimStatus.statusDetails[0].status,
-            statusCode: claimStatus.statusDetails[0].statusCode,
-            traceId: claimStatus.traceId,
+        const existingClaimNumbers = new Set();
+        const newDataArray = response.data.claimStatuses.reduce((acc: any[], claimStatus: any) => {
+          if (!existingClaimNumbers.has(claimStatus.claimControlNumber)) {
+            existingClaimNumbers.add(claimStatus.claimControlNumber);
+            const newData = {
+              claimControlNumber: claimStatus.claimControlNumber,
+              patientControlNumber: claimStatus.patientControlNumber,
+              fromDate: claimStatus.fromDate,
+              toDate: claimStatus.toDate,
+              category: claimStatus.statusDetails[0].category,
+              categoryCode: claimStatus.statusDetails[0].categoryCode,
+              checkNumber: claimStatus.statusDetails[0].checkNumber,
+              claimAmount: claimStatus.statusDetails[0].claimAmount,
+              effectiveDate: claimStatus.statusDetails[0].effectiveDate,
+              finalizedDate: claimStatus.statusDetails[0].finalizedDate,
+              paymentAmount: claimStatus.statusDetails[0].paymentAmount,
+              remittanceDate: claimStatus.statusDetails[0].remittanceDate,
+              status: claimStatus.statusDetails[0].status,
+              statusCode: claimStatus.statusDetails[0].statusCode,
+              traceId: claimStatus.traceId,
+            };
+            acc.push(newData);
           }
-          
-          console.log(newData)
-          return newData
-        })
-        setAvailityData(newDataArray)
-        navigate('/availityScreen')
-      } 
-    )
-      .catch((err: any) => {
-        setLoadingAvailityData(false)
-        alert("Failed to load data")
-        console.error(err)
+          return acc;
+        }, []);
+  
+        setAvailityData(newDataArray);
+        navigate('/availityScreen');
+        setLoadingAvailityData(false);
       })
+      .catch((err: any) => {
+        setLoadingAvailityData(false);
+        alert("Failed to load data");
+        console.error(err);
+      });
   }
+  
 
   const grabExternalData = () => {
     const url = 'https://intellasurebackend-docker.onrender.com/external/getData';

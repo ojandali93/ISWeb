@@ -12,7 +12,7 @@ const ClaimsCollabScreen = () => {
   return (
     <LayoutComponent 
       header={
-        <div className='h-12 w-full mb-2'>
+        <div className='h-20 w-full mb-2'>
           <ClaimsFilterComponent />
         </div>
       } 
