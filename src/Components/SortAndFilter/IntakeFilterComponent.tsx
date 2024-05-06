@@ -4,6 +4,7 @@ import ButtonComponent from '../Inputs/ButtonComponent'
 import IntakeForm from '../Forms/IntakeForm'
 import { useData } from '../../Context/DataContext'
 import SearchComponent from '../Inputs/SearchComponent'
+import { X } from 'react-feather'
 
 const IntakeFilterComponent = () => {
 
@@ -46,7 +47,11 @@ const IntakeFilterComponent = () => {
       </div>
       {
         addRecord ? (
-          <div className='absolute w-1/3 top-16 left-0 bg-stone-700 p-3 min-w-96 rounded-lg'>
+          <div className='absolute max-h-96 w-1/4 top-16 left-0 bg-stone-700 p-3 min-w-96 rounded-lg overflow-y-scroll'>
+            <div className='w-full flex flex-row justify-between'>
+              <div className='text-white font-bold text-2xl ml-2'>New Record</div>
+              <X onClick={handleAddRecord} height={30} width={30} color='red'/>
+            </div>
             <IntakeForm />
           </div>
         ) : (
