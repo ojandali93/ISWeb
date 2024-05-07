@@ -661,7 +661,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       })
       .catch((err: any) => {
         setLoadingAvailityData(false);
-        alert("Failed to load data");
+        alert("Claim was not found in Availity");
         console.error(err);
       });
   }
