@@ -1,4 +1,4 @@
-export const intakeOColumns = [
+export const intakeAdminColumns = [
   {
     label:'Notes',
     type:'popup',
@@ -10,6 +10,25 @@ export const intakeOColumns = [
     type:'date',
     recordName: 'date',
     width: '52'
+  },
+  {
+    label:'Client',
+    type:'text',
+    recordName: 'name',
+    width: '52'
+  },
+  {
+    label:'Insurance',
+    type:'insurance-edit',
+    recordName: 'insurance',
+    width: '64'
+  },
+  {
+    label:'Coordinator',
+    type:'people',
+    recordName: 'coordinator',
+    people: [],
+    width: '96'
   },
   {
     label:'Status',
@@ -88,22 +107,10 @@ export const intakeOColumns = [
     width: '52'
   },
   {
-    label:'Client',
-    type:'text',
-    recordName: 'name',
-    width: '52'
-  },
-  {
     label:'DOB',
     type:'date-edit',
     recordName: 'date_of_birth',
     width: '52'
-  },
-  {
-    label:'Insurance',
-    type:'insurance-edit',
-    recordName: 'insurance',
-    width: '96'
   },
   {
     label:'Prefix',
@@ -122,13 +129,6 @@ export const intakeOColumns = [
     type:'boolean',
     recordName: 'active',
     width: '52'
-  },
-  {
-    label:'Coordinator',
-    type:'people',
-    recordName: 'coordinator',
-    people: [],
-    width: '56'
   },
   // {
   //   label:'INN Admit %',
