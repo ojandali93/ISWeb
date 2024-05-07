@@ -197,7 +197,7 @@ const IntakeAnalytivsScreen = () => {
     Object.values(analytics).map((record) => {
       newData.push(record)
     })
-    setAnalyticsData(newData)
+    setAnalyticsData(newData.reverse())
   }
 
   return (
