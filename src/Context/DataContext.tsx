@@ -258,6 +258,9 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   const navigate = useNavigate()
 
+  let counter = 0
+
+
   const collectAllData = () => {
     grabAllProfiles()
     getIntakeRecords()
@@ -624,46 +627,63 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       })
   }
 
+
+
+
   const grabAvailityData = (claim_id: any) => {
     setLoadingAvailityData(true);
     const url = `https://intellasurebackend-docker.onrender.com/availity/${claim_id}`;
     axios.get(url)
-      .then((response: any) => {
-        const existingClaimNumbers = new Set();
-        const newDataArray = response.data.claimStatuses.reduce((acc: any[], claimStatus: any) => {
-          if (!existingClaimNumbers.has(claimStatus.claimControlNumber)) {
-            existingClaimNumbers.add(claimStatus.claimControlNumber);
-            const newData = {
-              claimControlNumber: claimStatus.claimControlNumber,
-              patientControlNumber: claimStatus.patientControlNumber,
-              fromDate: claimStatus.fromDate,
-              toDate: claimStatus.toDate,
-              category: claimStatus.statusDetails[0].category,
-              categoryCode: claimStatus.statusDetails[0].categoryCode,
-              checkNumber: claimStatus.statusDetails[0].checkNumber,
-              claimAmount: claimStatus.statusDetails[0].claimAmount,
-              effectiveDate: claimStatus.statusDetails[0].effectiveDate,
-              finalizedDate: claimStatus.statusDetails[0].finalizedDate,
-              paymentAmount: claimStatus.statusDetails[0].paymentAmount,
-              remittanceDate: claimStatus.statusDetails[0].remittanceDate,
-              status: claimStatus.statusDetails[0].status,
-              statusCode: claimStatus.statusDetails[0].statusCode,
-              traceId: claimStatus.traceId,
-            };
-            acc.push(newData);
+        .then((response: any) => {
+          // existing code
+          console.log(response)
+          const existingClaimNumbers = new Set();
+          const newDataArray = response.data.claimStatuses.reduce((acc: any[], claimStatus: any) => {
+            if (!existingClaimNumbers.has(claimStatus.claimControlNumber)) {
+              existingClaimNumbers.add(claimStatus.claimControlNumber);
+              const newData = {
+                claimControlNumber: claimStatus.claimControlNumber,
+                patientControlNumber: claimStatus.patientControlNumber,
+                fromDate: claimStatus.fromDate,
+                toDate: claimStatus.toDate,
+                category: claimStatus.statusDetails[0].category,
+                categoryCode: claimStatus.statusDetails[0].categoryCode,
+                checkNumber: claimStatus.statusDetails[0].checkNumber,
+                claimAmount: claimStatus.statusDetails[0].claimAmount,
+                effectiveDate: claimStatus.statusDetails[0].effectiveDate,
+                finalizedDate: claimStatus.statusDetails[0].finalizedDate,
+                paymentAmount: claimStatus.statusDetails[0].paymentAmount,
+                remittanceDate: claimStatus.statusDetails[0].remittanceDate,
+                status: claimStatus.statusDetails[0].status,
+                statusCode: claimStatus.statusDetails[0].statusCode,
+                traceId: claimStatus.traceId,
+              };
+              acc.push(newData);
+            }
+            return acc;
+          }, []);
+
+          setAvailityData(newDataArray);
+          navigate('/availityScreen');
+          setLoadingAvailityData(false);
+
+        })
+        .catch((err: any) => {
+          // existing code
+          setLoadingAvailityData(false);
+          // check if the coutner number <3
+          if(counter < 3){
+            counter = counter + 1;
+            grabAvailityData(claim_id)
+          }else{
+            alert("Claim was not found in Availity");
+            console.error(err);
           }
-          return acc;
-        }, []);
-  
-        setAvailityData(newDataArray);
-        navigate('/availityScreen');
-        setLoadingAvailityData(false);
-      })
-      .catch((err: any) => {
-        setLoadingAvailityData(false);
-        alert("Claim was not found in Availity");
-        console.error(err);
-      });
+          // increment the counter
+          // call the same funciton repass the claim id
+
+        });
+
   }
   
 
