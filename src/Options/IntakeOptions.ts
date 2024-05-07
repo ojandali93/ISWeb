@@ -107,7 +107,7 @@ export const intakeOColumns = [
   },
   {
     label:'Prefix',
-    type:'text',
+    type:'clickable',
     recordName: 'prefix',
     width: '52'
   },
