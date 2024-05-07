@@ -20,6 +20,7 @@ import { useHistoric } from '../../Context/HistoricContext';
 import SingleClickTabComponent from '../Navigation/SingleClickTabComponent';
 import SingleSelectClickComponent from './SingleSelectClickComponent';
 import { useAuth } from '../../Context/AuthContext';
+import { useIntake } from '../../Context/IntakeContext';
 
 interface PeopleOptions {
   name: string;
@@ -56,6 +57,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
   const {currentSidebarTab, handleUpdateCurrentSidebarTab} = useNavigation()
   const {selectedFollowup, updateSelectedFollowup, updateCoordinatorFollwup} = useFollowup()
   const {currentProfile} = useAuth()
+  const {showPrefixPopup, showPrefix, grabPrefixRecordsFromDashboard} = useIntake();
   const location = useLocation()
 
 
@@ -547,7 +549,14 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                 <Edit height={20} width={20} className='text-secondary ml-2'/>
               </div></>
             ) : column.type === 'clickable' ? (
-              currentSidebarTab === 'Historic'
+              (column.label === 'Prefix') ? 
+                !showPrefix 
+                ? (<div className='hover:cursor-pointer' onClick={() => {grabPrefixRecordsFromDashboard(record[column.recordName]);showPrefixPopup()}}>
+                  <p className='text-primary'>{record[column.recordName]}</p>
+                </div>)
+
+              : (null)
+              : currentSidebarTab === 'Historic'
                 ? <div className='hover:cursor-pointer'>
                     <p className='text-sky-500' onClick={() => {handleClick(record[column.recordName], record['network'])}}>{record[column.recordName]}</p>
                   </div>
