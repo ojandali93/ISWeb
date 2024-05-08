@@ -30,6 +30,9 @@ import IntakeAnalytivsScreen from './Screens/Analytics/IntakeAnalytivsScreen';
 import ClaimsAvailityScreen from './Screens/Claims/ClaimsAvailityScreen';
 import Historic2Screen from './Screens/Historic/Historic2Screen';
 import Historic1Screen from './Screens/Historic/Historic1Screen';
+import FollowupCollabScreen from './Screens/FollowUp/FollowupCollabScreen';
+import FollowupAveaScreen from './Screens/FollowUp/FollowupAveaScreen';
+import BillingAnalyticsScreen from './Screens/Analytics/BillingAnalyticsScreen';
 
 Amplify.configure(amplifyconfig)
 
@@ -246,7 +249,7 @@ function App() {
                       currentProfile.department === 'administration' || 
                       currentProfile.department === 'billing'
                     )
-                    ? <FollowUpScreen /> 
+                    ? <FollowupCollabScreen /> 
                     : <Navigate to="/" />
                   : <Navigate to="/auth/login" />
           }
@@ -262,7 +265,7 @@ function App() {
                       currentProfile.department === 'administration' || 
                       currentProfile.department === 'billing'
                     )
-                    ? <FollowUpScreen /> 
+                    ? <FollowupCollabScreen /> 
                     : <Navigate to="/" />
                   : <Navigate to="/auth/login" />
           }
@@ -278,7 +281,23 @@ function App() {
                       currentProfile.department === 'administration' || 
                       currentProfile.department === 'billing'
                     )
-                    ? <FollowUpScreen /> 
+                    ? <FollowupAveaScreen /> 
+                    : <Navigate to="/" />
+                  : <Navigate to="/auth/login" />
+          }
+        />
+        <Route
+          path="/analytics/billing"
+          element={
+            authLoading 
+              ? <LoadingScreen /> 
+              : currentUser.username 
+                  ? (
+                      currentProfile.department === 'dev' ||
+                      currentProfile.department === 'administration' || 
+                      currentProfile.department === 'billing'
+                    )
+                    ? <BillingAnalyticsScreen /> 
                     : <Navigate to="/" />
                   : <Navigate to="/auth/login" />
           }

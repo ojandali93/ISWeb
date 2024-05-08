@@ -128,6 +128,10 @@ interface DataContextType {
   externalData: ExternalDataProps[] | null;
   currentNotes: NotesProps[] | null;
   currentIntakeId: any;
+  followupAveaRecords: ClaimsProps[] | null;
+  pendingAveaRecords: ClaimsProps[] | null;
+  successfullAveaRecords: ClaimsProps[] | null;
+  failedAveaRecords: ClaimsProps[] | null;
   collectAllData: () => void;
   grabAllProfiles: () => void;
   grabClaims: () => void;
@@ -188,6 +192,10 @@ const DataContext = createContext<DataContextType>({
   externalData: null,
   currentNotes: null,
   currentIntakeId: null,
+  followupAveaRecords: null,
+  pendingAveaRecords: null,
+  successfullAveaRecords: null,
+  failedAveaRecords: null,
   collectAllData: () => {},
   grabAllProfiles: () => {},
   grabClaims: () => {},
@@ -242,6 +250,11 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [successfullRecords, setSuccessfulRecords] = useState<ClaimsProps[] | null>(null)
   const [failedRecords, setFailedRecords] = useState<ClaimsProps[] | null>(null)
 
+  const [followupAveaRecords, setFollowupAveaClaims] = useState<ClaimsProps[] | null>(null)
+  const [pendingAveaRecords, setPendingAveaRecords] = useState<ClaimsProps[] | null>(null)
+  const [successfullAveaRecords, setSuccessfulAveaRecords] = useState<ClaimsProps[] | null>(null)
+  const [failedAveaRecords, setFailedAveaRecords] = useState<ClaimsProps[] | null>(null)
+
   const [availityData, setAvailityData] = useState<any>(null)
   const [loadingAvailityData, setLoadingAvailityData] = useState<boolean>(false)
 
@@ -260,7 +273,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   let counter = 0
 
-
   const collectAllData = () => {
     grabAllProfiles()
     getIntakeRecords()
@@ -271,6 +283,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     grabAveaClaims()
     getClaimsFollowup()
     grabExternalData()
+    getAveaFollowup()
   }
 
   const grabAllProfiles = () => {
@@ -594,6 +607,40 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     });
   }
 
+  const getAveaFollowup = () => {
+    let pendingRecords: any = []
+    let successfulRecords: any = []
+    let rejectedRecords: any = []
+    let config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: 'https://intellasurebackend-docker.onrender.com/claims/avea_favorites',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    axios.request(config)
+    .then((response) => {
+      console.log(response.data)
+      response.data.map((record: any) => {
+        record.claim_status === 'Successful'
+          ? successfulRecords.push(record)
+          : record.claim_status === 'pending'
+              ? pendingRecords.push(record)
+              : record.claim_status == 'Failed'
+                  ? rejectedRecords.push(record)
+                  : pendingRecords.push(record)
+      })
+      setFailedAveaRecords(rejectedRecords)
+      setSuccessfulAveaRecords(successfulRecords)
+      setPendingAveaRecords(pendingRecords)
+      setFollowupAveaClaims(response.data)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
   function getCurrentDateFormatted() {
     const now = new Date();
     const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-based in JS, add 1
@@ -684,10 +731,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
           // call the same funciton repass the claim id
 
         });
-
   }
   
-
   const searchExternalData = (search: string) => {
     if(search === ''){
       grabExternalData()
@@ -807,6 +852,10 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     pendingRecords,
     successfullRecords,
     failedRecords,
+    followupAveaRecords,
+    pendingAveaRecords,
+    successfullAveaRecords,
+    failedAveaRecords,
     collectAllData,
     grabClaims,
     grabAveaClaims,
@@ -839,3 +888,9 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     </DataContext.Provider>
   );
 };
+
+
+// const [followupAveaRecords, setFollowupAveaClaims] = useState<ClaimsProps[] | null>(null)
+  // const [pendingAveaRecords, setPendingAveaRecords] = useState<ClaimsProps[] | null>(null)
+  // const [successfullAveaRecords, setSuccessfulAveaRecords] = useState<ClaimsProps[] | null>(null)
+  // const [failedAveaRecords, setFailedAveaRecords] = useState<ClaimsProps[] | null>(null)

@@ -106,6 +106,22 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
       ]
     },
     {
+      label: 'Billing Analytics',
+      icon: 'trending-up',
+      route: '/analytics/billing',
+      page: 'static',
+      subTabs: null,
+      department: [
+        'administration',
+        'dev'
+      ],
+      privileges: [
+        'admin',
+        'dev',
+        'owner'
+      ]
+    },
+    {
       label: 'Claims',
       icon: 'file-text',
       route: '/claims/collab',
