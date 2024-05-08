@@ -51,10 +51,10 @@ interface CellProps {
 
 const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedClaims}) => {
   const navigate = useNavigate()
-  const {intakeUsers, getIntakeRecords, insuranceOptions, grabAllProfiles, grabAvailityData, billingUsers, getNotes} = useData()
+  const {intakeUsers, getIntakeRecords, insuranceOptions, grabAllProfiles, grabAvailityData, grabAveaAvailityData, billingUsers, getNotes} = useData()
   const {updateSelectedClaims, updateSelectedClaimsAvea} = useClaims()
   const {grabPrefixRecords, grabUserRecords} = useHistoric()
-  const {currentSidebarTab, handleUpdateCurrentSidebarTab} = useNavigation()
+  const {currentSidebarTab, currentSidebarSubTab, handleUpdateCurrentSidebarTab} = useNavigation()
   const {selectedFollowup, updateSelectedFollowup, updateCoordinatorFollwup} = useFollowup()
   const {currentProfile} = useAuth()
   const {showPrefixPopup, showPrefix, grabPrefixRecordsFromDashboard} = useIntake();
@@ -563,7 +563,11 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                                 <p className='text-primary'>{record[column.recordName]}</p>
                               </div>
                             : <div>{record[column.recordName] ? record[column.recordName] : ''}</div>
-                        : <SingleSelectClickComponent value={record[column.recordName]} onChange={grabAvailityData} record={record}/>
+                        
+                        : currentSidebarSubTab === 'Avea'  
+                          ? <SingleSelectClickComponent value={record[column.recordName]} onChange={grabAveaAvailityData} record={record}/>
+                          
+                            :<SingleSelectClickComponent value={record[column.recordName]} onChange={grabAvailityData} record={record}/>
             ) : (
               <div>
                 <p>
