@@ -678,6 +678,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
           }else{
             alert("Claim was not found in Availity");
             console.error(err);
+            counter = 3;
           }
           // increment the counter
           // call the same funciton repass the claim id
