@@ -11,6 +11,7 @@ import { start } from 'repl'
 import { faC } from '@fortawesome/free-solid-svg-icons'
 import PaginationComponent from '../Pagination/PaginationComponent'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { Search } from 'react-feather'
 
 const ClaimsFilterComponent = () => {
 
@@ -89,6 +90,9 @@ const ClaimsFilterComponent = () => {
       <div className='w-full flex flex-row items-center justify-between mt-1'>
         <div className=''>
           <PaginationComponent pageCount={50} currentPage={page} handlePageChange={handlePageChange}/>
+        </div>
+        <div className='flex-1 mr-2'>
+          <SearchComponent searchTerm={''} handler={() => {}} activeSearch={false} handleActiveSearch={() => {}} placeholder='Search name...'/>
         </div>
         <div className='flex flex-row items-center justify-end'>
           <div className='flex flex-row items-center'>

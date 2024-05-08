@@ -400,6 +400,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     };
     axios.request(config)
     .then((response) => {
+      console.log('claims: ', response.data)
       setClaimsRcords(response.data)
     })
     .catch((error) => {
@@ -437,6 +438,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     };
     axios.request(config)
     .then((response) => {
+      console.log('claims: ', response.data)
       setClaimsRcords(response.data)
     })
     .catch((error) => {
