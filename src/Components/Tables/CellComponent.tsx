@@ -549,14 +549,7 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                 <Edit height={20} width={20} className='text-secondary ml-2'/>
               </div></>
             ) : column.type === 'clickable' ? (
-              (column.label === 'Prefix') ? 
-                !showPrefix 
-                ? (<div className='hover:cursor-pointer' onClick={() => {grabPrefixRecordsFromDashboard(record[column.recordName]);showPrefixPopup()}}>
-                  <p className='text-primary'>{record[column.recordName]}</p>
-                </div>)
-
-              : (null)
-              : currentSidebarTab === 'Historic'
+              currentSidebarTab === 'Historic'
                 ? <div className='hover:cursor-pointer'>
                     <p className='text-sky-500' onClick={() => {handleClick(record[column.recordName], record['network'])}}>{record[column.recordName]}</p>
                   </div>
@@ -564,7 +557,13 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                     ? <div className='hover:cursor-pointer'>
                         <p className='text-sky-500' onClick={() => {handleClickHistoric(record[column.recordName])}}>{record[column.recordName]}</p>
                       </div>
-                    : <SingleSelectClickComponent value={record[column.recordName]} onChange={grabAvailityData} record={record}/>
+                    : currentSidebarTab === 'Dashboard'
+                        ? column.label === 'Prefix'
+                            ?<div className='hover:cursor-pointer' onClick={() => {grabPrefixRecordsFromDashboard(record[column.recordName]);showPrefixPopup()}}>
+                                <p className='text-primary'>{record[column.recordName]}</p>
+                              </div>
+                            : <div>{record[column.recordName] ? record[column.recordName] : ''}</div>
+                        : <SingleSelectClickComponent value={record[column.recordName]} onChange={grabAvailityData} record={record}/>
             ) : (
               <div>
                 <p>
