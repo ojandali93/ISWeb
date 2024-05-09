@@ -101,7 +101,6 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
   }
 
   const handleDateChange = (date: string) => {
-    console.log('new date as string: ', date)
     setValue(date)
   }
 
@@ -129,7 +128,6 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
   }
 
   const handleDelete = (intake_id: string) => {
-    console.log(intake_id)
     let config = {
       method: 'delete',
       maxBodyLength: Infinity,
@@ -139,7 +137,6 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
 
     axios.request(config)
     .then((response) => {
-      console.log(JSON.stringify(response.data));
       getIntakeRecords()
     })
     .catch((error) => {
@@ -240,9 +237,6 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
   }
 
   const handleSelectChange = (columnName: string | undefined, record: any, value: any) => {
-    console.log('column name: ', columnName)
-    console.log('value: ', value)
-    console.log('record: ', record)
     const data = {
       "checked_in": columnName === 'Status' ? value : record.checked_in,
       "booked": columnName === 'Booked' ? value : record.booked,
@@ -259,18 +253,15 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
       "policy": columnName === 'Policy' ? value : record.policy_id,
       "insurance": columnName === 'Insurance' ? value : record.insurance
     }
-    console.log('updated record: ', data)
     submitUpdate(data)
   }
 
   const handlePrivilegeChange = (columnName: string | undefined, record: any, value: any) => {
-    console.log(record)
     const data = {
       "department": columnName === 'Department' ? value : record.department,
       "privileges": columnName === 'Privileges' ? value : record.privileges,
       "active": record.active
     };
-    console.log("data object: ", data);
     let config = {
       method: 'put',
       maxBodyLength: Infinity,
@@ -283,7 +274,6 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
     axios.request(config)
       .then((response: any) => {
         grabAllProfiles();
-        console.log(response)
       })
       .catch((error) => {
         console.log(error);
@@ -337,7 +327,6 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                       value={cellValue}
                       onChange={(newValue) => {
                         handleSelectChange(column.label, record, newValue)
-                        console.log('updated select option: ', newValue);
                       }}
                     />
                   </div>
@@ -361,7 +350,6 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                     value={cellValue}
                     onChange={(newValue) => {
                       handleSelectChange(column.label, record, newValue)
-                      console.log('updated select option: ', newValue);
                     }}
                   />
                 </div>
@@ -431,7 +419,6 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                           <DateChangeComponent selectedDate={dobDate} handleDateChange={(date: string) => {
                             handleDateSelectedChange(date, column.label)
                             handleSelectChange(column.label, record, date)
-                            console.log('updated select option: ', date);
                           }}/>
                           </div>
                         </>
@@ -449,7 +436,6 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                     <DateSelectionComponent selectedDate={selectedDate} handleDateChange={(date: string) => {
                       handleDateSelectedChange(date, column.label)
                       handleSelectChange(column.label, record, date)
-                      console.log('updated select option: ', date);
                     }}/>
                   </div>
                 ) : (
@@ -490,7 +476,6 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                       value={cellValue}
                       onChange={(newValue) => {
                         handleSelectChange(column.label, record, newValue)
-                        console.log('updated select option: ', newValue);
                       }}
                     />
                   </div>
@@ -499,8 +484,6 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                       options={formattedBillingUsers()}
                       value={cellValue === null ? 'Select Coordinator' : getCoordinatorName(cellValue)}
                       onChange={(newValue) => {
-                        console.log('default value: ', cellValue)
-                        console.log('updated select option: ', newValue);
                         updateCoordinatorFollwup(record['claim_id'], newValue)
                       }}
                     />

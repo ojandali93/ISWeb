@@ -376,7 +376,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     const url = 'https://intellasurebackend-docker.onrender.com/billing/'
     axios.get(url)
     .then((response) => {
-      console.log('billiing analytics: ', response.data.slice(0, 37))
       let data = response.data.slice(0, 30)
       data.reverse()
       data.map((record: any) => {
@@ -399,7 +398,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   };
 
   const grabSearchByNameClaims = ( name:string ) => {
-    console.log('search name', name)
 
     let formattedName = name.replace(/\s+/g, '_').replace(/_+$/, '');
     let config = {
@@ -412,7 +410,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   
       axios.request(config)
           .then((response: any) => {
-            console.log('claims: ', response.data)
             setClaimsRcords(response.data)
           })
           .catch((error) => {
@@ -491,7 +488,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     };
     axios.request(config)
     .then((response) => {
-      console.log('claims: ', response.data)
       setClaimsRcords(response.data)
     })
     .catch((error) => {
@@ -517,7 +513,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       'facilities': facility,
       'status': status
     }
-    console.log('refresh claims: ', data)
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
@@ -529,7 +524,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     };
     axios.request(config)
     .then((response) => {
-      console.log('claims: ', response.data)
       setClaimsRcords(response.data)
     })
     .catch((error) => {
@@ -554,7 +548,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       'facilities': facility,
       'status': status
     }
-    console.log('refresh claims: ', data)
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
@@ -714,7 +707,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     };
     axios.request(config)
     .then((response) => {
-      console.log(response.data)
       response.data.map((record: any) => {
         record.claim_status === 'Successful'
           ? successfulRecords.push(record)
@@ -775,8 +767,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     const url = `https://intellasurebackend-docker.onrender.com/availity/${claim_id}`;
     axios.get(url)
         .then((response: any) => {
-          // existing code
-          console.log(response)
           const existingClaimNumbers = new Set();
           const newDataArray = response.data.claimStatuses.reduce((acc: any[], claimStatus: any) => {
             if (!existingClaimNumbers.has(claimStatus.claimControlNumber)) {
@@ -866,7 +856,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
             note.name = response2.data.data.name
             return note
           })
-          console.log(newData2);
           setCurrentNotes(newData2)
         })
       }
@@ -880,7 +869,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     const url = 'https://intellasurebackend-docker.onrender.com/intake/update_intake_note'
     axios.post(url, notesData)
     .then((response: any) => {
-      console.log("New response added.",response);
       getNotes(currentIntakeId, notesData.coordinator)
     })
     .catch((err: any) => {

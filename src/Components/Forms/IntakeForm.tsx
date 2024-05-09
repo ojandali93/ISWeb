@@ -32,7 +32,6 @@ const IntakeForm = () => {
   }
 
   const handleUpdateDOB = (text: Date) => {
-    console.log('intake form date: ', text)
     //intake form date:  Thu Apr 25 2024 12:16:05 GMT-0700 (Pacific Daylight Time)
     setDateOfBirth(text)
   }

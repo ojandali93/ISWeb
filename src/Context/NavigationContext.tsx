@@ -287,14 +287,12 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
 
   useEffect(() => {
     const storedRoute = localStorage.getItem('lastClickedRoute');
-    console.log(storedRoute)
     if (storedRoute) {
       <Navigate to={storedRoute}/>
     }
   }, []);
 
   const handleUpdateCurrentSidebarTab = (text: string, path: string) => {
-    console.log(path)
     localStorage.setItem('lastClickedRoute', path);
     setCurrentSidebarTab(text)
   }

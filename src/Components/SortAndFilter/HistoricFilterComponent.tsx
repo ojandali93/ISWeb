@@ -11,7 +11,6 @@ const HistoricFilterComponent = () => {
   const [activeSearch, setActiveSearch] = useState<boolean>(false)
 
   const handleSearchChange = (text: string) => {
-    console.log('searched text: ', text)
     setSearchTerm(text)
     searchHistoricRecords(text)
   }

@@ -19,10 +19,6 @@ interface ChartProps {
 
 const ChartComponent:React.FC<ChartProps> = ({records}) => {
 
-  useEffect(() => {
-    console.log('analytics reecords: ', records)
-  }, [])
-
   return (
     <div>
       <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
