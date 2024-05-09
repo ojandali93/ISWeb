@@ -8,9 +8,7 @@ const AvailityComponent = () => {
   
   return (
     <div>
-      {availityData.map( (record: any, index: any) => (
-      <TableComponent key={index} records={[record]} columns={AvailityOptions} users={allUsers} table="Availity"/>
-      ))}
+      <TableComponent records={availityData} columns={AvailityOptions} users={allUsers} table="Availity"/>
     </div>
   )
 }
