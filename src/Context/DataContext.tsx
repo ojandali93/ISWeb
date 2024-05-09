@@ -783,6 +783,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
                 effectiveDate: claimStatus.statusDetails[0].effectiveDate,
                 finalizedDate: claimStatus.statusDetails[0].finalizedDate,
                 paymentAmount: claimStatus.statusDetails[0].paymentAmount,
+                percent_payout: Number(claimStatus.statusDetails[0].paymentAmount)/Number(claimStatus.statusDetails[0].claimAmount),
                 remittanceDate: claimStatus.statusDetails[0].remittanceDate,
                 status: claimStatus.statusDetails[0].status,
                 statusCode: claimStatus.statusDetails[0].statusCode,

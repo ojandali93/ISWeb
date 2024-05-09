@@ -42,9 +42,20 @@ export const AvailityOptions = [
   },
   {
     label: 'Claim Amount',
-    type: 'text',
+    type: 'dollar',
     recordName: 'claimAmount',
     width: '52'
+  },
+  {
+    label: 'Payment Amount',
+    type: 'dollar',
+    recordName: 'paymentAmount',
+    width: '52'
+  },
+  {
+    label: 'Payout',
+    type: 'percent',
+    recordName: 'percent_payout',
   },
   {
     label: 'Effective Date',
@@ -56,12 +67,6 @@ export const AvailityOptions = [
     label: 'Finalized Date',
     type: 'text',
     recordName: 'finalizedDate',
-    width: '52'
-  },
-  {
-    label: 'Payment Amount',
-    type: 'text',
-    recordName: 'paymentAmount',
     width: '52'
   },
   {
