@@ -114,10 +114,10 @@ function App() {
               ? <LoadingScreen /> 
               : currentUser.username 
                   ? (currentProfile.department === 'intake' || 
-                    currentProfile.department === 'admin' || 
+                    currentProfile.department === 'administration' || 
                     currentProfile.department === 'dev' ) && 
                     (currentProfile.privileges === 'manager' || 
-                    currentProfile.privileges === 'administration' || 
+                    currentProfile.privileges === 'admin' || 
                     currentProfile.privileges === 'dev' ||
                     currentProfile.privileges === 'owner' )
                       ? <IntakeAnalytivsScreen /> 
