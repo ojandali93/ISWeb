@@ -25,7 +25,7 @@ const ExternalFilterComponent = () => {
       <div className='w-full flex flex-row items-center justify-start'>
         <SearchComponent searchTerm={searchTerm} handler={handleSearchChange}
           activeSearch={activeSearch} handleActiveSearch={handleActiveSearchChange}
-          placeholder='Search Name...'
+          placeholder='Search Name...' requireSubmit={false}
         />
       </div>
     </div>

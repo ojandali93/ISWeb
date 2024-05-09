@@ -4,17 +4,18 @@ import { Search, X } from 'react-feather'
 interface ComponentProps {
   searchTerm: string;
   handler: (text: string) => void;
-  activeSearch: boolean;
-  handleActiveSearch: () => void;
   placeholder: string;
-  requireSubmit?: boolean;
-  submitSearch?: (name: string) => void;
+  activeSearch: boolean;
+  handleSearchToggle: () => void;
+  submitSearch: (name: string) => void;
+  clearSearch: () => void;
 }
 
-const SearchComponent: React.FC<ComponentProps>  = ({searchTerm, handler, activeSearch, handleActiveSearch, requireSubmit, placeholder, submitSearch}) => {
+const SearchSubmitComponent: React.FC<ComponentProps>  = ({searchTerm, handler, placeholder, submitSearch, activeSearch, handleSearchToggle, clearSearch}) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    submitSearch(searchTerm.toUpperCase())
   };
 
   return (
@@ -29,11 +30,11 @@ const SearchComponent: React.FC<ComponentProps>  = ({searchTerm, handler, active
       </form>
       {
         activeSearch
-          ? <X size={24} color='white'/>
+          ? <X onClick={clearSearch} height={24} width={24} color='white'/>
           : null
-      } 
+      }
     </div>
   )
 }
 
-export default SearchComponent
+export default SearchSubmitComponent
