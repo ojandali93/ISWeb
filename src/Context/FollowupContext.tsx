@@ -50,12 +50,10 @@ export const FollowupProvider: React.FC<AppProviderProps> = ({ children }) => {
   const { getClaimsFollowup } = useData()
 
   const updateFollowupTab = (text: string) => {
-    console.log('update follow up tab: ', text)
     setFollowupTab(text)
   }
 
   const updateSelectedFollowup = (text: string) => {
-    console.log('new added item: ', text)
     setSelectedFollowup(prevSelectedFollowup => {
       if (prevSelectedFollowup.includes(text)) {
         return prevSelectedFollowup.filter(item => item !== text);
@@ -89,7 +87,6 @@ export const FollowupProvider: React.FC<AppProviderProps> = ({ children }) => {
   const addBatchToFavorites = () => {
     setPushingToFollowup(true)
     let newData = arrayToIndexedObject(selectedFollowup)
-    console.log(JSON.stringify(newData))
     let config = {
       method: 'patch',
       maxBodyLength: Infinity,
@@ -148,7 +145,6 @@ export const FollowupProvider: React.FC<AppProviderProps> = ({ children }) => {
       },
       data : data
     };
-    console.log(JSON.stringify(config))
     axios.request(config)
       .then((response) => {
         getClaimsFollowup()

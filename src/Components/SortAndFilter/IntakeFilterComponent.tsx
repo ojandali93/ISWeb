@@ -39,7 +39,7 @@ const IntakeFilterComponent = () => {
         <ButtonComponent label='Add Record' handler={handleAddRecord}/>
         <SearchComponent searchTerm={searchTerm} handler={handleSearchChange}
           activeSearch={activeSearch} handleActiveSearch={handleActiveSearchChange}
-          placeholder='Search Name...'
+          placeholder='Search Name...' requireSubmit={false}
         />
         {/* <div>
           <PaginationComponent currentPage={currentPage} pageCount={pageCount} handlePageChange={handlePageChange}/>

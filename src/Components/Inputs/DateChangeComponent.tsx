@@ -9,10 +9,6 @@ interface SelectComponentProps {
 
 const DobSelectComponent: React.FC<SelectComponentProps> = ({selectedDate, handleDateChange}) => {
 
-  console.log(selectedDate)
-
-  // const [select, setSelect] = useState(new Date(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60000))
-
   const convertDateToCustomFormatDob = (date: Date) => {
     const mm = String(date.getMonth() + 1).padStart(2, '0'); // Local month
     const dd = String(date.getDate()).padStart(2, '0'); // Local date

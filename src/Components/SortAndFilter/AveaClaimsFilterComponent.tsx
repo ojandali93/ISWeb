@@ -105,6 +105,9 @@ const AveaClaimsFilterComponent = () => {
           <div className=''>
             <PaginationComponent pageCount={50} currentPage={page} handlePageChange={handlePageChange}/>
           </div>
+          <div className='flex-1 mr-2'>
+            <SearchComponent searchTerm={''} handler={() => {}} activeSearch={false} handleActiveSearch={() => {}} placeholder='Search name...'/>
+          </div>
           <div className='flex flex-row items-center justify-end'>
             <div className='flex flex-row items-center'>
               <p className='mx-2 min-w-16 max-w-24 text-white font-bold'>Date Range: </p>

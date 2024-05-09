@@ -11,6 +11,8 @@ import { start } from 'repl'
 import { faC } from '@fortawesome/free-solid-svg-icons'
 import PaginationComponent from '../Pagination/PaginationComponent'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { Search } from 'react-feather'
+import SearchSubmitComponent from '../Inputs/SearchSubmitComponent'
 
 const ClaimsFilterComponent = () => {
 
@@ -18,7 +20,7 @@ const ClaimsFilterComponent = () => {
   const location = useLocation()
 
   const {selectedClaims, addBatchToFavorites, pushingToFollowup} = useClaims()
-  const { grabRefreshClaims } = useData()
+  const { grabRefreshClaims, claimsSearch, handleClaimsSearchChange, grabSearchByNameClaims, activeClaimSearch, handleAcriveClaimSearchChange, clearActiveClaimSearch } = useData()
 
   const [page, setPage] = useState<number>(1)
 
@@ -89,6 +91,9 @@ const ClaimsFilterComponent = () => {
       <div className='w-full flex flex-row items-center justify-between mt-1'>
         <div className=''>
           <PaginationComponent pageCount={50} currentPage={page} handlePageChange={handlePageChange}/>
+        </div>
+        <div className='flex-1 mr-2'>
+          <SearchSubmitComponent searchTerm={claimsSearch} handler={handleClaimsSearchChange} submitSearch={grabSearchByNameClaims} placeholder='Search name...' activeSearch={activeClaimSearch} handleSearchToggle={handleAcriveClaimSearchChange} clearSearch={clearActiveClaimSearch}/>
         </div>
         <div className='flex flex-row items-center justify-end'>
           <div className='flex flex-row items-center'>

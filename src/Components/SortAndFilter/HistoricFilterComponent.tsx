@@ -11,7 +11,6 @@ const HistoricFilterComponent = () => {
   const [activeSearch, setActiveSearch] = useState<boolean>(false)
 
   const handleSearchChange = (text: string) => {
-    console.log('searched text: ', text)
     setSearchTerm(text)
     searchHistoricRecords(text)
   }
@@ -25,7 +24,7 @@ const HistoricFilterComponent = () => {
       <div className='w-full flex flex-row items-center justify-start'>
         <SearchComponent searchTerm={searchTerm} handler={handleSearchChange}
           activeSearch={activeSearch} handleActiveSearch={handleActiveSearchChange}
-          placeholder='Search Name...'
+          placeholder='Search Name...' requireSubmit={false}
         />
       </div>
     </div>

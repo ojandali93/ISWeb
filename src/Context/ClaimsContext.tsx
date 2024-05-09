@@ -53,7 +53,6 @@ export const ClaimsProvider: React.FC<AppProviderProps> = ({ children }) => {
   const { grabRefreshClaims, grabClaims, grabAveaClaims } = useData()
 
   const updateSelectedClaims = (text: string) => {
-    console.log('new added item: ', text)
     setSelectedClaims(prevSelectedClaims => {
       if (prevSelectedClaims.includes(text)) {
         return prevSelectedClaims.filter(item => item !== text);
@@ -92,7 +91,6 @@ export const ClaimsProvider: React.FC<AppProviderProps> = ({ children }) => {
   }
 
   const updateSelectedClaimsAvea = (text: string) => {
-    console.log('new added item: ', text)
     setSelectedClaimsAvea(prevSelectedClaims => {
       if (prevSelectedClaims.includes(text)) {
         return prevSelectedClaims.filter(item => item !== text);
@@ -119,7 +117,6 @@ export const ClaimsProvider: React.FC<AppProviderProps> = ({ children }) => {
   const addBatchToFavorites = (navigate: any, location: any) => {
     setPushingToFollowup(true)
     let newData = arrayToIndexedObject(selectedClaims)
-    console.log(newData)
     let config = {
       method: 'patch',
       maxBodyLength: Infinity,
@@ -144,7 +141,6 @@ export const ClaimsProvider: React.FC<AppProviderProps> = ({ children }) => {
   const addBatchToAveaFavorites = () => {
     setPushingToFollowup(true)
     let newData = arrayToIndexedObjectAvea(selectedClaimsAvea)
-    console.log('new avea data: ', newData)
     let config = {
       method: 'patch',
       maxBodyLength: Infinity,

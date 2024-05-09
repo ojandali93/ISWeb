@@ -41,8 +41,6 @@ const SidebarSubMenuComponent: React.FC<NavigationTabProps> = ({
   const navigate = useNavigate()
 
   const handleRedirectTab = (tab: TabOptions, subTab: TabSubOptions) => {
-    console.log('tab: ', tab.label)
-    console.log('sub tab: ', subTab.label)
     handleUpdateCurrentSidebarTab(tab.label, location.pathname)
     handleUpdateCurrentSidebarSubTab(subTab.label)
     navigate(subTab.route)

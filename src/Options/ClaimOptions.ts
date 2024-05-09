@@ -18,6 +18,12 @@ export const ClaimOptions = [
     width: '52'
   },
   {
+    label:'Policy',
+    type:'text',
+    recordName: 'policy_id',
+    width: '52'
+  },
+  {
     label:'Insruance',
     type:'text',
     recordName: 'insurance',

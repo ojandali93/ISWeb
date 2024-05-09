@@ -92,7 +92,6 @@ export const HistoricProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [selectedUserFinancial, setSelectedUserFinancial] = useState<UserFinancialProps[] | null>(null)
 
   const grabPrefixRecords = (selectedPrefix: string, selectedNetwork: string) => {
-    console.log(`parameters: ${selectedNetwork} & ${selectedPrefix}`)
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
@@ -117,7 +116,6 @@ export const HistoricProvider: React.FC<AppProviderProps> = ({ children }) => {
     };
     axios.request(config)
     .then((response) => {
-      console.log('level 1 data: ', response.data)
       let newUserDate = {
         name: response.data.patient_info[0].name || '',
         insurance: response.data.patient_info[0].insurance_company || '',

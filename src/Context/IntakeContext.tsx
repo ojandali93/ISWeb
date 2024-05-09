@@ -91,7 +91,6 @@ export const IntakeProvider: React.FC<AppProviderProps> = ({ children }) => {
           }
           return item;
         })
-        console.log("in network response", data) 
         setPrefixDataDashboard(data);
       }
       else {
@@ -106,7 +105,6 @@ export const IntakeProvider: React.FC<AppProviderProps> = ({ children }) => {
             }
             return item;
           })
-          console.log("out of network response", data)
           setPrefixDataDashboard(data);
         })
         .catch((error: any) => console.error("Inside of GrabPrefixRecordsFromDashboard", error))

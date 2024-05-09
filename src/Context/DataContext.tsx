@@ -16,6 +16,12 @@ interface ProfileProps {
   userid: string;
 }
 
+interface BillingAnalyticsProps {
+  claim_id: string,
+  paid_total: number,
+  start_date: string
+}
+
 interface IntakeProps {
   active: boolean;
   booked: string;
@@ -128,6 +134,13 @@ interface DataContextType {
   externalData: ExternalDataProps[] | null;
   currentNotes: NotesProps[] | null;
   currentIntakeId: any;
+  followupAveaRecords: ClaimsProps[] | null;
+  pendingAveaRecords: ClaimsProps[] | null;
+  successfullAveaRecords: ClaimsProps[] | null;
+  failedAveaRecords: ClaimsProps[] | null;
+  billingAnalytics: BillingAnalyticsProps[] | null;
+  claimsSearch: string;
+  activeClaimSearch: boolean;
   collectAllData: () => void;
   grabAllProfiles: () => void;
   grabClaims: () => void;
@@ -162,6 +175,10 @@ interface DataContextType {
   sendNewNotes: (notesData: any) => void;
   searchHistoricRecords: (text: string) => void;
   searchExternalData: (search: string) => void;
+  handleClaimsSearchChange: (text: string) => void;
+  grabSearchByNameClaims: (name: string) => void;
+  handleAcriveClaimSearchChange: () => void;
+  clearActiveClaimSearch: () => void
 }
 
 
@@ -188,6 +205,13 @@ const DataContext = createContext<DataContextType>({
   externalData: null,
   currentNotes: null,
   currentIntakeId: null,
+  followupAveaRecords: null,
+  pendingAveaRecords: null,
+  successfullAveaRecords: null,
+  failedAveaRecords: null,
+  billingAnalytics: null,
+  claimsSearch: '',
+  activeClaimSearch: false,
   collectAllData: () => {},
   grabAllProfiles: () => {},
   grabClaims: () => {},
@@ -205,7 +229,11 @@ const DataContext = createContext<DataContextType>({
   getNotes: () => {},
   sendNewNotes: () => {},
   searchHistoricRecords: () => {},
-  searchExternalData: () => {}
+  searchExternalData: () => {},
+  handleClaimsSearchChange: () => {},
+  grabSearchByNameClaims: () => {},
+  handleAcriveClaimSearchChange: () => {},
+  clearActiveClaimSearch: () => {}
 });
 
 export function useData() {
@@ -242,6 +270,11 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [successfullRecords, setSuccessfulRecords] = useState<ClaimsProps[] | null>(null)
   const [failedRecords, setFailedRecords] = useState<ClaimsProps[] | null>(null)
 
+  const [followupAveaRecords, setFollowupAveaClaims] = useState<ClaimsProps[] | null>(null)
+  const [pendingAveaRecords, setPendingAveaRecords] = useState<ClaimsProps[] | null>(null)
+  const [successfullAveaRecords, setSuccessfulAveaRecords] = useState<ClaimsProps[] | null>(null)
+  const [failedAveaRecords, setFailedAveaRecords] = useState<ClaimsProps[] | null>(null)
+
   const [availityData, setAvailityData] = useState<any>(null)
   const [loadingAvailityData, setLoadingAvailityData] = useState<boolean>(false)
 
@@ -256,10 +289,14 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [minPercent, setMinPercent] = useState(0);
   const [maxPercent, setMaxPercent] = useState(100)
 
+  const [billingAnalytics, setBillingAnalytics] = useState<BillingAnalyticsProps[] | null>([])
+
+  const [claimsSearch, setClaimsSearch] = useState<string>('')
+  const [activeClaimSearch, setActiveClaimSearch] = useState<boolean>(false)
+
   const navigate = useNavigate()
 
   let counter = 0
-
 
   const collectAllData = () => {
     grabAllProfiles()
@@ -271,6 +308,25 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     grabAveaClaims()
     getClaimsFollowup()
     grabExternalData()
+    getAveaFollowup()
+    grabBillingAnalytics()
+  }
+
+  const handleClaimsSearchChange = (text: string) => {
+    text === ''
+      ? setActiveClaimSearch(false)
+      : setActiveClaimSearch(true)
+    setClaimsSearch(text)
+  }
+
+  const handleAcriveClaimSearchChange = () => {
+    setActiveClaimSearch(!activeClaimSearch)
+  }
+
+  const clearActiveClaimSearch = () => {
+    setClaimsSearch('')
+    setActiveClaimSearch(false)
+    grabClaims()
   }
 
   const grabAllProfiles = () => {
@@ -314,6 +370,51 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     .catch((error) => {
       console.log(error);
     });
+  }
+
+  const grabBillingAnalytics = () => {
+    const url = 'https://intellasurebackend-docker.onrender.com/billing/'
+    axios.get(url)
+    .then((response) => {
+      let data = response.data.slice(0, 30)
+      data.reverse()
+      data.map((record: any) => {
+        if (!(record.start_date instanceof Date)) {
+          record.start_date = new Date(record.start_date);
+        }
+        record.start_date = convertDate(record.start_date)
+      })
+      setBillingAnalytics(data)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
+  const convertDate = (date: Date) => {
+    const mm = String(date.getMonth() + 1).padStart(2, '0'); // Local month
+    const dd = String(date.getDate()).padStart(2, '0'); // Local date
+    return `${mm}/${dd}`;
+  };
+
+  const grabSearchByNameClaims = ( name:string ) => {
+
+    let formattedName = name.replace(/\s+/g, '_').replace(/_+$/, '');
+    let config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `https://intellasurebackend-docker.onrender.com/claims/search_name/${formattedName}`,
+      headers: {
+        'Content-Type': 'application/json'
+      }};
+  
+      axios.request(config)
+          .then((response: any) => {
+            setClaimsRcords(response.data)
+          })
+          .catch((error) => {
+            console.log(error);
+          });
   }
 
   const searchHistoricRecords = (search: string) => {
@@ -412,7 +513,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       'facilities': facility,
       'status': status
     }
-    console.log('refresh claims: ', data)
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
@@ -448,7 +548,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       'facilities': facility,
       'status': status
     }
-    console.log('refresh claims: ', data)
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
@@ -594,6 +693,39 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     });
   }
 
+  const getAveaFollowup = () => {
+    let pendingRecords: any = []
+    let successfulRecords: any = []
+    let rejectedRecords: any = []
+    let config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: 'https://intellasurebackend-docker.onrender.com/claims/avea_favorites',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    axios.request(config)
+    .then((response) => {
+      response.data.map((record: any) => {
+        record.claim_status === 'Successful'
+          ? successfulRecords.push(record)
+          : record.claim_status === 'pending'
+              ? pendingRecords.push(record)
+              : record.claim_status == 'Failed'
+                  ? rejectedRecords.push(record)
+                  : pendingRecords.push(record)
+      })
+      setFailedAveaRecords(rejectedRecords)
+      setSuccessfulAveaRecords(successfulRecords)
+      setPendingAveaRecords(pendingRecords)
+      setFollowupAveaClaims(response.data)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
   function getCurrentDateFormatted() {
     const now = new Date();
     const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-based in JS, add 1
@@ -635,7 +767,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     const url = `https://intellasurebackend-docker.onrender.com/availity/${claim_id}`;
     axios.get(url)
         .then((response: any) => {
-          // existing code
           const existingClaimNumbers = new Set();
           const newDataArray = response.data.claimStatuses.reduce((acc: any[], claimStatus: any) => {
             if (!existingClaimNumbers.has(claimStatus.claimControlNumber)) {
@@ -684,10 +815,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
           // call the same funciton repass the claim id
 
         });
-
   }
   
-
   const searchExternalData = (search: string) => {
     if(search === ''){
       grabExternalData()
@@ -728,7 +857,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
             note.name = response2.data.data.name
             return note
           })
-          console.log(newData2);
           setCurrentNotes(newData2)
         })
       }
@@ -742,7 +870,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     const url = 'https://intellasurebackend-docker.onrender.com/intake/update_intake_note'
     axios.post(url, notesData)
     .then((response: any) => {
-      console.log("New response added.",response);
       getNotes(currentIntakeId, notesData.coordinator)
     })
     .catch((err: any) => {
@@ -807,6 +934,13 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     pendingRecords,
     successfullRecords,
     failedRecords,
+    followupAveaRecords,
+    pendingAveaRecords,
+    successfullAveaRecords,
+    failedAveaRecords,
+    billingAnalytics,
+    claimsSearch,
+    activeClaimSearch,
     collectAllData,
     grabClaims,
     grabAveaClaims,
@@ -830,7 +964,11 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     sendNewNotes,
     currentIntakeId,
     searchHistoricRecords,
-    searchExternalData
+    searchExternalData,
+    handleClaimsSearchChange,
+    grabSearchByNameClaims,
+    handleAcriveClaimSearchChange,
+    clearActiveClaimSearch
   };
 
   return (
@@ -839,3 +977,9 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     </DataContext.Provider>
   );
 };
+
+
+// const [followupAveaRecords, setFollowupAveaClaims] = useState<ClaimsProps[] | null>(null)
+  // const [pendingAveaRecords, setPendingAveaRecords] = useState<ClaimsProps[] | null>(null)
+  // const [successfullAveaRecords, setSuccessfulAveaRecords] = useState<ClaimsProps[] | null>(null)
+  // const [failedAveaRecords, setFailedAveaRecords] = useState<ClaimsProps[] | null>(null)

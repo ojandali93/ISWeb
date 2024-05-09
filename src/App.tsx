@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import logo from './logo.svg';
 // import './App.css';
 import { useAuth } from './Context/AuthContext';
@@ -30,13 +30,21 @@ import IntakeAnalytivsScreen from './Screens/Analytics/IntakeAnalytivsScreen';
 import ClaimsAvailityScreen from './Screens/Claims/ClaimsAvailityScreen';
 import Historic2Screen from './Screens/Historic/Historic2Screen';
 import Historic1Screen from './Screens/Historic/Historic1Screen';
+import FollowupCollabScreen from './Screens/FollowUp/FollowupCollabScreen';
+import FollowupAveaScreen from './Screens/FollowUp/FollowupAveaScreen';
+import BillingAnalyticsScreen from './Screens/Analytics/BillingAnalyticsScreen';
 
 Amplify.configure(amplifyconfig)
 
+const TIMEOUT = 20 * 60 * 1000;
+
 function App() {
 
-  const {validAccessCode, currentUser, authLoading, grabCurrentUser, currentProfile} = useAuth()
+  const {validAccessCode, currentUser, authLoading, grabCurrentUser, currentProfile, signOutUser} = useAuth()
   const {collectAllData} = useData()
+
+  const [isActive, setIsActive] = useState(true);
+  const [timer, setTimer] = useState(TIMEOUT);
 
   useEffect(() => {
     grabCurrentUser()
@@ -47,6 +55,42 @@ function App() {
       collectAllData()
     }
   }, [currentUser])
+
+  const handleActivity = useCallback(() => {
+    setIsActive(true);
+    setTimer(TIMEOUT);
+  }, []);
+
+  useEffect(() => {
+    if (isActive && timer === 0) {
+      // Do something after inactivity, like logout the user
+      setIsActive(false);
+      signOutUser()
+    }
+  }, [isActive, timer]);
+
+  useEffect(() => {
+    // Events that will reset the timer
+    window.addEventListener('mousemove', handleActivity);
+    window.addEventListener('keypress', handleActivity);
+    window.addEventListener('scroll', handleActivity);
+    window.addEventListener('touchstart', handleActivity);
+    window.addEventListener('click', handleActivity);
+
+    let interval = setInterval(() => {
+      setTimer((prevTimer) => (prevTimer > 0 ? prevTimer - 1000 : 0));
+    }, 1000);
+
+    // Cleanup
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('mousemove', handleActivity);
+      window.removeEventListener('keypress', handleActivity);
+      window.removeEventListener('scroll', handleActivity);
+      window.removeEventListener('touchstart', handleActivity);
+      window.removeEventListener('click', handleActivity);
+    };
+  }, [handleActivity]);
 
   return (
     <div className='w-screen h-screen flex-column bg-slate-800'>
@@ -246,7 +290,7 @@ function App() {
                       currentProfile.department === 'administration' || 
                       currentProfile.department === 'billing'
                     )
-                    ? <FollowUpScreen /> 
+                    ? <FollowupCollabScreen /> 
                     : <Navigate to="/" />
                   : <Navigate to="/auth/login" />
           }
@@ -262,7 +306,7 @@ function App() {
                       currentProfile.department === 'administration' || 
                       currentProfile.department === 'billing'
                     )
-                    ? <FollowUpScreen /> 
+                    ? <FollowupCollabScreen /> 
                     : <Navigate to="/" />
                   : <Navigate to="/auth/login" />
           }
@@ -278,7 +322,23 @@ function App() {
                       currentProfile.department === 'administration' || 
                       currentProfile.department === 'billing'
                     )
-                    ? <FollowUpScreen /> 
+                    ? <FollowupAveaScreen /> 
+                    : <Navigate to="/" />
+                  : <Navigate to="/auth/login" />
+          }
+        />
+        <Route
+          path="/analytics/billing"
+          element={
+            authLoading 
+              ? <LoadingScreen /> 
+              : currentUser.username 
+                  ? (
+                      currentProfile.department === 'dev' ||
+                      currentProfile.department === 'administration' || 
+                      currentProfile.department === 'billing'
+                    )
+                    ? <BillingAnalyticsScreen /> 
                     : <Navigate to="/" />
                   : <Navigate to="/auth/login" />
           }

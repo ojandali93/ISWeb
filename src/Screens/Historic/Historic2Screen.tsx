@@ -14,10 +14,6 @@ const Historic2Screen = () => {
   const {prefixRecords} = useHistoric()
   const {allUsers} = useData()
 
-  useEffect(() => {
-    console.log('prefix records length: ', prefixRecords)
-  }, [prefixRecords])
-
   return (
       <LayoutComponent 
         header={
