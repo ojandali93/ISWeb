@@ -293,6 +293,10 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
   }, []);
 
   const handleUpdateCurrentSidebarTab = (text: string, path: string) => {
+    console.log('sidebar tab: ', text)
+    if(text === 'Follow Up' || text === 'Claims'){
+      setCurrentSidebarSubTab('Collab Md')
+    }
     localStorage.setItem('lastClickedRoute', path);
     setCurrentSidebarTab(text)
   }
@@ -302,6 +306,7 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
   }
 
   const handleUpdateCurrentSidebarSubTab = (text: string) => {
+    console.log('sidebar sub tab: ', text)
     setCurrentSidebarSubTab(text)
   }
 

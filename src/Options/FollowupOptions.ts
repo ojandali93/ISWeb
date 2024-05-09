@@ -102,4 +102,10 @@ export const FollowupOptions = [
     recordName: 'end_date',
     width: '52'
   },
+  {
+    label:'Delete',
+    type:'delete',
+    recordName: '',
+    width: '52'
+  },
 ]

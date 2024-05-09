@@ -14,7 +14,8 @@ interface FollowupContextType {
   unselectAllFollowup: () => void;
   updateFollowupTab: (text: string) => void;
   updateCoordinatorFollwup: (claim_id: string, coordinator: string) => void;
-  submitBatchToCollab: () => void
+  submitBatchToCollab: () => void; 
+  removeBatchToFavorites: (claim_id: string) => void;
 }
 
 const FollowupContext = createContext<FollowupContextType>({
@@ -29,7 +30,8 @@ const FollowupContext = createContext<FollowupContextType>({
   unselectAllFollowup: () => {},
   updateFollowupTab: () => {},
   updateCoordinatorFollwup: () => {},
-  submitBatchToCollab: () => {}
+  submitBatchToCollab: () => {},
+  removeBatchToFavorites: () => {}
 });
 
 export function useFollowup() {
@@ -87,6 +89,7 @@ export const FollowupProvider: React.FC<AppProviderProps> = ({ children }) => {
   const addBatchToFavorites = () => {
     setPushingToFollowup(true)
     let newData = arrayToIndexedObject(selectedFollowup)
+    console.log('data pushed to followup: ', JSON.stringify(newData))
     let config = {
       method: 'patch',
       maxBodyLength: Infinity,
@@ -105,6 +108,30 @@ export const FollowupProvider: React.FC<AppProviderProps> = ({ children }) => {
       console.log(error);
       setPushingToFollowup(false)
     });
+  }
+
+  const removeBatchToFavorites = (claim_id: string) => {
+    setPushingToFollowup(true)
+    console.log('removing from favorites')
+    let newData = {"1": claim_id}
+    let config = {
+      method: 'patch',
+      maxBodyLength: Infinity,
+      url: 'https://intellasurebackend-docker.onrender.com/claims/remove_favorite_collab',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: newData
+    };
+    axios.request(config)
+      .then((response) => {
+        console.log(response.data)
+        getClaimsFollowup()
+        setPushingToFollowup(false)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   const updateCoordinatorFollwup = (claim_id: string, coordinator: string) => {
@@ -168,7 +195,8 @@ export const FollowupProvider: React.FC<AppProviderProps> = ({ children }) => {
     unselectAllFollowup,
     updateFollowupTab,
     updateCoordinatorFollwup,
-    submitBatchToCollab
+    submitBatchToCollab,
+    removeBatchToFavorites
   };
 
   return (

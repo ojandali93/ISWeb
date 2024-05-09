@@ -15,7 +15,7 @@ interface ClaimsContextType {
   selectAllClaimsAvea: (records: any) => void;
   unselectAllClaims: () => void;
   unselectAllClaimsAvea: () => void;
-  addBatchToAveaFavorites: () => void
+  addBatchToAveaFavorites: () => void;
 }
 
 const ClaimsContext = createContext<ClaimsContextType>({
@@ -176,7 +176,7 @@ export const ClaimsProvider: React.FC<AppProviderProps> = ({ children }) => {
     selectAllClaimsAvea, 
     unselectAllClaims,
     unselectAllClaimsAvea,
-    addBatchToAveaFavorites
+    addBatchToAveaFavorites,
   };
 
   return (

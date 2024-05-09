@@ -663,6 +663,10 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   }
 
   const getClaimsFollowup = () => {
+    setFailedRecords([])
+      setSuccessfulRecords([])
+      setPendingRecords([])
+      setFollowupClaims([])
     let pendingRecords: any = []
     let successfulRecords: any = []
     let rejectedRecords: any = []
