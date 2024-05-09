@@ -18,6 +18,8 @@ const DobSelectComponent: React.FC<SelectComponentProps> = ({selectedDate, handl
 
   const dateChanged = (date: Date | null) => {
     if (date) {
+      // Add 1 day to the selected date
+      date.setDate(date.getDate() + 1);
       handleDateChange(convertDateToCustomFormatDob(date));
     }
   };

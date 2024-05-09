@@ -645,7 +645,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
         "notes": data.notes,
         "created_date": getCurrentDateFormatted()
       }}
-  
+      console.log('initial dob: ', JSON.stringify(intakeData))
       const url = 'https://intellasurebackend-docker.onrender.com/intake/'
       
       axios.post(url, intakeData)

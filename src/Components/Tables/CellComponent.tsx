@@ -187,7 +187,12 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
   }
 
   function convertDateToCustomFormatDob(dateStr: string) {
+    console.log('converting date: ', dateStr)
     const date = new Date(dateStr);
+    if (isNaN(date.getTime())) {
+      // Date parsing failed, handle invalid date string
+      return "Invalid Date";
+  }
     const mm = String(date.getUTCMonth() + 1).padStart(2, '0'); 
     const dd = String(date.getUTCDate() - 1).padStart(2, '0'); 
     const yyyy = date.getUTCFullYear(); 
@@ -237,6 +242,12 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
   }
 
   const handleSelectChange = (columnName: string | undefined, record: any, value: any) => {
+    columnName === 'DOB' || columnName === 'Policy' || columnName === 'Insurance'
+      ? updateInsuranceInfo(columnName, record, value)
+      : updateRecordInfo(columnName, record, value)
+  }
+
+  const updateRecordInfo = (columnName: string | undefined, record: any, value: any) => {
     const data = {
       "checked_in": columnName === 'Status' ? value : record.checked_in,
       "booked": columnName === 'Booked' ? value : record.booked,
@@ -248,12 +259,55 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                                 ? value
                                 : record.expected_arrival_date === null 
                                   ? convertDateToCustomFormatDate(new Date()) 
-                                  : convertDateToCustomFormat(record.expected_arrival_date),
-      "dob": columnName === 'DOB' ? value : record.date_of_birth,
+                                  : convertDateToCustomFormat(record.expected_arrival_date)
+    }
+    console.log('updating data: ', data)
+    console.log('jsonified data: ', JSON.stringify(data))
+    let config = {
+      method: 'patch',
+      maxBodyLength: Infinity,
+      url: `https://intellasurebackend-docker.onrender.com/intake/update_non_insurance_info/${record.intake_id}`,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: data,
+    };
+    axios.request(config)
+      .then((response) => {
+        console.log(response.data)
+        getIntakeRecords()
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  const updateInsuranceInfo = (columnName: string | undefined, record: any, value: any) => {
+    console.log('updating dob: ', typeof value)
+    console.log('updating dob: ', convertDateToCustomFormat(value))
+    const data = {
+      "dob": columnName === 'DOB' ? convertDateToCustomFormatDob(value) : convertDateToCustomFormatDob(record.date_of_birth),
       "policy": columnName === 'Policy' ? value : record.policy_id,
       "insurance": columnName === 'Insurance' ? value : record.insurance
     }
-    submitUpdate(data)
+    console.log('updating data: ', data)
+    console.log('jsonified data: ', JSON.stringify(data))
+    let config = {
+      method: 'patch',
+      maxBodyLength: Infinity,
+      url: `https://intellasurebackend-docker.onrender.com/intake/update_insurance_info/${record.intake_id}`,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: data,
+    };
+    axios.request(config)
+      .then((response) => {
+        getIntakeRecords()
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   const handlePrivilegeChange = (columnName: string | undefined, record: any, value: any) => {
