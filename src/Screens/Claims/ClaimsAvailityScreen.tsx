@@ -3,18 +3,23 @@ import LayoutComponent from '../BaseScreen';
 import AvailityComponent from './Availity/AvailityComponent';
 import ButtonComponent from '../../Components/Inputs/ButtonComponent';
 import { useNavigate } from 'react-router-dom'
+import { useNavigation } from '../../Context/NavigationContext';
 
 
 
 const ClaimsAvailityScreen = () => {
-  const navigate = useNavigate()
+  const {currentSidebarSubTab} = useNavigation();
+  const navigate = useNavigate();
   return (
     <LayoutComponent
       header={
       <div className='mb-3'>
       <ButtonComponent 
       label='BACK' 
-      handler={() => navigate('/claims')}
+      handler=
+      {() => {if (currentSidebarSubTab === "Avea") navigate('/claims/avea'); 
+              else navigate('/claims')}
+      }
        />
       </div>
       } // Render your custom header component here
