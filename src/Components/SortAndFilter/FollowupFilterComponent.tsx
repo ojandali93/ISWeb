@@ -14,7 +14,7 @@ import { useFollowup } from '../../Context/FollowupContext'
 
 const FollowupFilterComponent = () => {
 
-  const {selectedFollowup, followupTab, updateFollowupTab, submuttingData, submitBatchToCollab} = useFollowup()
+  const {selectedFollowup, updateFollowupTab, followupTab, submuttingData, submitBatchToCollab} = useFollowup()
 
   return (
     <div className="h-12 px-2 w-full flex flex-col justify-center bg-stone-700 rounded-md mb-4">

@@ -182,6 +182,7 @@ interface DataContextType {
   handleAcriveClaimSearchChange: () => void;
   clearActiveClaimSearch: () => void;
   filterBillingAnalytics: (text: string) => void;
+  SearchAveaClaims: (text: string) => void;
 }
 
 
@@ -239,7 +240,8 @@ const DataContext = createContext<DataContextType>({
   grabSearchByNameClaims: () => {},
   handleAcriveClaimSearchChange: () => {},
   clearActiveClaimSearch: () => {},
-  filterBillingAnalytics: () => {}
+  filterBillingAnalytics: () => {},
+  SearchAveaClaims: () => {}
 });
 
 export function useData() {
@@ -504,6 +506,24 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
         .catch((error) => {
           console.log(error);
         });
+  }
+
+  const SearchAveaClaims = (text: string) => {
+    let config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `https://intellasurebackend-docker.onrender.com/claims/avea_policy_search/${text}`,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    axios.request(config)
+      .then((response) => {
+        setAveaClaimsRecords(response.data)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   const grabClaims = () => {
@@ -1070,7 +1090,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     grabSearchByNameClaims,
     handleAcriveClaimSearchChange,
     clearActiveClaimSearch,
-    filterBillingAnalytics
+    filterBillingAnalytics,
+    SearchAveaClaims
   };
 
   return (

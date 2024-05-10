@@ -13,6 +13,7 @@ import PaginationComponent from '../Pagination/PaginationComponent'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Search } from 'react-feather'
 import SearchSubmitComponent from '../Inputs/SearchSubmitComponent'
+import { useNavigation } from '../../Context/NavigationContext'
 
 const ClaimsFilterComponent = () => {
 
@@ -20,7 +21,9 @@ const ClaimsFilterComponent = () => {
   const location = useLocation()
 
   const {selectedClaims, addBatchToFavorites, pushingToFollowup} = useClaims()
-  const { grabRefreshClaims, claimsSearch, handleClaimsSearchChange, grabSearchByNameClaims, activeClaimSearch, handleAcriveClaimSearchChange, clearActiveClaimSearch } = useData()
+  const { grabRefreshClaims, claimsSearch, handleClaimsSearchChange, grabSearchByNameClaims, 
+    activeClaimSearch, handleAcriveClaimSearchChange, clearActiveClaimSearch, SearchAveaClaims } = useData()
+  const {currentSidebarSubTab} = useNavigation()
 
   const [page, setPage] = useState<number>(1)
 
@@ -32,6 +35,9 @@ const ClaimsFilterComponent = () => {
 
   const [facility, setFacility] = useState<string>('All')
   const [status, setStatus] = useState<string>('All')
+
+  const [searchTerm, setSearchTerm] = useState<string>('')
+  const [activeSearch, setActiveSearch] = useState<boolean>(false)
 
   const percentOptions = [];
   const facilityOptions = ['ALL', 'AFFINITY', 'BEACHSIDE', 'AXIS']

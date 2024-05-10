@@ -14,7 +14,7 @@ import PaginationComponent from '../Pagination/PaginationComponent'
 const AveaClaimsFilterComponent = () => {
 
     const {selectedClaimsAvea, addBatchToAveaFavorites, pushingToFollowup} = useClaims()
-    const { grabRefreshAveaClaims } = useData()
+    const { grabRefreshAveaClaims, SearchAveaClaims } = useData()
 
     const [page, setPage] = useState<number>(1)
 
@@ -26,6 +26,9 @@ const AveaClaimsFilterComponent = () => {
 
     const [facility, setFacility] = useState<string>('All')
     const [status, setStatus] = useState<string>('All')
+
+    const [searchTerm, setSearchTerm] = useState<string>('')
+    const [activeSearch, setActiveSearch] = useState<boolean>(false)
 
     const percentOptions = [];
     const facilityOptions = ['ALL', 'Affinity', 'Beachside', 'Axis']
@@ -99,6 +102,15 @@ const AveaClaimsFilterComponent = () => {
         grabRefreshAveaClaims(startDate, endtDate, minPercent, maxPercent, page, facility, data)
     }
 
+    const toggleActiveSearch = () => {
+      setActiveSearch(!activeSearch)
+    }
+  
+    const updateSearchTerm = (text: string) => {
+      setSearchTerm(text)
+      SearchAveaClaims(text)
+    }
+
     return (
       <div className="h-full px-2 w-full flex flex-col justify-between bg-stone-700 rounded-md mb-4">        
         <div className='w-full flex flex-row items-center justify-between mt-1'>
@@ -106,7 +118,7 @@ const AveaClaimsFilterComponent = () => {
             <PaginationComponent pageCount={50} currentPage={page} handlePageChange={handlePageChange}/>
           </div>
           <div className='flex-1 mr-2'>
-            <SearchComponent searchTerm={''} handler={() => {}} activeSearch={false} handleActiveSearch={() => {}} placeholder='Search name...'/>
+            <SearchComponent searchTerm={searchTerm} handler={updateSearchTerm} placeholder='Search policy...' activeSearch={activeSearch} handleActiveSearch={toggleActiveSearch}/>
           </div>
           <div className='flex flex-row items-center justify-end'>
             <div className='flex flex-row items-center'>
