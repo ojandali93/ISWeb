@@ -31,6 +31,12 @@ export const FollowupOptions = [
     width: '52'
   },
   {
+    label:'DOB',
+    type:'text',
+    recordName: 'dob',
+    width: '52'
+  },
+  {
     label:'Policy',
     type:'text',
     recordName: 'policy_id',
