@@ -140,6 +140,7 @@ interface DataContextType {
   failedAveaRecords: ClaimsProps[] | null;
   billingAnalytics: BillingAnalyticsProps[] | null;
   claimsSearch: string;
+  billingAnalyticsTimespand: string;
   activeClaimSearch: boolean;
   collectAllData: () => void;
   grabAllProfiles: () => void;
@@ -179,7 +180,8 @@ interface DataContextType {
   handleClaimsSearchChange: (text: string) => void;
   grabSearchByNameClaims: (name: string) => void;
   handleAcriveClaimSearchChange: () => void;
-  clearActiveClaimSearch: () => void
+  clearActiveClaimSearch: () => void;
+  filterBillingAnalytics: (text: string) => void;
 }
 
 
@@ -213,6 +215,7 @@ const DataContext = createContext<DataContextType>({
   billingAnalytics: null,
   claimsSearch: '',
   activeClaimSearch: false,
+  billingAnalyticsTimespand: '1 Month',
   collectAllData: () => {},
   grabAllProfiles: () => {},
   grabClaims: () => {},
@@ -235,7 +238,8 @@ const DataContext = createContext<DataContextType>({
   handleClaimsSearchChange: () => {},
   grabSearchByNameClaims: () => {},
   handleAcriveClaimSearchChange: () => {},
-  clearActiveClaimSearch: () => {}
+  clearActiveClaimSearch: () => {},
+  filterBillingAnalytics: () => {}
 });
 
 export function useData() {
@@ -292,6 +296,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [maxPercent, setMaxPercent] = useState(100)
 
   const [billingAnalytics, setBillingAnalytics] = useState<BillingAnalyticsProps[] | null>([])
+  const [billingAnalyticsTimespand, setBillingAnalyticsTimespand] = useState<string>('1 Month')
 
   const [claimsSearch, setClaimsSearch] = useState<string>('')
   const [activeClaimSearch, setActiveClaimSearch] = useState<boolean>(false)
@@ -378,7 +383,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     const url = 'https://intellasurebackend-docker.onrender.com/billing/'
     axios.get(url)
     .then((response) => {
-      let data = response.data.slice(0, 30)
+      let data = response.data.slice(7, 37)
       data.reverse()
       data.map((record: any) => {
         if (!(record.start_date instanceof Date)) {
@@ -391,6 +396,38 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     .catch((error) => {
       console.log(error);
     });
+  }
+
+  const grabBillingAnalyticsByTime = (timeSpan: number) => {
+    const url = 'https://intellasurebackend-docker.onrender.com/billing/'
+    axios.get(url)
+    .then((response) => {
+      let data = response.data.slice(7, timeSpan)
+      data.reverse()
+      data.map((record: any) => {
+        if (!(record.start_date instanceof Date)) {
+          record.start_date = new Date(record.start_date);
+        }
+        record.start_date = convertDate(record.start_date)
+      })
+      setBillingAnalytics(data)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
+  const filterBillingAnalytics = (text:string) => {
+    text === '1 Week'
+      ? grabBillingAnalyticsByTime(14)
+      : text === '1 Month'
+          ? grabBillingAnalyticsByTime(37)
+          : text === '3 Months'
+              ? grabBillingAnalyticsByTime(97)
+              : text === '6 Months'
+                  ? grabBillingAnalyticsByTime(187)
+                  : grabBillingAnalyticsByTime(37)
+    setBillingAnalyticsTimespand(text)
   }
 
   const convertDate = (date: Date) => {
@@ -1003,6 +1040,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     billingAnalytics,
     claimsSearch,
     activeClaimSearch,
+    billingAnalyticsTimespand,
     collectAllData,
     grabClaims,
     grabAveaClaims,
@@ -1031,7 +1069,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     handleClaimsSearchChange,
     grabSearchByNameClaims,
     handleAcriveClaimSearchChange,
-    clearActiveClaimSearch
+    clearActiveClaimSearch,
+    filterBillingAnalytics
   };
 
   return (

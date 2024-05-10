@@ -102,7 +102,7 @@ function App() {
               ? <LoadingScreen /> 
               : currentUser.username 
                   ? currentProfile.department === 'billing'
-                      ? <FollowUpScreen />
+                      ? <Navigate to="/follow-up/collab" />
                       : <HomeScreen /> 
                   : <Navigate to="/auth/login" />
           }

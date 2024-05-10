@@ -617,14 +617,13 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                     : currentSidebarTab === 'Dashboard'
                         ? column.label === 'Prefix'
                             ?<div className='hover:cursor-pointer' onClick={() => {grabPrefixRecordsFromDashboard(record[column.recordName]);showPrefixPopup()}}>
-                                <p className='text-primary'>{record[column.recordName]}</p>
+                                <p className='text-sky-500'>{record[column.recordName]}</p>
                               </div>
                             : <div>{record[column.recordName] ? record[column.recordName] : ''}</div>
                         
                         : currentSidebarSubTab === 'Avea'  
                           ? <SingleSelectClickComponent value={record[column.recordName]} onChange={grabAveaAvailityData} record={record}/>
-                          
-                            :<SingleSelectClickComponent value={record[column.recordName]} onChange={grabAvailityData} record={record}/>
+                          : <SingleSelectClickComponent value={record[column.recordName]} onChange={grabAvailityData} record={record}/>
             ) : (
               <div>
                 <p>

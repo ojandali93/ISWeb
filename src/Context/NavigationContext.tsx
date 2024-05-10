@@ -43,7 +43,6 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
       subTabs: null,
       department: [
         'intake',
-        'billing',
         'administration',
         'dev'
       ],
@@ -170,6 +169,7 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
         },
       ],
       department: [
+        'billing',
         'administration',
         'dev'
       ],
