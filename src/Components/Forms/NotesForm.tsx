@@ -44,7 +44,8 @@ const NotesForm = () => {
   }
 
   function reformatDateString(date: string): string {
-    const dateString = new Date();
+    if (date === null) return "N/A";
+    const dateString = new Date(date);
   
     
     const year: number = dateString.getFullYear();
@@ -55,7 +56,7 @@ const NotesForm = () => {
     month = month.length < 2 ? '0' + month : month;
     day = day.length < 2 ? '0' + day : day;
   
-
+    
     return `${year}-${month}-${day}`;
   }
 
