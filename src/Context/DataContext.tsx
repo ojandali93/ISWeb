@@ -183,6 +183,8 @@ interface DataContextType {
   clearActiveClaimSearch: () => void;
   filterBillingAnalytics: (text: string) => void;
   SearchAveaClaims: (text: string) => void;
+  getRefreshClaimsFollowup: (facility: string, status: string,) => void;
+  getRefreshAveaFollowup: (facility: string, status: string) => void;
 }
 
 
@@ -241,7 +243,9 @@ const DataContext = createContext<DataContextType>({
   handleAcriveClaimSearchChange: () => {},
   clearActiveClaimSearch: () => {},
   filterBillingAnalytics: () => {},
-  SearchAveaClaims: () => {}
+  SearchAveaClaims: () => {},
+  getRefreshClaimsFollowup: () => {},
+  getRefreshAveaFollowup: () => {}
 });
 
 export function useData() {
@@ -294,6 +298,12 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [startDate, setStartDate] = useState(new Date(Date.UTC(2018, 1, 1)));
   const [endDate, setEndDate] = useState(new Date())
 
+  const [followupStartDate, setFollowupStartDate] = useState(new Date(Date.UTC(2018, 1, 1)));
+  const [followupEndDate, setFollowupEndDate] = useState(new Date());
+
+  const [followupClaimsFacility, setFollowupClaimsFacility] = useState('ALL')
+  const [followupClaimsStatus, setFollowupClaimsStatus] = useState('ALL')
+
   const [minPercent, setMinPercent] = useState(0);
   const [maxPercent, setMaxPercent] = useState(100)
 
@@ -330,6 +340,14 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   const handleAcriveClaimSearchChange = () => {
     setActiveClaimSearch(!activeClaimSearch)
+  }
+
+  const handleFollowupClaimsStatusChange = (text: string) => {
+    setFollowupClaimsStatus(text)
+  }
+
+  const handleFollowupClaimsFacilityChange = (text: string) => {
+    setFollowupClaimsFacility(text)
   }
 
   const clearActiveClaimSearch = () => {
@@ -727,13 +745,75 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     let pendingRecords: any = []
     let successfulRecords: any = []
     let rejectedRecords: any = []
+    const requestData = {
+      'start_date': formatDate(followupStartDate),
+      'end_date': formatDate(followupEndDate),
+      "min_percent": 0.0,
+      "max_percent": 1.0,
+      "page": 0,
+      "facilities":"ALL",
+      "status": "ALL"
+    }
+    console.log(JSON.stringify(requestData))
     let config = {
-      method: 'get',
+      method: 'post',
       maxBodyLength: Infinity,
       url: 'https://intellasurebackend-docker.onrender.com/claims/favorites',
       headers: {
         'Content-Type': 'application/json'
-      }
+      },
+      data: requestData
+    };
+    axios.request(config)
+    .then((response) => {
+      response.data.map((record: any) => {
+        record.claim_status === 'Successful'
+          ? successfulRecords.push(record)
+          : record.claim_status === 'pending'
+              ? pendingRecords.push(record)
+              : record.claim_status == 'Failed'
+                  ? rejectedRecords.push(record)
+                  : pendingRecords.push(record)
+      })
+      setFailedRecords(rejectedRecords)
+      setSuccessfulRecords(successfulRecords)
+      setPendingRecords(pendingRecords)
+      setFollowupClaims(response.data)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
+  const getRefreshClaimsFollowup = (
+    facility: string, 
+    status: string,
+  ) => {
+    setFailedRecords([])
+    setSuccessfulRecords([])
+    setPendingRecords([])
+    setFollowupClaims([])
+    let pendingRecords: any = []
+    let successfulRecords: any = []
+    let rejectedRecords: any = []
+    const requestData = {
+      'start_date': formatDate(followupStartDate),
+      'end_date': formatDate(followupEndDate),
+      "min_percent": 0.0,
+      "max_percent": 1.0,
+      "page": 0,
+      "facilities": facility,
+      "status": status
+    }
+    console.log(JSON.stringify(requestData))
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://intellasurebackend-docker.onrender.com/claims/favorites',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: requestData
     };
     axios.request(config)
     .then((response) => {
@@ -760,13 +840,69 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     let pendingRecords: any = []
     let successfulRecords: any = []
     let rejectedRecords: any = []
+    const requestData = {
+      'start_date': formatDate(followupStartDate),
+      'end_date': formatDate(followupEndDate),
+      "min_percent": 0.0,
+      "max_percent": 1.0,
+      "page": 0,
+      "facilities":"ALL",
+      "status": "ALL"
+    }
     let config = {
-      method: 'get',
+      method: 'post',
       maxBodyLength: Infinity,
       url: 'https://intellasurebackend-docker.onrender.com/claims/avea_favorites',
       headers: {
         'Content-Type': 'application/json'
-      }
+      },
+      data: requestData
+    };
+    axios.request(config)
+    .then((response) => {
+      response.data.map((record: any) => {
+        record.claim_status === 'Successful'
+          ? successfulRecords.push(record)
+          : record.claim_status === 'pending'
+              ? pendingRecords.push(record)
+              : record.claim_status == 'Failed'
+                  ? rejectedRecords.push(record)
+                  : pendingRecords.push(record)
+      })
+      setFailedAveaRecords(rejectedRecords)
+      setSuccessfulAveaRecords(successfulRecords)
+      setPendingAveaRecords(pendingRecords)
+      setFollowupAveaClaims(response.data)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
+  const getRefreshAveaFollowup = (
+    facility: string, 
+    status: string,
+  ) => {
+    let pendingRecords: any = []
+    let successfulRecords: any = []
+    let rejectedRecords: any = []
+    const requestData = {
+      'start_date': formatDate(followupStartDate),
+      'end_date': formatDate(followupEndDate),
+      "min_percent": 0.0,
+      "max_percent": 1.0,
+      "page": 0,
+      "facilities":facility,
+      "status": status
+    }
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://intellasurebackend-docker.onrender.com/claims/avea_favorites',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: requestData
     };
     axios.request(config)
     .then((response) => {
@@ -1091,7 +1227,9 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     handleAcriveClaimSearchChange,
     clearActiveClaimSearch,
     filterBillingAnalytics,
-    SearchAveaClaims
+    SearchAveaClaims,
+    getRefreshClaimsFollowup,
+    getRefreshAveaFollowup
   };
 
   return (

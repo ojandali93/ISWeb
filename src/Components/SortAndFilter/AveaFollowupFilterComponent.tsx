@@ -12,37 +12,56 @@ import { faC } from '@fortawesome/free-solid-svg-icons'
 import PaginationComponent from '../Pagination/PaginationComponent'
 import { useFollowup } from '../../Context/FollowupContext'
 
-const FollowupFilterComponent = () => {
+const AveaFollowupFilterComponent = () => {
 
   const {selectedFollowup, updateFollowupTab, 
     followupTab, submuttingData, submitBatchToCollab,
   } = useFollowup()
-  const {getRefreshClaimsFollowup} = useData()
+  const {getRefreshAveaFollowup} = useData()
 
   const [facility, setFacility] = useState<string>('ALL')
   const [status, setStatus] = useState<string>('ALL')
 
-  const facilityOptions = ['All', 'Affinity', 'Beachside', 'Axis']
-  const statusOptions = [
-                          'ALL',
-                          'CLAIM AT INSURANCE', 
-                          'SEND TO INSURANCE VIA CLEARINGHOUSE',
-                          'PENDING INSURANCE AUTH',
-                          'REJECTED AT INSURANCE',
-                          'WRITEOFF',
-                          'BALANCE DUE PATIENT',
-                          'DENIED AT INSURANCE',
-                          'PAID'
-                        ]
+  const facilityOptions = ['ALL', 'Affinity', 'Beachside', 'Axis']
+    const statusOptions = [
+        'ALL',
+        'Closed - Paid To Member',
+        'Payer - Medical Records Requested',
+        'Billing - Resubmit Needed',
+        'Closed - Write-off - Medical Necessity',
+        'Appeal - Sent - Pending Payer Response',
+        'Practice - Incomplete Medical Records',
+        'Payer - Original Claim Processing',
+        'Approved - Paper Check',
+
+        'Closed - Write Off - Non Covered Benefit',
+        'Payer - Re-submitted - Waiting on Determination',
+        'Payer - Denied - Pending Investigation',
+        'Closed - Paid - Applied to deductible',
+        'Closed - Paid',
+        'Patient - COB Required',
+        'Closed - Paid Partially - Medical Necessity',
+
+        'Payer - Medical Records Sent - Receipt Not Confirmed',
+        'Approved - Pending ACH Payment',
+        'Payer - Reprocessing',
+        'Closed - Write-off - Policy Terminated',
+        'Closed - Write-off Timely Filing',
+        'Closed - Write-off - Duplicated Claim',
+
+        'Appeal - Denied',
+        'Payer - Medical Records Sent - In Review',
+        'Payer - Pending Repricing'
+    ]
 
   const handleFacilityChange = (data: string) => {
     setFacility(data)
-    getRefreshClaimsFollowup(data, status)
+    getRefreshAveaFollowup(data, status)
   }
 
   const handleStatusChange = (data: string) => {
     setStatus(data)
-    getRefreshClaimsFollowup(facility, data)
+    getRefreshAveaFollowup(facility, data)
   }
 
   return (
@@ -84,4 +103,4 @@ const FollowupFilterComponent = () => {
   )
 }
 
-export default FollowupFilterComponent
+export default AveaFollowupFilterComponent

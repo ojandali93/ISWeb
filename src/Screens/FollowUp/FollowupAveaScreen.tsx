@@ -7,6 +7,7 @@ import { ClaimOptions } from '../../Options/ClaimOptions'
 import { FollowupOptions } from '../../Options/FollowupOptions'
 import FollowupFilterComponent from '../../Components/SortAndFilter/FollowupFilterComponent'
 import { useFollowup } from '../../Context/FollowupContext'
+import AveaFollowupFilterComponent from '../../Components/SortAndFilter/AveaFollowupFilterComponent'
 
 const FollowupAveaScreen = () => {
 
@@ -17,7 +18,7 @@ const FollowupAveaScreen = () => {
     <LayoutComponent 
       header={
         <div className='h-12 w-full mb-2'>
-          <FollowupFilterComponent/>
+          <AveaFollowupFilterComponent/>
         </div>
       } 
       content={

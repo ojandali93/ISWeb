@@ -13,9 +13,15 @@ export const FollowupOptions = [
     width: '56'
   },
   {
-    label:'Claim Id',
+    label:'Old Claim Id',
     type:'text',
     recordName: 'claim_id',
+    width: '52'
+  },
+  {
+    label:'New Claim Id',
+    type:'text',
+    recordName: 'new_claim_id',
     width: '52'
   },
   {

@@ -40,7 +40,7 @@ const ClaimsFilterComponent = () => {
   const [activeSearch, setActiveSearch] = useState<boolean>(false)
 
   const percentOptions = [];
-  const facilityOptions = ['ALL', 'AFFINITY', 'BEACHSIDE', 'AXIS']
+  const facilityOptions = ['All', 'Affinity', 'Beachside', 'Axis']
   const statusOptions = [
                           'ALL',
                           'CLAIM AT INSURANCE', 
