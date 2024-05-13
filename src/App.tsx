@@ -216,7 +216,8 @@ function App() {
                   ? (
                       currentProfile.privileges === 'admin' || 
                       currentProfile.privileges === 'owner' || 
-                      currentProfile.privileges === 'dev' 
+                      currentProfile.privileges === 'dev' ||
+                      currentProfile.department === 'billing' 
                     )
                       ? <ClaimsScreen />
                       : <Navigate to="/" />
@@ -232,7 +233,8 @@ function App() {
                   ? (
                       currentProfile.privileges === 'admin' || 
                       currentProfile.privileges === 'owner' || 
-                      currentProfile.privileges === 'dev' 
+                      currentProfile.privileges === 'dev' ||
+                      currentProfile.department === 'billing' 
                     )
                       ? <ClaimsScreen/> 
                       : <Navigate to="/" />

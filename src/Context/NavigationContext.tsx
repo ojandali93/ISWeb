@@ -141,12 +141,14 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
       ],
       department: [
         'administration',
-        'dev'
+        'dev',
+        'billing'
       ],
       privileges: [
         'admin',
         'dev',
-        'owner'
+        'owner',
+        'staff'
       ]
     },
     {
@@ -171,12 +173,14 @@ export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children
       department: [
         'billing',
         'administration',
-        'dev'
+        'dev',
+        'billing'
       ],
       privileges: [
         'admin',
         'dev',
-        'owner'
+        'owner',
+        'staff'
       ]
     },
     {
