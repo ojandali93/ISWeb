@@ -65,7 +65,9 @@ function App() {
     if (isActive && timer === 0) {
       // Do something after inactivity, like logout the user
       setIsActive(false);
-      signOutUser()
+      if(currentProfile.department != 'dev'){
+        signOutUser()
+      }
     }
   }, [isActive, timer]);
 
@@ -246,7 +248,9 @@ function App() {
                   ? (
                       currentProfile.privileges === 'admin' || 
                       currentProfile.privileges === 'owner' || 
-                      currentProfile.privileges === 'dev' 
+                      currentProfile.privileges === 'dev' ||
+                      currentProfile.department === 'billing' 
+
                     )
                       ? <ClaimsCollabScreen /> 
                       : <Navigate to="/" />
@@ -262,7 +266,8 @@ function App() {
                   ? (
                       currentProfile.privileges === 'admin' || 
                       currentProfile.privileges === 'owner' || 
-                      currentProfile.privileges === 'dev' 
+                      currentProfile.privileges === 'dev' ||
+                      currentProfile.department === 'billing'
                     )
                     ? <ClaimsAveaScreen />
                     : <Navigate to="/" /> 
