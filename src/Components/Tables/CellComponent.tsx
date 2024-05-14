@@ -620,7 +620,10 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                                 <p className='text-sky-500'>{record[column.recordName]}</p>
                               </div>
                             : <div>{record[column.recordName] ? record[column.recordName] : ''}</div>
-                        
+                    : currentSidebarTab === 'Follow Up'
+                        ? <SingleSelectClickComponent value={record[column.recordName]} onChange={grabAvailityData} record={record}/>
+                        : currentSidebarSubTab === 'Avea' 
+                        ? <SingleSelectClickComponent value={record[column.recordName]} onChange={grabAveaAvailityData} record={record}/>
                         : currentSidebarSubTab === 'Avea'  
                           ? <SingleSelectClickComponent value={record[column.recordName]} onChange={grabAveaAvailityData} record={record}/>
                           : <SingleSelectClickComponent value={record[column.recordName]} onChange={grabAvailityData} record={record}/>

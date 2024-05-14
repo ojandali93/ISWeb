@@ -16,7 +16,7 @@ export const FollowupOptions = [
   // },
   {
     label:'Old Claim Id',
-    type:'text',
+    type:'clickable',
     recordName: 'claim_id',
     width: '52',
     sort: false,
