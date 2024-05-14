@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SearchComponent from '../Inputs/SearchComponent'
 import { useClaims } from '../../Context/ClaimsContext'
 import ButtonComponent from '../Inputs/ButtonComponent'
@@ -17,10 +17,15 @@ const FollowupFilterComponent = () => {
   const {selectedFollowup, updateFollowupTab, 
     followupTab, submuttingData, submitBatchToCollab,
   } = useFollowup()
-  const {getRefreshClaimsFollowup} = useData()
+  const {getRefreshClaimsFollowup, 
+    handleFollowupClaimsFacilityChange,
+    handleFollowupClaimsStatusChange,
+    followupClaimsStatus,
+    followupClaimsFacility} = useData()
 
-  const [facility, setFacility] = useState<string>('ALL')
-  const [status, setStatus] = useState<string>('ALL')
+  useEffect(() => {
+    getRefreshClaimsFollowup()
+  }, [followupClaimsStatus, followupClaimsFacility])
 
   const facilityOptions = ['All', 'Affinity', 'Beachside', 'Axis']
   const statusOptions = [
@@ -36,13 +41,11 @@ const FollowupFilterComponent = () => {
                         ]
 
   const handleFacilityChange = (data: string) => {
-    setFacility(data)
-    getRefreshClaimsFollowup(data, status)
+    handleFollowupClaimsFacilityChange(data)
   }
 
   const handleStatusChange = (data: string) => {
-    setStatus(data)
-    getRefreshClaimsFollowup(facility, data)
+    handleFollowupClaimsStatusChange(data)
   }
 
   return (
@@ -60,11 +63,11 @@ const FollowupFilterComponent = () => {
           <div className='w-full flex flex-row items-center justify-end mr-4'>
             <div className='flex flex-row items-center'>
               <p className='mx-2 ml-6  min-w-16 max-w-24 text-white font-bold'>Facility: </p>
-              <SelectInputComponent placeholder='All' options={facilityOptions} selectedValue={facility} handleOptionClick={handleFacilityChange}/>
+              <SelectInputComponent placeholder='All' options={facilityOptions} selectedValue={followupClaimsFacility} handleOptionClick={handleFacilityChange}/>
             </div>
             <div className='flex flex-row items-center'>
               <p className='mx-2 ml-6 min-w-16 max-w-24 text-white font-bold'>Status: </p>
-              <SelectInputComponent placeholder='All' options={statusOptions} selectedValue={status} handleOptionClick={handleStatusChange}/>
+              <SelectInputComponent placeholder='ALL' options={statusOptions} selectedValue={followupClaimsStatus} handleOptionClick={handleStatusChange}/>
             </div>
           </div>
           <div className='bg-stone-500 flex flex-row rounded-lg hover:cursor-pointer'>

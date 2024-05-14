@@ -57,7 +57,7 @@ const BillingAnalyticsScreen = () => {
                     <LineChart
                       width={window.innerWidth * .75}
                       height={((2 / 3) * (window.innerWidth * .35))}
-                      data={billingAnalytics.slice().reverse()} // Ensure to create a copy before reversing the array
+                      data={billingAnalytics.slice()} // Ensure to create a copy before reversing the array
                       margin={{ top: 5, right: 150, left: 100, bottom: 5 }}
                     >
                       <CartesianGrid strokeDasharray="3 3" stroke="white" />

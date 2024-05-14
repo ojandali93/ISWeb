@@ -14,7 +14,7 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({ handlePageCha
     <div className='flex flex-row'>
       <div 
         onClick={() => {
-          if(currentPage > 1){
+          if(currentPage >= 1){
             handlePageChange(currentPage - 1)
           }
         }}
@@ -24,7 +24,7 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({ handlePageCha
       </div>
       <div className='flex flex-row'>
         <div className='h-6 w-6 min-w-6 hover:cursor-pointe rounded-md flex justify-center items-center bg-stone-300  my-1 mr-1'>
-          <p className='font-bold text-black'>{currentPage}</p>
+          <p className='font-bold text-black'>{currentPage + 1}</p>
         </div> 
         <div
           onClick={() => {
@@ -32,7 +32,7 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({ handlePageCha
           }}
           className='h-6 w-6 min-w-6 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500 my-1 mr-1'
         >
-          <p className='font-bold text-white'>{currentPage + 1}</p>
+          <p className='font-bold text-white'>{currentPage + 2}</p>
         </div>
         <div
           onClick={() => {
@@ -40,7 +40,7 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({ handlePageCha
           }}
           className='h-6 w-6 min-w-6 hover:cursor-pointer hover:bg-stone-700 rounded-md flex justify-center items-center bg-stone-500 my-1 mr-1'
         >
-          <p className='font-bold text-white'>{currentPage + 2}</p>
+          <p className='font-bold text-white'>{currentPage + 3}</p>
         </div>
         
       </div>

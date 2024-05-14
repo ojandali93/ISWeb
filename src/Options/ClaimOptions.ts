@@ -18,7 +18,7 @@ export const ClaimOptions = [
     type:'clickable',
     recordName: 'name',
     width: '52',
-    sort: false
+    sort: true
   },
   {
     label:'DOB',
@@ -39,7 +39,7 @@ export const ClaimOptions = [
     type:'text',
     recordName: 'insurance',
     width: '96',
-    sort: false
+    sort: true
   },
   {
     label:'Facility',
@@ -74,7 +74,7 @@ export const ClaimOptions = [
     type:'dollar',
     recordName: 'charged_total',
     width: '52',
-    sort: true
+    sort: false
   },
   {
     label:'Paid Total',
@@ -88,7 +88,7 @@ export const ClaimOptions = [
     type:'percent',
     recordName: 'payout_ratio',
     width: '52',
-    sort: false
+    sort: true
   },
   {
     label:'Balance Total',
@@ -109,6 +109,6 @@ export const ClaimOptions = [
     type:'date',
     recordName: 'end_date',
     width: '52',
-    sort: false
+    sort: true
   },
 ]

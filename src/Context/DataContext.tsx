@@ -142,19 +142,24 @@ interface DataContextType {
   claimsSearch: string;
   billingAnalyticsTimespand: string;
   activeClaimSearch: boolean;
+  column: string;
+  ascending: boolean;
+  followupClaimsFacility: string,
+  followupClaimsStatus: string,
+  page: number, 
+  startDate: Date, 
+  endDate: Date, 
+  minPercent: number,
+  maxPercent: number, 
+  facility: string, 
+  status: string,
+  handleSortColumnChange: (text: string) => void;
+  handleSortOrderChange: (value: boolean) => void;
   collectAllData: () => void;
   grabAllProfiles: () => void;
   grabClaims: () => void;
   grabAveaClaims: () => void;
-  grabRefreshClaims: (
-    startDate: Date, 
-    endDate: Date, 
-    minPercent: number, 
-    maxPercent: number, 
-    page: number, 
-    facility: string, 
-    status: string,
-  ) => void;
+  grabRefreshClaims: () => void;
   grabRefreshAveaClaims:(
       startDate: Date,
       endDate: Date,
@@ -183,8 +188,17 @@ interface DataContextType {
   clearActiveClaimSearch: () => void;
   filterBillingAnalytics: (text: string) => void;
   SearchAveaClaims: (text: string) => void;
-  getRefreshClaimsFollowup: (facility: string, status: string,) => void;
+  getRefreshClaimsFollowup: () => void;
   getRefreshAveaFollowup: (facility: string, status: string) => void;
+  handleFollowupClaimsFacilityChange: (text: string) => void;
+  handleFollowupClaimsStatusChange: (text: string) => void;
+  handlePageChange: (page: number) => void,
+  handleStartDate: (date: Date) => void,
+  handleEndDate: (date: Date) => void,
+  handleMinPercent: (data: string) => void,
+  handleMaxPercent: (date: string) => void,
+  handleFacilityChange: (data: string) => void,
+  handleStatusChange: (tedataxt: string) => void
 }
 
 
@@ -219,6 +233,21 @@ const DataContext = createContext<DataContextType>({
   claimsSearch: '',
   activeClaimSearch: false,
   billingAnalyticsTimespand: '1 Month',
+  followupClaimsFacility: 'All',
+  column: 'end_date',
+  ascending: false,
+  followupClaimsStatus: 'ALL',
+  page: 0, 
+  startDate: new Date(Date.UTC(2018, 1, 1)), 
+  endDate: new Date(), 
+  minPercent: 0,
+  maxPercent: 1, 
+  facility: 'All', 
+  status: 'ALL',
+  handleSortColumnChange: () => {},
+  handleSortOrderChange: () => {},
+  handleFollowupClaimsFacilityChange: () => {},
+  handleFollowupClaimsStatusChange: () => {},
   collectAllData: () => {},
   grabAllProfiles: () => {},
   grabClaims: () => {},
@@ -245,7 +274,14 @@ const DataContext = createContext<DataContextType>({
   filterBillingAnalytics: () => {},
   SearchAveaClaims: () => {},
   getRefreshClaimsFollowup: () => {},
-  getRefreshAveaFollowup: () => {}
+  getRefreshAveaFollowup: () => {},
+  handlePageChange: () => {},
+  handleStartDate: () => {},
+  handleEndDate: () => {},
+  handleMinPercent: () => {},
+  handleMaxPercent: () => {},
+  handleFacilityChange: () => {},
+  handleStatusChange: () => {}
 });
 
 export function useData() {
@@ -295,23 +331,32 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   const [externalData, setExternalData] = useState<ExternalDataProps[] | null>(null)
 
-  const [startDate, setStartDate] = useState(new Date(Date.UTC(2018, 1, 1)));
-  const [endDate, setEndDate] = useState(new Date())
-
+  
   const [followupStartDate, setFollowupStartDate] = useState(new Date(Date.UTC(2018, 1, 1)));
   const [followupEndDate, setFollowupEndDate] = useState(new Date());
-
-  const [followupClaimsFacility, setFollowupClaimsFacility] = useState('ALL')
+  
+  const [followupClaimsFacility, setFollowupClaimsFacility] = useState('All')
   const [followupClaimsStatus, setFollowupClaimsStatus] = useState('ALL')
 
-  const [minPercent, setMinPercent] = useState(0);
-  const [maxPercent, setMaxPercent] = useState(100)
+  const [page, setPage] = useState<number>(0)
+
+  const [startDate, setStartDate] = useState<Date>(new Date(Date.UTC(2018, 1, 1)))
+  const [endDate, setEndDate] = useState<Date>(new Date())
+
+  const [minPercent, setMinPercent] = useState<number>(0)
+  const [maxPercent, setMaxPercent] = useState<number>(100)
+
+  const [facility, setFacility] = useState<string>('All')
+  const [status, setStatus] = useState<string>('All')
 
   const [billingAnalytics, setBillingAnalytics] = useState<BillingAnalyticsProps[] | null>([])
   const [billingAnalyticsTimespand, setBillingAnalyticsTimespand] = useState<string>('1 Month')
 
   const [claimsSearch, setClaimsSearch] = useState<string>('')
   const [activeClaimSearch, setActiveClaimSearch] = useState<boolean>(false)
+
+  const [column, setColumn] = useState<string>('end_date')
+  const [ascending, setAscending] = useState<boolean>(false)
 
   const navigate = useNavigate()
 
@@ -336,6 +381,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       ? setActiveClaimSearch(false)
       : setActiveClaimSearch(true)
     setClaimsSearch(text)
+    grabSearchByNameClaims(text)
   }
 
   const handleAcriveClaimSearchChange = () => {
@@ -348,6 +394,43 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   const handleFollowupClaimsFacilityChange = (text: string) => {
     setFollowupClaimsFacility(text)
+  }
+
+  const handleSortColumnChange = (text:string) => {
+    setColumn(text)
+    
+  }
+
+  const handleSortOrderChange = (value: boolean) => {
+    setAscending(value)
+  }
+
+  const handlePageChange = (page: number) => {
+    setPage(page)
+  }
+
+  const handleStartDate = (date: Date) => {
+    setStartDate(date)
+  }
+
+  const handleEndDate = (date: Date) => {
+    setEndDate(date)
+  }
+
+  const handleMinPercent = (data: string) => {
+    setMinPercent(parseInt(data))
+  }
+
+  const handleMaxPercent = (data: string) => {
+    setMaxPercent(parseInt(data))
+  }
+
+  const handleFacilityChange = (data: string) => {
+    setFacility(data)
+  }
+
+  const handleStatusChange = (data: string) => {
+    setStatus(data)
   }
 
   const clearActiveClaimSearch = () => {
@@ -457,23 +540,25 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   };
 
   const grabSearchByNameClaims = ( name:string ) => {
-
-    let formattedName = name.replace(/\s+/g, '_').replace(/_+$/, '');
-    let config = {
+    if(name === ''){
+      grabClaims()
+    } else {
+      let formattedName = name.toUpperCase()
+      let config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `https://intellasurebackend-docker.onrender.com/claims/search_name/${formattedName}`,
+      url: `https://intellasurebackend-docker.onrender.com/claims/full_search_mainpage/${formattedName}`,
       headers: {
         'Content-Type': 'application/json'
       }};
-  
       axios.request(config)
-          .then((response: any) => {
-            setClaimsRcords(response.data)
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        .then((response: any) => {
+          setClaimsRcords(response.data)
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }
 
   const searchHistoricRecords = (search: string) => {
@@ -552,7 +637,9 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       "max_percent": 1.0,
       "page": 1,
       "facilities":"ALL",
-      "status": "ALL"
+      "status": "ALL",
+      "sort_by": 'end_date',
+      'ascending': false
     }
     let config = {
       method: 'post',
@@ -572,15 +659,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     });
   }
 
-  const grabRefreshClaims = (
-    startDate: Date, 
-    endDate: Date, 
-    minPercent: number, 
-    maxPercent: number, 
-    page: number, 
-    facility: string, 
-    status: string,
-  ) => {
+  const grabRefreshClaims = () => {
     let data = {
       'start_date': formatDate(startDate),
       'end_date': formatDate(endDate),
@@ -588,7 +667,9 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       'max_percent': (maxPercent / 100),
       'page': page,
       'facilities': facility,
-      'status': status
+      'status': status,
+      'sort_by': column,
+      'ascending': ascending
     }
     let config = {
       method: 'post',
@@ -607,6 +688,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       console.log(error);
     });
   }
+
   const grabRefreshAveaClaims = (
       startDate: Date,
       endDate: Date,
@@ -722,7 +804,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
         "notes": data.notes,
         "created_date": getCurrentDateFormatted()
       }}
-      console.log('initial dob: ', JSON.stringify(intakeData))
       const url = 'https://intellasurebackend-docker.onrender.com/intake/'
       
       axios.post(url, intakeData)
@@ -752,9 +833,10 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       "max_percent": 1.0,
       "page": 0,
       "facilities":"ALL",
-      "status": "ALL"
+      "status": "ALL",  
+      "sort_by": 'end_date',
+      'ascending': false
     }
-    console.log(JSON.stringify(requestData))
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
@@ -785,10 +867,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     });
   }
 
-  const getRefreshClaimsFollowup = (
-    facility: string, 
-    status: string,
-  ) => {
+  const getRefreshClaimsFollowup = () => {
     setFailedRecords([])
     setSuccessfulRecords([])
     setPendingRecords([])
@@ -802,10 +881,11 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       "min_percent": 0.0,
       "max_percent": 1.0,
       "page": 0,
-      "facilities": facility,
-      "status": status
+      "facilities": followupClaimsFacility,
+      "status": followupClaimsStatus, 
+      "sort_by": column,
+      'ascending': ascending
     }
-    console.log(JSON.stringify(requestData))
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
@@ -1022,7 +1102,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     axios.get(url)
         .then((response: any) => {
           // existing code
-          console.log(response)
           const existingClaimNumbers = new Set();
           const newDataArray = response.data.claimStatuses.reduce((acc: any[], claimStatus: any) => {
             if (!existingClaimNumbers.has(claimStatus.claimControlNumber)) {
@@ -1197,6 +1276,21 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     claimsSearch,
     activeClaimSearch,
     billingAnalyticsTimespand,
+    followupClaimsFacility, 
+    followupClaimsStatus, 
+    column, 
+    ascending,
+    page, 
+    startDate, 
+    endDate, 
+    minPercent,
+    maxPercent, 
+    facility, 
+    status,
+    handleSortColumnChange,
+    handleSortOrderChange,
+    handleFollowupClaimsFacilityChange,
+    handleFollowupClaimsStatusChange,
     collectAllData,
     grabClaims,
     grabAveaClaims,
@@ -1229,7 +1323,14 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     filterBillingAnalytics,
     SearchAveaClaims,
     getRefreshClaimsFollowup,
-    getRefreshAveaFollowup
+    getRefreshAveaFollowup,
+    handlePageChange,
+    handleStartDate,
+    handleEndDate,
+    handleMinPercent,
+    handleMaxPercent,
+    handleFacilityChange,
+    handleStatusChange
   };
 
   return (
@@ -1238,9 +1339,3 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     </DataContext.Provider>
   );
 };
-
-
-// const [followupAveaRecords, setFollowupAveaClaims] = useState<ClaimsProps[] | null>(null)
-  // const [pendingAveaRecords, setPendingAveaRecords] = useState<ClaimsProps[] | null>(null)
-  // const [successfullAveaRecords, setSuccessfulAveaRecords] = useState<ClaimsProps[] | null>(null)
-  // const [failedAveaRecords, setFailedAveaRecords] = useState<ClaimsProps[] | null>(null)

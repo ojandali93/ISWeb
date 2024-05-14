@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SearchComponent from '../Inputs/SearchComponent'
 import { useClaims } from '../../Context/ClaimsContext'
 import ButtonComponent from '../Inputs/ButtonComponent'
@@ -21,23 +21,13 @@ const ClaimsFilterComponent = () => {
   const location = useLocation()
 
   const {selectedClaims, addBatchToFavorites, pushingToFollowup} = useClaims()
-  const { grabRefreshClaims, claimsSearch, handleClaimsSearchChange, grabSearchByNameClaims, 
-    activeClaimSearch, handleAcriveClaimSearchChange, clearActiveClaimSearch, SearchAveaClaims } = useData()
-  const {currentSidebarSubTab} = useNavigation()
-
-  const [page, setPage] = useState<number>(1)
-
-  const [startDate, setStartDate] = useState<Date>(new Date(Date.UTC(2018, 1, 1)))
-  const [endtDate, setEndDate] = useState<Date>(new Date())
-
-  const [minPercent, setMinPercent] = useState<number>(0)
-  const [maxPercent, setMaxPercent] = useState<number>(100)
-
-  const [facility, setFacility] = useState<string>('All')
-  const [status, setStatus] = useState<string>('All')
-
-  const [searchTerm, setSearchTerm] = useState<string>('')
-  const [activeSearch, setActiveSearch] = useState<boolean>(false)
+  const { claimsSearch, handleClaimsSearchChange, 
+    activeClaimSearch, handleAcriveClaimSearchChange,
+    grabRefreshClaims, page, startDate, endDate, minPercent, 
+    maxPercent, facility, status, handlePageChange,
+    handleStartDate,handleEndDate,handleMinPercent,handleMaxPercent,
+    handleFacilityChange, handleStatusChange
+  } = useData()
 
   const percentOptions = [];
   const facilityOptions = ['All', 'Affinity', 'Beachside', 'Axis']
@@ -57,40 +47,9 @@ const ClaimsFilterComponent = () => {
     percentOptions.push(i);
   }
 
-  const handlePageChange = (page: number) => {
-    setPage(page)
-    grabRefreshClaims(startDate, endtDate, minPercent, maxPercent, page, facility, status)
-  }
-
-  const handleStartDate = (date: Date) => {
-    setStartDate(date)
-    grabRefreshClaims(date, endtDate, minPercent, maxPercent, page, facility, status)
-  }
-
-  const handleEndDate = (date: Date) => {
-    setEndDate(date)
-    grabRefreshClaims(startDate, date, minPercent, maxPercent, page, facility, status)
-  }
-
-  const handleMinPercent = (data: string) => {
-    setMinPercent(parseInt(data))
-    grabRefreshClaims(startDate, endtDate, parseInt(data), maxPercent, page, facility, status)
-  }
-
-  const handleMaxPercent = (data: string) => {
-    setMaxPercent(parseInt(data))
-    grabRefreshClaims(startDate, endtDate, minPercent, parseInt(data), page, facility, status)
-  }
-
-  const handleFacilityChange = (data: string) => {
-    setFacility(data)
-    grabRefreshClaims(startDate, endtDate, minPercent, maxPercent, page, data, status)
-  }
-
-  const handleStatusChange = (data: string) => {
-    setStatus(data)
-    grabRefreshClaims(startDate, endtDate, minPercent, maxPercent, page, facility, data)
-  }
+  useEffect(() => {
+    grabRefreshClaims()
+  }, [startDate, endDate, minPercent, maxPercent, page, facility, status])
 
   return (
     <div className="h-full px-2 w-full flex flex-col justify-between bg-stone-700 rounded-md mb-4">
@@ -99,14 +58,15 @@ const ClaimsFilterComponent = () => {
           <PaginationComponent pageCount={50} currentPage={page} handlePageChange={handlePageChange}/>
         </div>
         <div className='flex-1 mr-2'>
-          <SearchSubmitComponent searchTerm={claimsSearch} handler={handleClaimsSearchChange} submitSearch={grabSearchByNameClaims} placeholder='Search name...' activeSearch={activeClaimSearch} handleSearchToggle={handleAcriveClaimSearchChange} clearSearch={clearActiveClaimSearch}/>
+          <SearchComponent searchTerm={claimsSearch} handler={handleClaimsSearchChange}
+          placeholder='Search name...' activeSearch={activeClaimSearch} handleActiveSearch={handleAcriveClaimSearchChange}/>
         </div>
         <div className='flex flex-row items-center justify-end'>
           <div className='flex flex-row items-center'>
             <p className='mx-2 min-w-16 max-w-24 text-white font-bold'>Date Range: </p>
             <CalendarSelectComponent selectedDate={startDate} handleDateChange={handleStartDate}/>
             <p className='mx-2 text-white font-bold'> - </p>
-            <CalendarSelectComponent selectedDate={endtDate} handleDateChange={handleEndDate}/>
+            <CalendarSelectComponent selectedDate={endDate} handleDateChange={handleEndDate}/>
           </div>
           <div className='flex flex-row items-center'>
             <p className='mx-2 ml-6  min-w-16 max-w-24 text-white font-bold'>Payout: </p>

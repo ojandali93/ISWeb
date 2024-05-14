@@ -4,6 +4,8 @@ import { useClaims } from '../../Context/ClaimsContext';
 import { useNavigation } from '../../Context/NavigationContext';
 import { useFollowup } from '../../Context/FollowupContext';
 import { useAuth } from '../../Context/AuthContext';
+import SortHeaderComponent from '../SortAndFilter/SortHeaderComponent';
+import { tab } from '@testing-library/user-event/dist/tab';
 
 interface PeopleOptions {
   name: string;
@@ -19,6 +21,7 @@ interface ColumnData {
   dependentResults?: string[];
   people?: PeopleOptions[];
   width?: string;
+  sort?: boolean;
 }
 
 interface UserData {
@@ -107,11 +110,13 @@ const TableComponent: React.FC<TableProps> = (props) => {
                                 }
                               }}
                             />
-                      : column.label === 'Delete'
-                          ? currentProfile.privileges === 'admin' || currentProfile.privileges === 'manager' || currentProfile.privileges === 'dev' || currentProfile.privileges === 'owner'
-                              ? <p className='text-lg text-white'>{column.label}</p>
-                              : null
-                          : <p className='text-lg text-white'>{column.label}</p>
+                      : column.sort
+                          ? <SortHeaderComponent label={column.label} columnName={column.recordName}/>
+                          : column.label === 'Delete'
+                              ? currentProfile.privileges === 'admin' || currentProfile.privileges === 'manager' || currentProfile.privileges === 'dev' || currentProfile.privileges === 'owner'
+                                  ? <p className='text-lg text-white'>{column.label}</p>
+                                  : null
+                              : <p className='text-lg text-white'>{column.label}</p>
                   } 
                 </th>
               )
