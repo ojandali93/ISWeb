@@ -18,7 +18,7 @@ interface ProfileProps {
 
 interface BillingAnalyticsProps {
   claim_id: string,
-  paid_total: number,
+  total_paid: string,
   start_date: string
 }
 

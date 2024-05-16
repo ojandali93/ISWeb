@@ -30,13 +30,13 @@ const BillingAnalyticsScreen = () => {
 
   useEffect(() => {
     let maxValue: number = 0
-    if (billingAnalytics) {
+    if (billingAnalytics != null) {
       billingAnalytics.map(entry => {
-        if(entry.paid_total > maxValue){
-          maxValue = entry.paid_total
+        let totalPaid: number = parseInt(entry.total_paid)
+        if(totalPaid > maxValue){
+          maxValue = totalPaid
         }
       })
-      console.log('max value: ', maxValue)
       setYAxisDomain([0, maxValue]); 
     }
   }, [billingAnalytics]);
