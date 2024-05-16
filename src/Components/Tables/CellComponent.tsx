@@ -36,6 +36,7 @@ interface ColumnData {
   dependentResults?: string[];
   people?: PeopleOptions[];
   width?: string;
+  admin?: boolean;
 }
 
 interface RecordData {
@@ -51,7 +52,7 @@ interface CellProps {
 
 const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedClaims}) => {
   const navigate = useNavigate()
-  const {intakeUsers, getIntakeRecords, insuranceOptions, grabAllProfiles, grabAvailityData, grabAveaAvailityData, billingUsers, getNotes} = useData()
+  const {intakeUsers, getIntakeRecords, insuranceOptions, grabAllProfiles, grabAvailityData, grabAveaAvailityData, billingUsers, getNotes, allUsers} = useData()
   const {updateSelectedClaims, updateSelectedClaimsAvea} = useClaims()
   const {grabPrefixRecords, grabUserRecords} = useHistoric()
   const {currentSidebarTab, currentSidebarSubTab, handleUpdateCurrentSidebarTab} = useNavigation()
@@ -370,45 +371,65 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
       {columns.map((column, columnIndex) => {
         const cellValue = column.recordName ? record[column.recordName] : '';
         const width = `min-w-${column.width}`
+        const currentUser = allUsers?.find(user => record[column.recordName] === user.userid)
         return (
           <td key={columnIndex}>
-            {column.type === 'select' && column.options ? (
-              column.type === 'select' && column.dependent && column.dependentResults ? (
-                column.dependentResults.includes(record[column.dependent]) ? (
-                  <div>
-                    <SelectOptionComponent
-                      options={column.options}
-                      value={cellValue}
-                      onChange={(newValue) => {
-                        handleSelectChange(column.label, record, newValue)
-                      }}
-                    />
-                  </div>
-                ) : (
-                  null
-                )
-              ) : currentSidebarTab === 'Accounts' ? (
-                <div>
-                  <SelectOptionComponent
-                    options={column.options}
-                    value={cellValue}
-                    onChange={(newValue) => {
-                      handlePrivilegeChange(column.label,record, newValue)
-                    }}
-                  />
-                </div>
-              ) : (
-                <div>
-                  <SelectOptionComponent
-                    options={column.options}
-                    value={cellValue}
-                    onChange={(newValue) => {
-                      handleSelectChange(column.label, record, newValue)
-                    }}
-                  />
-                </div>
-              )
-            ) : column.type === 'select-edit' ? (
+            {column.type === 'select' && column.options 
+              ? (
+                  column.type === 'select' && column.dependent && column.dependentResults 
+                    ? (
+                        column.dependentResults.includes(record[column.dependent]) 
+                          ? (
+                              column.admin && currentProfile.privileges != 'staff'
+                                ? (
+                                    <div>
+                                      <SelectOptionComponent
+                                        options={column.options}
+                                        value={cellValue}
+                                        onChange={(newValue) => {
+                                          handleSelectChange(column.label, record, newValue)
+                                        }}
+                                      />
+                                    </div>
+                                  )
+                                : (
+                                    record[column.recordName] ? <p className={`${record[column.recordName] === 'Yellow Stripe' ? 'text-yellow-500' : 'text-white'}`}>{record[column.recordName]}</p> : '' //${record[column.recordName] === 'Yellow Stripe' ? 'text-yellow-500' : 'text-white'}
+                                  )
+                            ) 
+                          : (
+                              null
+                            )
+                      ) 
+                    : currentSidebarTab === 'Accounts' ? (
+                        <div>
+                          <SelectOptionComponent
+                            options={column.options}
+                            value={cellValue}
+                            onChange={(newValue) => {
+                              handlePrivilegeChange(column.label,record, newValue)
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        column.admin && currentProfile.privileges != 'staff'
+                          ? (
+                            <div>
+                              <SelectOptionComponent
+                                options={column.options}
+                                value={cellValue}
+                                onChange={(newValue) => {
+                                  handleSelectChange(column.label, record, newValue)
+                                }}
+                              />
+                            </div>
+                          ) : (
+                            <div className={`w-40 ${record[column.recordName] === 'Approved' || record[column.recordName] === 'Approved BD' || record[column.recordName] === 'Approved LB No RTC' || record[column.recordName] === 'Approved RTC' ? 'text-green-500' : record[column.recordName] === 'Denied' ? 'text-red-500' : record[column.recordName] === 'Pending' ? 'text-sky-500' : 'text-white'}`}>
+                              {record[column.recordName] ? record[column.recordName] : ''}
+                            </div>
+                          )
+                  )
+                ) 
+              : column.type === 'select-edit' ? (
               <>
                 <div className={`flex flex-row justify-center`}>
                   {record[column.recordName]}
@@ -544,15 +565,25 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
               </div>
             ) : column.type === 'people' ? (
               currentSidebarTab === 'Dashboard'
-                ? <div>
-                    <SelectPeopleComponent
-                      options={intakeUsers}
-                      value={cellValue}
-                      onChange={(newValue) => {
-                        handleSelectChange(column.label, record, newValue)
-                      }}
-                    />
-                  </div>
+                ? (
+                    column.admin && currentProfile.privileges != 'staff'
+                      ? (
+                        <div>
+                          <SelectPeopleComponent
+                            options={intakeUsers}
+                            value={cellValue}
+                            onChange={(newValue) => {
+                              handleSelectChange(column.label, record, newValue)
+                            }}
+                          />
+                        </div>
+                      )
+                      : (
+                        <div className='w-44'>
+                          {currentUser ? currentUser.name : ''}
+                        </div>
+                      )
+                  )
                 : <div>
                     <SelectPeopleComponent
                       options={formattedBillingUsers()}
@@ -616,9 +647,11 @@ const CellComponent: React.FC<CellProps> = ({columns, record, table, selectedCla
                       </div>
                     : currentSidebarTab === 'Dashboard'
                         ? column.label === 'Prefix'
-                            ?<div className='hover:cursor-pointer' onClick={() => {grabPrefixRecordsFromDashboard(record[column.recordName]);showPrefixPopup()}}>
-                                <p className='text-sky-500'>{record[column.recordName]}</p>
-                              </div>
+                            ? column.admin && currentProfile.privileges != 'staff'
+                              ? <div className='hover:cursor-pointer' onClick={() => {grabPrefixRecordsFromDashboard(record[column.recordName]);showPrefixPopup()}}>
+                                  <p className='text-sky-500'>{record[column.recordName]}</p>
+                                </div>
+                              : <div>{record[column.recordName] ? record[column.recordName] : ''}</div>
                             : <div>{record[column.recordName] ? record[column.recordName] : ''}</div>
                     : currentSidebarTab === 'Follow Up'
                         ? <SingleSelectClickComponent value={record[column.recordName]} onChange={grabAvailityData} record={record}/>

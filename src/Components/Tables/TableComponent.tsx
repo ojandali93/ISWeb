@@ -22,6 +22,7 @@ interface ColumnData {
   people?: PeopleOptions[];
   width?: string;
   sort?: boolean;
+  admin?: boolean
 }
 
 interface UserData {
@@ -126,11 +127,9 @@ const TableComponent: React.FC<TableProps> = (props) => {
         <tbody>
           {records != null ? ( records.map((record: any, rowIndex: number) => (
             table === 'intake' && currentProfile.department === 'intake' && currentProfile.privileges === 'staff'
-              ? currentProfile.userid === record.coordinator
-                  ? <tr key={rowIndex} className={`text-center min-h-14 h-16 text-white ${rowIndex % 2 === 0 ? 'bg-stone-900' : 'bg-stone-800'}`}>
-                      <CellComponent table={table} columns={columns} record={record} selectedClaims={null}/>
-                    </tr>
-                  :  null
+              ? <tr key={rowIndex} className={`text-center min-h-14 h-16 text-white ${rowIndex % 2 === 0 ? 'bg-stone-900' : 'bg-stone-800'}`}>
+                  <CellComponent table={table} columns={columns} record={record} selectedClaims={null}/>
+                </tr>
               :  <tr key={rowIndex} className={`text-center min-h-14 h-16 text-white ${rowIndex % 2 === 0 ? 'bg-stone-900' : 'bg-stone-800'}`}>
                   <CellComponent table={table} columns={columns} record={record} selectedClaims={table === 'Claims' ? selectedClaims : table === 'Avea Claims' ? selectedClaimsAvea : null}/>
                 </tr>

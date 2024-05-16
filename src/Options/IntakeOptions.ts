@@ -24,7 +24,8 @@ export const intakeOColumns = [
       'Denied'
     ],
     recordName: 'checked_in',
-    width: '56'
+    width: '56',
+    admin: true
   },
   {
     label:'Booked',
@@ -45,7 +46,8 @@ export const intakeOColumns = [
       'Approved LB No RTC',
     ],
     recordName: 'booked',
-    width: '52'
+    width: '52',
+    admin: true
   },
   {
     label:'Reason',
@@ -63,7 +65,8 @@ export const intakeOColumns = [
       'Yellow Stripe'
     ],
     recordName: 'reason',
-    width: '52'
+    width: '52',
+    admin: true
   },
   {
     label:'Arriving Date',
@@ -73,7 +76,8 @@ export const intakeOColumns = [
       'Booked',
     ],
     recordName: 'expected_arrival_date',
-    width: '52'
+    width: '52',
+    admin: true
   },
   {
     label:'Facility',
@@ -85,7 +89,8 @@ export const intakeOColumns = [
       'Axis',
     ],
     recordName: 'facility',
-    width: '52'
+    width: '52',
+    admin: true
   },
   {
     label:'Client',
@@ -128,7 +133,8 @@ export const intakeOColumns = [
     type:'people',
     recordName: 'coordinator',
     people: [],
-    width: '56'
+    width: '56',
+    admin: true
   },
   // {
   //   label:'INN Admit %',
@@ -188,6 +194,7 @@ export const intakeOColumns = [
     label:'Delete',
     type:'delete',
     recordName: '',
-    width: '52'
+    width: '52',
+    admin: true
   },
 ]
