@@ -21,11 +21,17 @@ const FollowupFilterComponent = () => {
     handleFollowupClaimsFacilityChange,
     handleFollowupClaimsStatusChange,
     followupClaimsStatus,
-    followupClaimsFacility} = useData()
+    followupClaimsFacility, claimsFollowupTerm, handleClaimsFollowupTermUpdate} = useData()
 
   useEffect(() => {
     getRefreshClaimsFollowup()
   }, [followupClaimsStatus, followupClaimsFacility])
+
+  const [activeClaimSearch, setActiveClaimSearch] = useState<boolean>(false)
+
+  const handleActiveChange = () => {
+    setActiveClaimSearch(!activeClaimSearch)
+  }
 
   const facilityOptions = ['All', 'Affinity', 'Beachside', 'Axis']
   const statusOptions = [
@@ -58,7 +64,10 @@ const FollowupFilterComponent = () => {
               : null
           }
         </div>
-
+        <div className='flex-1 mr-2'>
+          <SearchComponent searchTerm={claimsFollowupTerm} handler={handleClaimsFollowupTermUpdate}
+          placeholder='Search name...' activeSearch={activeClaimSearch} handleActiveSearch={handleActiveChange}/>
+        </div>
         <div className='flex flex-row items-center'>
           <div className='w-full flex flex-row items-center justify-end mr-4'>
             <div className='flex flex-row items-center'>
@@ -69,6 +78,8 @@ const FollowupFilterComponent = () => {
               <p className='mx-2 ml-6 min-w-16 max-w-24 text-white font-bold'>Status: </p>
               <SelectInputComponent placeholder='ALL' options={statusOptions} selectedValue={followupClaimsStatus} handleOptionClick={handleStatusChange}/>
             </div>
+          </div>
+          <div>
           </div>
           <div className='bg-stone-500 flex flex-row rounded-lg hover:cursor-pointer'>
             <div onClick={() => {updateFollowupTab('PENDING')}} className={`${followupTab === 'PENDING' ? 'bg-primary p-2 py-1 text-sm rounded-lg font-bold' : 'bg-stone-500  p-2 py-1 text-sm rounded-lg font-bold' } text-white`}>

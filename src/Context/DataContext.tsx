@@ -153,6 +153,7 @@ interface DataContextType {
   maxPercent: number, 
   facility: string, 
   status: string,
+  claimsFollowupTerm: string,
   handleSortColumnChange: (text: string) => void;
   handleSortOrderChange: (value: boolean) => void;
   collectAllData: () => void;
@@ -198,7 +199,8 @@ interface DataContextType {
   handleMinPercent: (data: string) => void,
   handleMaxPercent: (date: string) => void,
   handleFacilityChange: (data: string) => void,
-  handleStatusChange: (tedataxt: string) => void
+  handleStatusChange: (tedataxt: string) => void,
+  handleClaimsFollowupTermUpdate: (data: string) => void;
 }
 
 
@@ -244,6 +246,7 @@ const DataContext = createContext<DataContextType>({
   maxPercent: 1, 
   facility: 'All', 
   status: 'ALL',
+  claimsFollowupTerm: '',
   handleSortColumnChange: () => {},
   handleSortOrderChange: () => {},
   handleFollowupClaimsFacilityChange: () => {},
@@ -281,7 +284,8 @@ const DataContext = createContext<DataContextType>({
   handleMinPercent: () => {},
   handleMaxPercent: () => {},
   handleFacilityChange: () => {},
-  handleStatusChange: () => {}
+  handleStatusChange: () => {},
+  handleClaimsFollowupTermUpdate: () => {}
 });
 
 export function useData() {
@@ -355,6 +359,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [claimsSearch, setClaimsSearch] = useState<string>('')
   const [activeClaimSearch, setActiveClaimSearch] = useState<boolean>(false)
 
+  const [claimsFollowupTerm, setClaimsFollowupTerm] = useState<string>('')
+
   const [column, setColumn] = useState<string>('end_date')
   const [ascending, setAscending] = useState<boolean>(false)
 
@@ -382,6 +388,16 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       : setActiveClaimSearch(true)
     setClaimsSearch(text)
     grabSearchByNameClaims(text)
+  }
+
+  const handleClaimsFollowupTermUpdate = (data: string) => {
+    if(data === '' ){
+      setClaimsFollowupTerm(data)
+      getClaimsFollowup()
+    } else {
+      setClaimsFollowupTerm(data)
+      searchClaimsFollowup(data)
+    }
   }
 
   const handleAcriveClaimSearchChange = () => {
@@ -867,6 +883,26 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     });
   }
 
+  const searchClaimsFollowup = (data: string) => {
+    console.log('data: ', data)
+    let config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `https://intellasurebackend-docker.onrender.com/claims/followup_collab_search/${data}`,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    };
+    axios.request(config)
+      .then((response) => {
+        console.log('search response: ', response.data.length)
+        setPendingRecords(response.data)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   const getRefreshClaimsFollowup = () => {
     setFailedRecords([])
     setSuccessfulRecords([])
@@ -1287,6 +1323,7 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     maxPercent, 
     facility, 
     status,
+    claimsFollowupTerm,
     handleSortColumnChange,
     handleSortOrderChange,
     handleFollowupClaimsFacilityChange,
@@ -1330,7 +1367,8 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
     handleMinPercent,
     handleMaxPercent,
     handleFacilityChange,
-    handleStatusChange
+    handleStatusChange,
+    handleClaimsFollowupTermUpdate
   };
 
   return (
