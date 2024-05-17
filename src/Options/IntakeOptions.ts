@@ -114,7 +114,8 @@ export const intakeOColumns = [
     label:'Prefix',
     type:'clickable',
     recordName: 'prefix',
-    width: '52'
+    width: '52',
+    admin: true
   },
   {
     label:'Policy',
