@@ -33,6 +33,7 @@ import Historic1Screen from './Screens/Historic/Historic1Screen';
 import FollowupCollabScreen from './Screens/FollowUp/FollowupCollabScreen';
 import FollowupAveaScreen from './Screens/FollowUp/FollowupAveaScreen';
 import BillingAnalyticsScreen from './Screens/Analytics/BillingAnalyticsScreen';
+import ConfirmResetPassword from './Screens/Authentcation/ConfirmResetPassword';
 
 Amplify.configure(amplifyconfig)
 
@@ -422,6 +423,7 @@ function App() {
         <Route path="/auth/login" element={<LoginScreen />} />
         <Route path="/auth/forgotPassword" element={<ForgotPasswordScreen />} />
         <Route path="/auth/accessCode" element={<AccessCodeScreen />} />
+        <Route path="/auth/reset-password" element={<ConfirmResetPassword />} />
         <Route
           path="/auth/signup"
           element={

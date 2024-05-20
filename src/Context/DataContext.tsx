@@ -848,11 +848,12 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
       "min_percent": 0.0,
       "max_percent": 1.0,
       "page": 0,
-      "facilities":"ALL",
+      "facilities":"All",
       "status": "ALL",  
       "sort_by": 'end_date',
       'ascending': false
     }
+    console.log('followup request config: ', requestData)
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
@@ -1073,9 +1074,6 @@ export const DataProvider: React.FC<AppProviderProps> = ({ children }) => {
         console.log(err)
       })
   }
-
-
-
 
   const grabAvailityData = (claim_id: any) => {
     setLoadingAvailityData(true);

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { getCurrentUser, signIn, signUp, signOut } from 'aws-amplify/auth';
+import { getCurrentUser, signIn, signUp, signOut, confirmResetPassword } from 'aws-amplify/auth';
 import axios from 'axios';
 import { Navigate, redirect, useNavigate } from 'react-router-dom';
 import { confirmSignUp, resendSignUpCode, resetPassword } from 'aws-amplify/auth'
@@ -84,7 +84,9 @@ interface AuthContextType {
   invalidEmail: boolean;
   confirmedEmail: boolean;
   createdAccount: boolean;
-  accessCode: accessCode,
+  accessCode: accessCode;
+  successfulReset: boolean;
+  email: string,
   signInUser: ({username, password}: UserDetails) => void;
   validateAccessCode: (accessCode: string) => void;
   removeAccessCode: () => void;
@@ -101,6 +103,11 @@ interface AuthContextType {
   confirmEmailCode: (confirmationCode: string) => void;
   grabCurrentUserProfile: (userId: string) => void;
   resetUserEmail: (email: string) => void;
+  confirmResetPasswrd: (
+    confirmationCode: string,
+    newPassword: string,
+  ) => void;
+  handleEmailUpdate: (data: string) => void,
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -124,6 +131,8 @@ const AuthContext = createContext<AuthContextType>({
   createdAccount: false,
   invalidEmail: false,
   accessCode: {code: '', company: '', privileges: '', department: ''},
+  successfulReset: true,
+  email: '',
   confirmEmailCode: () => {},
   unvalidateAccessCode: () => {},
   signInUser: () => {},
@@ -134,7 +143,9 @@ const AuthContext = createContext<AuthContextType>({
   validateAccessCode: () => {},
   grabCurrentUser: () => {},
   grabCurrentUserProfile: () => {},
-  resetUserEmail: () => {}
+  resetUserEmail: () => {},
+  confirmResetPasswrd: () => {},
+  handleEmailUpdate: () => {}
 });
 
 interface AuthProviderProps {
@@ -182,6 +193,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [invalidEmail, setInvalidEmail] = useState<boolean>(false)
   const [createdAccount, setCreatedAccount] = useState<boolean>(false)
   const [confirmedEmail, setConfirmedEmail] = useState<boolean>(false)
+  const [successfulReset, setSuccessfulReset] = useState<boolean>(true)
+
+  const handleEmailUpdate = (data: string) => {
+    setEmail(data)
+  }
 
   const signInUser = (userInfo: UserDetails) => {
     const { username, password } = userInfo;
@@ -332,10 +348,28 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     });
   }
 
+  const confirmResetPasswrd = (
+    confirmationCode: string,
+    newPassword: string,
+  ) => {
+    console.log(email)
+    confirmResetPassword({
+      username: email, confirmationCode, newPassword
+    })
+    .then((response) => {
+      console.log(response)
+      navigate('/auth/login')
+    }).catch((error) => {
+      setSuccessfulReset(false)
+      console.log(error)
+    })
+  }
+
   const resetUserEmail = (email: string) => {
+    setEmail(email)
     resetPassword({username: email})
       .then((response) => {
-        navigate('/auth/login')
+        navigate('/auth/reset-password')
       })
       .catch((error) => {
         console.log(error)
@@ -370,6 +404,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         createdAccount,
         confirmedEmail,
         accessCode,
+        successfulReset, 
+        email,
         signInUser,
         createNewUser,
         removeAccessCode,
@@ -380,7 +416,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         confirmEmailCode,
         resetConfirmEmail,
         grabCurrentUserProfile,
-        resetUserEmail
+        resetUserEmail,
+        confirmResetPasswrd,
+        handleEmailUpdate
       }}
     >
       {children}
